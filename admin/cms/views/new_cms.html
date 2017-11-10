@@ -1,0 +1,75 @@
+<div class="row fade-in-up">
+    <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class=" icon-user font-green"></i>
+                    <span class="caption-subject font-green sbold uppercase">Add New CMS Section</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="new_cms(newCMSForm.$valid)" class="form-horizontal" name="newCMSForm" ng-keydown="clear($event.target.name, newCMSForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': newCMSForm.title.$touched && newCMSForm.title.$invalid || newCMSForm.title.$invalid && newCMSForm.$submitted }">
+                            <label class="col-md-2 control-label" for="title">Title <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="title" ng-model="cms.title" class="form-control" id="title" placeholder="Enter your cms title" required>
+                                <div ng-messages="newCMSForm.title.$error"
+                                    ng-show="newCMSForm.title.$touched || newCMSForm.$submitted">
+                                    <span class="help-block" ng-message="required">Title is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                          
+                                 
+                         <div class="form-group form-md-line-input" ng-class="{ 'has-error': newCMSForm.description.$touched && newCMSForm.description.$invalid || newCMSForm.description.$invalid && newCMSForm.$submitted }">
+                            <label class="col-md-2 control-label" for="description">Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                            <text-angular ng-required="true" ng-model="cms.description"></text-angular>
+                                <div ng-messages="newCMSForm.description.$error"
+                                    ng-show="newCMSForm.description.$touched || newCMSForm.$submitted">
+                                    <span class="help-block" ng-message="required">Description is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': newCMSForm.meta_title.$touched && newCMSForm.meta_title.$invalid || newCMSForm.meta_title.$invalid && newCMSForm.$submitted }">
+                            <label class="col-md-2 control-label" for="meta_title">Meta Title <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="meta_title" ng-model="cms.meta_title" class="form-control" id="meta_title" placeholder="Enter your cms meta title" required>
+                                <div ng-messages="newCMSForm.metaTitle.$error"
+                                    ng-show="newCMSForm.meta_title.$touched || newCMSForm.$submitted">
+                                    <span class="help-block" ng-message="required">Meta Title is required.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                          <div class="form-group form-md-line-input" ng-class="{ 'has-error': newCMSForm.meta_description.$touched && newCMSForm.meta_description.$invalid || newCMSForm.meta_description.$invalid && newCMSForm.$submitted }">
+                            <label class="col-md-2 control-label" for="meta_description">Meta Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <textarea rows="4" name="meta_description" ng-model="cms.meta_description" class="form-control" id="meta_description" placeholder="Enter your meta description" required></textarea>
+                                <div ng-messages="newCMSForm.meta_description.$error"
+                                    ng-show="newCMSForm.meta_description.$touched || newCMSForm.$submitted">
+                                    <span class="help-block" ng-message="required">Meta Description is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-9">
+                                <button type="submit" ladda="isLoading" class="btn green">Submit</button>
+                                <a href ui-sref="cms" class="btn default">cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+</div>

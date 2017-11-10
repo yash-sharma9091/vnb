@@ -1,0 +1,99 @@
+<div class="row fade-in-up">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+		    <div class="portlet-title">
+		        <div class="caption">
+		            <i class="icon-equalizer font-green-haze"></i>
+		            <span class="caption-subject font-green-haze bold uppercase">View Testimonial Info</span>
+		            <span class="caption-helper"><i>(last update on {{testimonial.updated_at | date: format : 'dd/m/y'}})</i></span>
+		        </div>
+		        <div class="tools">
+		            <button ui-sref="testimonials" class="btn default">Back</button>
+		        </div>
+		    </div>
+		    <div class="portlet-body form">
+		        <!-- BEGIN FORM-->
+		        <form class="form-horizontal" role="form">
+		            <div class="form-body">
+		                <!-- <h2 class="margin-bottom-20"> View User Info - Bob Nilson </h2> -->
+		                <h3 class="form-section">Testimonial Section Info</h3>
+		                <div class="row">
+		                    <div class="col-md-6">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Name:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> {{testimonial.name}} </p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <!--/span-->
+		                    <div class="col-md-6">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Date:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> {{testimonial.created_at | date: format : 'dd/m/y'}}  </p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <!--/span-->
+		                </div>
+		                <div class="row">
+		                	<div class="col-md-6">
+			                    <div class="form-group">
+		                            <label class="control-label col-md-3">Image:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> 
+		                                	<div class="thumbnail" style="width: 200px;">
+			                	            	<img class="img-responsive" ng-src="{{testimonial.image}}" alt="{{testimonial.image}}"/>
+			                	            </div>
+		                                </p>
+		                            </div>
+		                        </div>
+		                    </div>    
+	                        <div class="col-md-6">
+	                            <div class="form-group">
+	                                <label class="control-label col-md-3">Status:</label>
+	                                <div class="col-md-9">
+	                                    <p class="form-control-static"> 
+	                                    	<status-label status="testimonial.status"></status-label>
+	                                    </p>
+	                                </div>
+	                            </div>
+	                        </div>
+		                    <!--/span-->
+		                    
+		                    <!--/span-->
+		                </div>
+		                <div class="row">
+		                    <div class="col-md-6">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Description:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> {{testimonial.description}}  </p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <!--/span-->
+		                </div>
+		                <!--/row-->
+		            </div>
+		            <div class="form-actions">
+		                <div class="row">
+		                    <div class="col-md-6">
+		                        <div class="row">
+		                            <div class="col-md-offset-3 col-md-9">
+		                                <button type="button" ng-click="goToEdit()" class="btn green">
+		                                    <i class="fa fa-pencil"></i> Edit</button>
+		                                <a href ui-sref="testimonials" class="btn default">Back</a>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="col-md-6"> </div>
+		                </div>
+		            </div>
+		        </form>
+		        <!-- END FORM-->
+		    </div>
+		</div>
+	</div>
+</div>		

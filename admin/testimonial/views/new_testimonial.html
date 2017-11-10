@@ -1,0 +1,70 @@
+<div class="row fade-in-up">
+    <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class=" icon-user font-green"></i>
+                    <span class="caption-subject font-green sbold uppercase">Add New Testimonial Section</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="new_testimonial(newTestimonialForm.$valid)" class="form-horizontal" name="newTestimonialForm" ng-keydown="clear($event.target.name, newTestimonialForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': newTestimonialForm.name.$touched && newTestimonialForm.name.$invalid || newTestimonialForm.name.$invalid && newTestimonialForm.$submitted }">
+                            <label class="col-md-2 control-label" for="name">Name <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="name" ng-model="testimonial.name" class="form-control" id="name" placeholder="Enter your testimonial name" required>
+                                <div ng-messages="newTestimonialForm.name.$error"
+                                    ng-show="newTestimonialForm.name.$touched || newTestimonialForm.$submitted">
+                                    <span class="help-block" ng-message="required">Name is required.</span>
+                                </div>
+                            </div>
+                        </div>      
+                                 
+                        <div class="form-group form-md-line-input" ng-class="{ 'has-error': newTestimonialForm.description.$touched && newTestimonialForm.description.$invalid || newTestimonialForm.description.$invalid && newTestimonialForm.$submitted }">
+                            <label class="col-md-2 control-label" for="description">Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <textarea rows="4" name="description" ng-model="testimonial.description" class="form-control" id="description" placeholder="Enter your short description" required></textarea>
+                                <div ng-messages="newTestimonialForm.description.$error"
+                                    ng-show="newTestimonialForm.description.$touched || newTestimonialForm.$submitted">
+                                    <span class="help-block" ng-message="required">Description is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group form-md-line-input" ng-class="{ 'has-error': newTestimonialForm.image.$touched && newTestimonialForm.image.$invalid || newTestimonialForm.image.$invalid && newTestimonialForm.$submitted }">
+                            <label class="col-md-2 control-label" for="image">Testimonial Image <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input ngf-pattern="'image/*'" type="file" ngf-select name="image" ng-model="testimonial.image" class="form-control" id="image" placeholder="Click to select file" required></textarea>
+                                <div ng-messages="newTestimonialForm.image.$error"
+                                    ng-show="newTestimonialForm.image.$touched || newTestimonialForm.$submitted">
+                                    <span class="help-block" ng-message="required">Testimonial Image is required.</span>
+                                </div>    
+                            </div>
+                        </div>
+                        <div class="row" ng-show="testimonial.image">
+                            <div class="col-sm-6 col-md-3 col-md-offset-2">
+                                <div class="thumbnail" style="width: 200px;">
+                                    <img class="img-responsive" ngf-thumbnail="testimonial.image" alt="Preview">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-9">
+                                <button type="submit" ladda="isLoading" class="btn green">Submit</button>
+                                <a href ui-sref="testimonials" class="btn default">cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+</div>

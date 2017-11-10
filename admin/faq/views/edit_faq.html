@@ -1,0 +1,64 @@
+<div class="row fade-in-up">
+    <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class=" icon-user font-green"></i>
+                    <span class="caption-subject font-green sbold uppercase">Update FAQ Section</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="edit_faq(editFaqForm.$valid)" class="form-horizontal" name="editFaqForm" ng-keydown="clear($event.target.name, editFaqForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': editFaqForm.question.$touched && editFaqForm.question.$invalid || editFaqForm.question.$invalid && editFaqForm.$submitted }">
+                            <label class="col-md-2 control-label" for="question">Question <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="question" ng-model="faq.question" class="form-control" id="question" placeholder="Enter your question" required>
+                                <div ng-messages="editFaqForm.question.$error"
+                                    ng-show="editFaqForm.question.$touched || editFaqForm.$submitted">
+                                    <span class="help-block" ng-message="required">Question is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': editFaqForm.answer.$touched && editFaqForm.answer.$invalid || editFaqForm.answer.$invalid && editFaqForm.$submitted }">
+                            <label class="col-md-2 control-label" for="answer">Answer <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <textarea rows="4" name="answer" ng-model="faq.answer" class="form-control" id="answer" placeholder="Enter your answer" required></textarea>
+                                <div ng-messages="editFaqForm.answer.$error"
+                                    ng-show="editFaqForm.answer.$touched || editFaqForm.$submitted">
+                                    <span class="help-block" ng-message="required">Answer is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': editFaqForm.order.$touched && editFaqForm.order.$invalid || editFaqForm.order.$invalid && editFaqForm.$submitted }">
+                            <label class="col-md-2 control-label" for="order">Order <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="order" ng-model="faq.order" ng-pattern="/^\d+$/" class="form-control" id="order" placeholder="Enter your faq order" required>
+                                <div ng-messages="editFaqForm.order.$error"
+                                    ng-show="editFaqForm.order.$touched || editFaqForm.$submitted">
+                                    <span class="help-block" ng-message="required">FAQ Order is required.</span>
+                                    <span class="help-block" ng-message="pattern">Only numbers are allowed.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-9">
+                                <button type="submit" ladda="isLoading" class="btn green">Update</button>
+                                <a href ui-sref="faq" class="btn default">cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+</div>

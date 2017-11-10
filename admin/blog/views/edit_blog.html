@@ -1,0 +1,90 @@
+<div class="row fade-in-up">
+    <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class=" icon-user font-green"></i>
+                    <span class="caption-subject font-green sbold uppercase">Update Blog Section</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="edit_blog(editBlogForm.$valid)" class="form-horizontal" name="editBlogForm" ng-keydown="clear($event.target.name, editBlogForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': editBlogForm.title.$touched && editBlogForm.title.$invalid || editBlogForm.title.$invalid && editBlogForm.$submitted }">
+                            <label class="col-md-2 control-label" for="title">Title <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="title" ng-model="blog.title" class="form-control" id="title" placeholder="Enter your blog title" required>
+                                <div ng-messages="editBlogForm.title.$error"
+                                    ng-show="editBlogForm.title.$touched || editBlogForm.$submitted">
+                                    <span class="help-block" ng-message="required">Title is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input" ng-class="{ 'has-error': editBlogForm.type.$touched && editBlogForm.type.$invalid || editBlogForm.type.$invalid && editBlogForm.$submitted }">
+                            <label class="col-md-2 control-label" for="lastname">Blog Type <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <select id="type" class="form-control" name="type" ng-model="blog.type" required ng-options="type.value as type.title for type in blog_type">
+                                    <option value="">Select Blog Type</option>
+                                </select>
+                                <div ng-messages="editBlogForm.type.$error"
+                                    ng-show="editBlogForm.type.$touched || editBlogForm.$submitted">
+                                    <span class="help-block" ng-message="required">Blog Type is required.</span>
+                                </div>
+                            </div>
+                        </div>       
+                        <div class="form-group form-md-line-input" ng-class="{ 'has-error': editBlogForm.short_description.$touched && editBlogForm.short_description.$invalid || editBlogForm.short_description.$invalid && editBlogForm.$submitted }">
+                            <label class="col-md-2 control-label" for="short_description">Short Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <textarea rows="4" name="short_description" ng-model="blog.short_description" class="form-control" id="short_description" placeholder="Enter your short description" required></textarea>
+                                <div ng-messages="editBlogForm.short_description.$error"
+                                    ng-show="editBlogForm.short_description.$touched || editBlogForm.$submitted">
+                                    <span class="help-block" ng-message="required">Short Description is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input" ng-class="{ 'has-error': editBlogForm.description.$touched && editBlogForm.description.$invalid || editBlogForm.description.$invalid && editBlogForm.$submitted }">
+                            <label class="col-md-2 control-label" for="description">Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <text-angular ng-required="true" ng-model="blog.description"></text-angular>
+                                <div ng-messages="editBlogForm.description.$error"
+                                    ng-show="editBlogForm.description.$touched || editBlogForm.$submitted">
+                                    <span class="help-block" ng-message="required">Description is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input" ng-class="{ 'has-error': editBlogForm.image.$touched && editBlogForm.image.$invalid || editBlogForm.image.$invalid && editBlogForm.$submitted }">
+                            <label class="col-md-2 control-label" for="image">Blog Image <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input ngf-pattern="'image/*'" type="file" ngf-select name="image" ng-model="blog.image" class="form-control" id="image" placeholder="Click to select file" required></textarea>
+                                <div ng-messages="editBlogForm.image.$error"
+                                    ng-show="editBlogForm.image.$touched || editBlogForm.$submitted">
+                                    <span class="help-block" ng-message="required">Blog Image is required.</span>
+                                </div>    
+                            </div>
+                        </div>
+                        <div class="row" ng-show="blog.image">
+                            <div class="col-sm-6 col-md-3 col-md-offset-2">
+                                <div class="thumbnail" style="width: 200px;">
+                                    <img class="img-responsive" ngf-thumbnail="blog.image" alt="Preview">
+                                </div>
+                            </div>
+                        </div
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-9">
+                                <button type="submit" ladda="isLoading" class="btn green">Update</button>
+                                <a href ui-sref="blog" class="btn default">cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+</div>

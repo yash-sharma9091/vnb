@@ -1,0 +1,54 @@
+<div class="row fade-in-up">
+    <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class=" icon-user font-green"></i>
+                    <span class="caption-subject font-green sbold uppercase">Update Privacy &amp; Policy Detail</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="edit_privacypolicy(updatePrivacyPolicyForm.$valid)" class="form-horizontal" name="updatePrivacyPolicyForm" ng-keydown="clear($event.target.name, updatePrivacyPolicyForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': updatePrivacyPolicyForm.title.$touched && updatePrivacyPolicyForm.title.$invalid || updatePrivacyPolicyForm.title.$invalid && updatePrivacyPolicyForm.$submitted }">
+                            <label class="col-md-2 control-label" for="title">Title <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="title" ng-model="privacypolicy.title" class="form-control" id="title" placeholder="Enter your privacypolicy title" required>
+                                <div ng-messages="updatePrivacyPolicyForm.title.$error"
+                                    ng-show="updatePrivacyPolicyForm.title.$touched || updatePrivacyPolicyForm.$submitted">
+                                    <span class="help-block" ng-message="required">Title is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                      
+                                 
+                        <div class="form-group form-md-line-input" ng-class="{ 'has-error': updatePrivacyPolicyForm.description.$touched && updatePrivacyPolicyForm.description.$invalid || updatePrivacyPolicyForm.description.$invalid && updatePrivacyPolicyForm.$submitted }">
+                            <label class="col-md-2 control-label" for="description">Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                
+                                <text-angular ng-required="true" ng-model="privacypolicy.description"></text-angular>
+                                <div ng-messages="updatePrivacyPolicyForm.description.$error"
+                                    ng-show="updatePrivacyPolicyForm.description.$touched || updatePrivacyPolicyForm.$submitted">
+                                    <span class="help-block" ng-message="required">Description is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-9">
+                                <button type="submit" ladda="isLoading" class="btn green">Update</button>
+                                <a href ui-sref="privacypolicy" class="btn default">cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+</div>

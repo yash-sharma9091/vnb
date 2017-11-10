@@ -1,0 +1,25 @@
+
+# Dependency directories
+/node_modules
+jspm_packages
+npm-debug.log
+
+# Optional REPL history
+.node_repl_history
+
+# bower components
+/bower_components
+
+# local environment variable file
+.env
+
+# VSC files
+jsconfig.json
+.vscode/
+typings/
+/nbproject
+public/images/attachments
+public/images/blog
+public/images/profilePics
+public/images/userimages
+logs/

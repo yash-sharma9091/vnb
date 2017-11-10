@@ -1,0 +1,64 @@
+<div class="row fade-in-up">
+    <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class=" icon-user font-green"></i>
+                    <span class="caption-subject font-green sbold uppercase">Add New FAQ Section</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="new_faq(newFaqForm.$valid)" class="form-horizontal" name="newFaqForm" ng-keydown="clear($event.target.name, newFaqForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': newFaqForm.question.$touched && newFaqForm.question.$invalid || newFaqForm.question.$invalid && newFaqForm.$submitted }">
+                            <label class="col-md-2 control-label" for="question">Question <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="question" ng-model="faq.question" class="form-control" id="question" placeholder="Enter your question" required>
+                                <div ng-messages="newFaqForm.question.$error"
+                                    ng-show="newFaqForm.question.$touched || newFaqForm.$submitted">
+                                    <span class="help-block" ng-message="required">Question is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': newFaqForm.answer.$touched && newFaqForm.answer.$invalid || newFaqForm.answer.$invalid && newFaqForm.$submitted }">
+                            <label class="col-md-2 control-label" for="answer">Answer <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <textarea rows="4" name="answer" ng-model="faq.answer" class="form-control" id="answer" placeholder="Enter your answer" required></textarea>
+                                <div ng-messages="newFaqForm.answer.$error"
+                                    ng-show="newFaqForm.answer.$touched || newFaqForm.$submitted">
+                                    <span class="help-block" ng-message="required">Answer is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': newFaqForm.order.$touched && newFaqForm.order.$invalid || newFaqForm.order.$invalid && newFaqForm.$submitted }">
+                            <label class="col-md-2 control-label" for="order">Order <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="order" ng-model="faq.order" ng-pattern="/^\d+$/" class="form-control" id="order" placeholder="Enter your faq order" required>
+                                <div ng-messages="newFaqForm.order.$error"
+                                    ng-show="newFaqForm.order.$touched || newFaqForm.$submitted">
+                                    <span class="help-block" ng-message="required">FAQ Order is required.</span>
+                                    <span class="help-block" ng-message="pattern">Only numbers are allowed.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-9">
+                                <button type="submit" ladda="isLoading" class="btn green">Submit</button>
+                                <a href ui-sref="faq" class="btn default">cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+</div>
