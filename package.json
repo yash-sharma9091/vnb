@@ -7,7 +7,7 @@
   "license": "ISC",
   "scripts": {
     "nodemon": "nodemon -i node_modules/ -i admin/ -i assets/ -i bower_components/ server.js",
-    "server": "pm2 start server.js --name virtualNotebookServer",
+    "server": "pm2 start server.js --name virtualNotebookServer"
   },
   "dependencies": {
     "async": "^2.5.0",
