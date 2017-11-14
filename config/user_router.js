@@ -34,7 +34,7 @@ function fileFilter (req, file, cb) {
 
 module.exports = {
     routes: [
-      { url: '/register', method: ctrls.userCtrl.register, type: 'post' },
+      { url: '/signupSchool', method: ctrls.userCtrl.signupSchool, type: 'post' },
       { url: '/login', method: ctrls.userCtrl.login, type: 'post' },
       { url: '/verify_email/:salt', method: ctrls.userCtrl.verifyEmail, type: 'get' },
       { url: '/forgot_password', method: ctrls.userCtrl.forgot, type: 'post' },

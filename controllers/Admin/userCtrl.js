@@ -16,6 +16,18 @@ function getRandomInt(min, max) {
       max = Math.floor(max);
       return (Math.floor(Math.random() * (max - min)) + min).toString(); 
   };
+var status_list = {
+			class: {
+				"Approved" : "success",
+				"Rejected" : "danger",
+				"Pending"  : "info"	
+			},
+			status: {
+				"Approved" : "Approved",
+				"Rejected" : "Rejected",
+				"Pending"  : "Pending"
+			}
+		};
 exports.add = (req, res, next) => { 
 
  req.body.password=crypto.createHash('md5').update(getRandomInt()).digest("hex");
@@ -69,14 +81,16 @@ exports.view = (req, res, next) => {
     		if(error){
     			res.json({errors: error});
     		}
+    		result.status=`<span class="label label-sm label-${status_list.class[result.status]}">${status_list.status[result.status]}</span>`
     		res.json({success: true, result: result});
     	}
     );
 };
 
 exports.list = (req, res, next) => {
-	
 	let operation = { role: "schooladmin" }, reqData = req.body;
+    let sorting  = datatable.sortingDatatable(req.body.columns,req.body.order);
+
 	if( reqData.contact_name ){
 		operation.contact_name = {$regex: new RegExp(`${reqData.contact_name}`), $options:"im"};
 	}
@@ -116,7 +130,7 @@ exports.list = (req, res, next) => {
 					User.count(operation,done);
 				},
 				records: (done) => {
-					User.find(operation,done);	
+					User.find(operation,done).sort(sorting);	
 				}
 			}, done);	
 		}
@@ -124,18 +138,7 @@ exports.list = (req, res, next) => {
 		if(err){
 			return res.json({errors: err});
 		}
-		let status_list = {
-			class: {
-				"Approved" : "success",
-				"Rejected" : "danger",
-				"Pending"  : "info"	
-			},
-			status: {
-				"Approved" : "Approved",
-				"Rejected" : "Rejected",
-				"Pending"  : "Pending"
-			}
-		};
+		
 		
 		let dataTableObj = datatable.userTable(status_list, result.count, result.records, reqData.draw);
 		res.json(dataTableObj);

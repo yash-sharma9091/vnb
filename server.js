@@ -77,9 +77,12 @@ app.use(helmet());
 /* Register all your routes */
 app.use('/api', routes.router);
 app.use('/adminapi', routes.admin);
-app.get(/^((?!\/(api|adminapi|admin)).)*$/, function (req, res) {
-	res.sendFile(path.resolve('./build/index.html'));
-});
+
+if(process.env.NODE_ENV === 'production'){
+	app.get(/^((?!\/(api|adminapi|admin)).)*$/, function (req, res) {
+		res.sendFile(path.resolve('./build/index.html'));
+	});
+}
 app.get(/^((?!\/(adminapi)).)*$/, function (req, res) {
 	res.sendFile(path.resolve('./admin/index.html'));
 });

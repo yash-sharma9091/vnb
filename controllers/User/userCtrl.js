@@ -13,86 +13,50 @@ const
 	mongoose 	= require('mongoose'),
   	config 		= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 
-
-exports.register = (req, res, next) => {
-	if( !req.body.email || !req.body.password || !req.body.mobile ){
+function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return (Math.floor(Math.random() * (max - min)) + min).toString(); 
+};
+exports.signupSchool = (req, res, next) => {
+	let reqData= req.body;
+	if( !reqData.contact_email || !reqData.contact_telephoneno ){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-				.json(response.required({message: 'Email Password and Mobile is required'}));
+				.json(response.required({message: 'Email and Contact No are required.'}));
 	}
-	if( req.body.mobile ) {
-		req.body.mobile = _.replace(req.body.mobile, /-|\s|\+1/g, "");
+	if( reqData.contact_telephoneno || reqData.school_telephoneno) {
+		reqData.contact_telephoneno = _.replace(reqData.contact_telephoneno, /-|\s|\+1/g, "");
+		reqData.school_telephoneno = _.replace(reqData.school_telephoneno, /-|\s|\+1/g, "");
 	}
 	
 	async.waterfall([
 		function (done) {
-			twilio.isValidNumber(req.body.mobile)
+			User.findOne({contact_email:reqData.contact_email})
 			.then(response => done(null, response))
-			.catch(err => done({errors:{mobile:{message:'Enter a valid Mobile Number'}}}));
+			.catch(err => done(err,null));
 		},
-		function (isValid, done) {
-			// IT should be the most basic plan -> startup plan
-			Subscription.findOne({type:"monthly",price:24}, {_id: 1},function (err, plan) {
-				if( err ) {
-					done({message: 'No startup monthly trial plan exists'},null);
-				} else {
-					done(null, isValid, plan);
-				}
-			})
-		},
-		function (isValid, plan, done) {
-			let curDate = new Date(),
-			_constructPlan = {
-				start_date: new Date(),
-				expiration_date: curDate.setDate(curDate.getDate() + config.default_trail_month_plan_duration),
-				plan_id: plan._id,
-				trial: true
-			};
-			_.assign(req.body, {
-				ip: req.ip,
-				plan_start_during_signup: {
-					plan_id: plan._id,
-					name: 'trial',
-					duration: config.default_trail_month_plan_duration
-				},
-				subscription_plan: [_constructPlan]
-			});
-			let user = new User(req.body);
-			user.save(function (err, user) {
-				if(err){
-					done(err, null);
-				} else {
-					done(null, user);
-				}
-			});
-		},
-
 		function (user, done) {
-			let baseUrl = `${req.protocol}://${req.headers.host}`;
-			mail.send({
-				subject: 'New User Registration',
-				html: './public/email_templates/user/signup.html',
-				from: config.mail.from, 
-				to: user.email,
-				emailData : {
-		   		    signupLink: `${baseUrl}/api/verify_email/${user.salt}`,
-		   		    email: user.email
-		   		}
-			}, (err, success) => {
-				if(err){
-					done(err);
-				} else {
-					res.json(response.success({
-						success: true, 
-						message: 'An account verification email has been sent on your email address, make sure to check inbox/spam folder'
-					}));
-				}
-			});
+			if(_.isNull(user)){
+				req.body.password= getRandomInt(100,1000000);
+		 		let user = new User(req.body);
+				user.save(function (err, user) {
+					if(err){
+						done(err, null);
+					} else {
+						done(null, user);
+					}
+				});
+			}
+			else{
+     			done({message: 'This email is already exist.'},null);
+			}
+		
 		}
 	], function (err) {
-		User.remove({email: req.body.email});
-		res
-		.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-		.json(response.error(err.errors || err));
+		if(err) return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
+						  .json(response.error(err));
+		res.json(response.success({success: true, message:"Thank you for signup, The PencilsINK team will contact you shortly."}));
+
 	});
 };
 

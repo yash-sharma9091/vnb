@@ -12,7 +12,7 @@ const
   	config 		= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 
 exports.register = (req, res, next) => {
-	User.count({email: config.defaultAdmin.email}, (err, count) => {
+	User.count({contact_email: config.defaultAdmin.contact_email}, (err, count) => {
 		if(err){
 			return console.log(err);
 		}
@@ -32,7 +32,7 @@ exports.login = (req, res, next) => {
 				.json(response.required({message: 'Email and Password is required'}));
 	}
 	
-	User.findOne({ email: req.body.email }, {reset_password: 0, salt: 0},(err, user, next) => {
+	User.findOne({ contact_email: req.body.email }, {reset_password: 0, salt: 0},(err, user, next) => {
 		if(err){
 			res
 			.json(response.error(err));
@@ -89,7 +89,7 @@ exports.forgotpassword= (req,res,next) => {
 
   async.waterfall([
     function (done) {
-      User.findOne({ email: {$regex: new RegExp(`^${tmpEmail}`), $options:"im"}}, function (err, user) {
+      User.findOne({ contact_email: {$regex: new RegExp(`^${tmpEmail}`), $options:"im"}}, function (err, user) {
         if( err ){
           done(err, null);
         } else {
@@ -126,16 +126,22 @@ exports.forgotpassword= (req,res,next) => {
       let baseUrl = `${req.protocol}://${req.headers.host}`;
       let changePasswordLink=`${baseUrl}/adminapi/reset/${token}`;
 		mail.send({
-			subject: 'Social-Proof Reset Password',
+			subject: 'Virtual-Notebook Reset Password',
 			html: './public/email_templates/admin/forgotpassword.html',
 			from: config.mail.from, 
-			to: user.email,
+			to: user.contact_email,
 			emailData : {
 				changePasswordLink: changePasswordLink
 	  	    }
 		}, (err, success) => {
 			if(err){
-				done(err);
+				res.status(500).json(
+					response.error({
+						source: err,
+						message: 'Failure sending email',
+						success: false
+					})
+		        );
 			} else {
 				res.json({
 					success: true, 
@@ -177,9 +183,11 @@ exports.reset = function (req, res, next) {
 		function(done){
 			User.findOne(
 				{ "reset_password.token": req.params.token, "reset_password.timestamp": { $gt: Date.now() }, "reset_password.status": true }, 
-				{email: 1, password: 1, reset_password: 1},
+				{contact_email: 1, password: 1, reset_password: 1},
 				function(err, user){
-					if(!err && user){
+					if(err) {done(err,null);} 
+					else{
+					  if(user){
 						user.password = req.body.password;
 						user.reset_password = {
 							status: false
@@ -207,7 +215,8 @@ exports.reset = function (req, res, next) {
 				        		message: 'Password reset token is invalid or has been expired.'	
 							})
 				        );
-					}	
+					 }	
+					}
 				}
 			);	
 		},
@@ -216,7 +225,7 @@ exports.reset = function (req, res, next) {
 				subject: 'Your password has been changed',
 				html: './public/email_templates/admin/reset-password-confirm.html',
 				from: config.mail.from, 
-				to: user.email
+				to: user.contact_email
 			},done);
 		}
 	], function (err) {

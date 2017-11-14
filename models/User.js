@@ -16,7 +16,7 @@ UserSchema 	= new Schema({
 		type: String,
 		maxlength: [200, 'Contact Name cannot be more than {MAXLENGTH} characters.']
 	},
-	contact_email: {
+	email_address: {
 		type: String,
 		lowercase: true,
     	trim: true,
@@ -67,6 +67,28 @@ UserSchema 	= new Schema({
 		type: Number,
 		default:0
 	},
+	schools_challenges: {
+		online_lesson_planning:{
+			type:String
+		},
+		teacher_gradebook:{
+			type:String
+		},
+		students_classwork:{
+			type:String
+		}
+	},
+	schools_goals: {
+		online_lesson_planning:{
+			type:String
+		},
+		teacher_gradebook:{
+			type:String
+		},
+		students_classwork:{
+			type:String
+		}
+	},
 	role: {
 		type: String,
 		enum: {
@@ -88,6 +110,7 @@ UserSchema 	= new Schema({
 		type: String,
 		default: "Pending"
 	},
+	reset_password: {type: Object},
 	salt: { type: String },
 	lastLoggedIn: { type: Date },
 	ip: { type: String }

@@ -4,7 +4,7 @@
 		    <div class="portlet-title">
 		        <div class="caption">
 		            <i class="icon-equalizer font-green-haze"></i>
-		            <span class="caption-subject font-green-haze bold uppercase">View Customer Info - {{userinfo.customer_name}}</span>
+		            <span class="caption-subject font-green-haze bold uppercase">View School Info - {{userinfo.contact_name}}</span>
 		            <!-- <span class="caption-helper">some info...</span> -->
 		        </div>
 		        <div class="tools">
@@ -15,93 +15,216 @@
 		        <!-- BEGIN FORM-->
 		        <form class="form-horizontal" role="form">
 		            <div class="form-body">
-		                <!-- <h2 class="margin-bottom-20"> View User Info - Bob Nilson </h2> -->
-		                <h3 class="form-section">Person Info</h3>
+		              
 		                <div class="row">
-		                    <div class="col-md-6">
+                            <div class="col-md-6">
 		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Customer Name:</label>
+		                            <label class="control-label col-md-3">Contact Title:</label>
 		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{userinfo.customer_name}} </p>
+		                                <p class="form-control-static"> 
+		                                {{userinfo.contact_title}}</p>
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <!--/span-->
 		                    <div class="col-md-6">
 		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Customer URL:</label>
+		                            <label class="control-label col-md-3">Contact Name:</label>
 		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{userinfo.customer_url}} </p>
+		                                <p class="form-control-static"> 
+		                                {{userinfo.contact_name}} </p>
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <!--/span-->
 		                </div>
 		                <!--/row-->
 		                <div class="row">
 		                    <div class="col-md-6">
 		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Email:</label>
+		                            <label class="control-label col-md-3">
+		                             Email Address:</label>
 		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{userinfo.email}} </p>
+		                                <p class="form-control-static"> {{userinfo.email_address}} </p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="col-md-6">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Contact Telephone:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> {{userinfo.contact_telephoneno}} </p>
+		                            </div>
+		                        </div>
+		                    </div>
+  		                </div>
+	                     <div class="row">
+                            <div class="col-md-6">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">School Name:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> {{userinfo.school_name}} </p>
+		                            </div>
+		                        </div>
+		                    </div>
+	                        <div class="col-md-6">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">School Address:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> {{userinfo.school_address}} </p>
+		                            </div>
+		                        </div>
+		                    </div>
+ 		                 </div>
+                         <div class="row">
+
+	                           <div class="col-md-6">
+			                        <div class="form-group">
+			                            <label class="control-label col-md-3">School Type:</label>
+			                            <div class="col-md-9">
+			                                <p class="form-control-static"> {{userinfo.school_type}} </p>
+			                            </div>
+			                        </div>
+			                    </div>
+	                            <div class="col-md-6">
+		                          <div class="form-group">
+		                            <label class="control-label col-md-3">School Level:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> {{userinfo.school_level}} </p>
+		                            </div>
+		                          </div>
+		                        </div>
+		                </div>
+
+                        <div class="row">
+	                        <div class="col-md-6">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">No of Students Laptop:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> {{userinfo.no_of_students_laptop}} </p>
 		                            </div>
 		                        </div>
 		                    </div>
 		                    <!--/span-->
 		                    <div class="col-md-6">
 		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Mobile:</label>
+		                            <label class="control-label col-md-3">No of Students:</label>
 		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{userinfo.mobile}} </p>
+		                                <p class="form-control-static"> {{userinfo.no_of_students}} </p>
 		                            </div>
 		                        </div>
 		                    </div>
 		                    <!--/span-->
+		                </div>
+
+                        <div class="row">
+	                        <div class="col-md-6">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">
+		                            Become Pilot Description:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> {{userinfo.become_pilot_description}} </p>
+		                            </div>
+		                        </div>
+		                    </div>
+                	       <div class="col-md-6">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">School Telephone:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> {{userinfo.school_telephoneno}} </p>
+		                            </div>
+		                        </div>
+		                    </div>
+		       
 		                </div>
 		                <!--/row-->
 		                <div class="row">
-		                    <div class="col-md-6">
+                           <div class="col-md-6">
 		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Member Since:</label>
+		                            <label class="control-label col-md-3">Requested At:</label>
 		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{userinfo.created_at | date: format : 'dd/m/y'}} </p>
+		                                <p class="form-control-static"> {{userinfo.created_at | date: format : 'dd/m/y'}}</p>
 		                            </div>
 		                        </div>
 		                    </div>
 		                    <!--/span-->
 		                    <div class="col-md-6">
 		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Active:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static">
-		                                	<status-label status="userinfo.status"></status-label>
-		                                </p>
+		                            <label class="control-label col-md-3">Status:</label>
+		                            <div class="col-md-9 form-control-static">
+		                   			  <p ng-bind-html="userinfo.status"></p>
 		                            </div>
 		                        </div>
 		                    </div>
 		                    <!--/span-->
 		                </div>
-		                <div class="row" ng-show="userinfo.profile_img">
-		                	<div class="col-md-6">
-		                	    <div class="form-group">
-		                	        <label class="control-label col-md-3">Profile Image:</label>
-		                	        <div class="col-md-9">
-		                	        	<div class="thumbnail" style="width: 200px;">
-		                	            	<img class="img-responsive" ng-src="{{userinfo.profile_img.path}}" alt="{{userinfo.profile_img.path}}"/>
-		                	            </div>
-		                	        </div>
-		                	    </div>
-		                	</div>
+
+                        <hr />
+		                <h3 class="form-section">What are your school's challanges ?</h3>
+		                <div class="row">
+		                    <div class="col-md-4">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Online Lesson Planning:</label>
+		                            <div class="col-md-9">
+		                              <p class="form-control-static">{{userinfo.schools_challenges.online_lesson_planning}}</p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                     
+		                    <div class="col-md-4">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Teacher Gradebook:</label>
+		                            <div class="col-md-9">
+		                              <p class="form-control-static">{{userinfo.schools_challenges.teacher_gradebook}}</p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="col-md-4">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Students Classwork:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static">{{userinfo.schools_challenges.students_classwork}}</p>
+		                            </div>
+		                        </div>
+		                    </div>
 		                </div>
-		                <!--/row-->
+
+                        <hr />
+		                <h3 class="form-section">What are your school's goals ? </h3>
+		                <div class="row">
+		                    <div class="col-md-4">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Online Lesson Planning:</label>
+		                            <div class="col-md-9">
+		                              <p class="form-control-static">{{userinfo.schools_challenges.online_lesson_planning}}</p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                     
+		                    <div class="col-md-4">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Teacher Gradebook:</label>
+		                            <div class="col-md-9">
+		                              <p class="form-control-static">{{userinfo.schools_challenges.teacher_gradebook}}</p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="col-md-4">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Students Classwork:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static">{{userinfo.schools_challenges.students_classwork}}</p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		       		                <!--/row-->
 		            </div>
 		            <div class="form-actions">
 		                <div class="row">
 		                    <div class="col-md-6">
 		                        <div class="row">
 		                            <div class="col-md-offset-3 col-md-9">
-		                                <button type="button" ng-click="goToEdit()" class="btn green">
-		                                    <i class="fa fa-pencil"></i> Edit</button>
+		                            <!--     <button type="button" ng-click="goToEdit()" class="btn green">
+		                                    <i class="fa fa-pencil"></i> Edit</button> -->
 		                                <button type="button" ng-click="goBack()" class="btn default">Back</button>
 		                            </div>
 		                        </div>

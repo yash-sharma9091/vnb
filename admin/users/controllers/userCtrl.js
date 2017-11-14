@@ -21,10 +21,10 @@ mimicTrading.controller('userCtrl', ['$scope', '$state', '$rootScope', 'Upload',
 		                { "data": "sr_no" },
 		                { "data": "contact_name" },
 		                { "data": "contact_telephoneno" },
+                      	{ "data": "email_address" },
 		                { "data": "school_name" },  
-		                { "data": "no_of_students" },
-		                { "data": "school_type" },
-		                { "data": "school_level" },
+		                { "data": "school_address" },
+		                //{ "data": "no_of_students" },
 		                { "data": "status" },
 		                { "data": "action", "orderable": false }
 		            ]

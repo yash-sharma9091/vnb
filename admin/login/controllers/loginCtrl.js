@@ -1,6 +1,6 @@
 'use strict';
-mimicTrading.controller('loginCtrl', ['$scope', '$state','$http','RestSvr', 'loginSrv',
-	($scope, $state,$http, RestSvr, loginSrv) => {
+mimicTrading.controller('loginCtrl', ['$scope','$rootScope','$state','$http','RestSvr', 'loginSrv',
+	($scope,$rootScope,$state,$http, RestSvr, loginSrv) => {
 
 		/**
 		 * login function will authenticate user 
@@ -35,7 +35,11 @@ mimicTrading.controller('loginCtrl', ['$scope', '$state','$http','RestSvr', 'log
 	   	     let inputjson={email:$scope.email};
 			$http.post('adminapi/forgotpassword', inputjson)
 			.then(response => {
-				$state.go('login');	
+               App.alert({type: ('info'), icon: ( 'info'), message: response.data.message, container: $rootScope.settings.errorContainer, place: 'prepend'});
+	           setTimeout(function(){
+                 $scope.showForgetPasswordForm=false;
+               },3000);
+			   //$state.go('login');	
 			})
 			.catch(errors => {
 				$scope.message = errors.message;

@@ -19,7 +19,7 @@ router.use(expressJWT({
 	path:[
 		/^\/admin\/.*/,
 		'/favicon.ico',
-		'/api/register',
+		'/api/signupSchool',
 		'/api/login',
 		'/api/forgot_password',
 		'/api/cmsLinks',

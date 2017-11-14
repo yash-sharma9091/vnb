@@ -14,15 +14,15 @@ exports.userTable = (status_list, recordsTotal, data, draw) => {
 			sr_no: srno,
 			contact_name: data[i].contact_name || '-',
 			contact_telephoneno: data[i].contact_telephoneno || '-',
+			email_address: data[i].email_address || '-',
 			school_name: data[i].school_name,
+			school_address: data[i].school_address,
 			no_of_students: data[i].no_of_students,  
-			school_type: data[i].school_type,
-			school_level: data[i].school_level,
 			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
 			action: `
 					<div class="btn-group btn-group-solid">
 						<a href="#!/view-user/${data[i]._id}" class="btn btn-sm btn-outline blue tooltips" data-original-title="View">
-							<i class="fa fa-search"></i>
+							<i class="fa fa-eye"></i>
 						</a>
 					</div>`
 		};
@@ -34,6 +34,15 @@ exports.userTable = (status_list, recordsTotal, data, draw) => {
 		draw: draw
 	};
 };
+
+exports.sortingDatatable = (col,order) => {
+	let columnindx,dir,result={};
+	    columnindx = order[0].column;
+	    dir 	   = order[0].dir; 
+    var fieldname  = col[columnindx].data;
+    result[fieldname]=dir;
+    return result;
+}
 
 exports.subscriptionTable = (status_list, recordsTotal, data, draw) => {
 	

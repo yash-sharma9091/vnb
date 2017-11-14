@@ -67,10 +67,10 @@ var TableAjax = function () {
                         });
                     }
                 },
-                "columns": options.columns
-                // "order": [
-                //     [1, "asc"]
-                // ] // set first column as a default sort by asc
+                "columns": options.columns,
+                //dom:"<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-6'p><'col-sm-3'l><'col-sm-3'i>>"
+                //"paging": false
+                // "order": [[ 3, "asc" ]] // set first column as a default sort by asc
             }
         });
 
