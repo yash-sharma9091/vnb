@@ -20,7 +20,7 @@ function getRandomInt(min, max) {
 };
 exports.signupSchool = (req, res, next) => {
 	let reqData= req.body;
-	if( !reqData.contact_email || !reqData.contact_telephoneno ){
+	if( !reqData.email_address || !reqData.contact_telephoneno ){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
 				.json(response.required({message: 'Email and Contact No are required.'}));
 	}
@@ -31,7 +31,7 @@ exports.signupSchool = (req, res, next) => {
 	
 	async.waterfall([
 		function (done) {
-			User.findOne({contact_email:reqData.contact_email})
+			User.findOne({email_address:reqData.email_address})
 			.then(response => done(null, response))
 			.catch(err => done(err,null));
 		},

@@ -12,7 +12,7 @@ const
   	config 		= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 
 exports.register = (req, res, next) => {
-	User.count({contact_email: config.defaultAdmin.contact_email}, (err, count) => {
+	User.count({email_address: config.defaultAdmin.email_address}, (err, count) => {
 		if(err){
 			return console.log(err);
 		}
@@ -32,7 +32,7 @@ exports.login = (req, res, next) => {
 				.json(response.required({message: 'Email and Password is required'}));
 	}
 	
-	User.findOne({ contact_email: req.body.email }, {reset_password: 0, salt: 0},(err, user, next) => {
+	User.findOne({ email_address: req.body.email }, {reset_password: 0, salt: 0},(err, user, next) => {
 		if(err){
 			res
 			.json(response.error(err));
@@ -89,7 +89,7 @@ exports.forgotpassword= (req,res,next) => {
 
   async.waterfall([
     function (done) {
-      User.findOne({ contact_email: {$regex: new RegExp(`^${tmpEmail}`), $options:"im"}}, function (err, user) {
+      User.findOne({ email_address: {$regex: new RegExp(`^${tmpEmail}`), $options:"im"}}, function (err, user) {
         if( err ){
           done(err, null);
         } else {
@@ -129,7 +129,7 @@ exports.forgotpassword= (req,res,next) => {
 			subject: 'Virtual-Notebook Reset Password',
 			html: './public/email_templates/admin/forgotpassword.html',
 			from: config.mail.from, 
-			to: user.contact_email,
+			to: user.email_address,
 			emailData : {
 				changePasswordLink: changePasswordLink
 	  	    }
@@ -183,7 +183,7 @@ exports.reset = function (req, res, next) {
 		function(done){
 			User.findOne(
 				{ "reset_password.token": req.params.token, "reset_password.timestamp": { $gt: Date.now() }, "reset_password.status": true }, 
-				{contact_email: 1, password: 1, reset_password: 1},
+				{email_address: 1, password: 1, reset_password: 1},
 				function(err, user){
 					if(err) {done(err,null);} 
 					else{
@@ -225,7 +225,7 @@ exports.reset = function (req, res, next) {
 				subject: 'Your password has been changed',
 				html: './public/email_templates/admin/reset-password-confirm.html',
 				from: config.mail.from, 
-				to: user.contact_email
+				to: user.email_address
 			},done);
 		}
 	], function (err) {

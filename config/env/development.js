@@ -72,7 +72,7 @@ const config = {
   },
   docLimit: 10,
   defaultAdmin: {
-  	contact_email: 'admin@gmail.com',
+  	email_address: 'admin@gmail.com',
   	password: '123456',
   	role: 'admin',
   	status: true,

@@ -9,8 +9,8 @@ const config = {
     }
   },
   server: {
-    host: 'http://158.85.67.166:8027',
-    PORT: process.env.PORT || 8028
+    host: 'http://158.85.76.204:8027',
+    PORT: process.env.PORT || 7000
   },
   socket_server:{
     SOCKETPORT:5000
@@ -72,7 +72,7 @@ const config = {
   },
   docLimit: 10,
   defaultAdmin: {
-    email: 'admin@gmail.com',
+    email_address: 'admin@gmail.com',
     password: '123456',
     role: 'admin',
     status: true
