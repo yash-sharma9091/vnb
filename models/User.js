@@ -67,27 +67,23 @@ UserSchema 	= new Schema({
 		type: Number,
 		default:0
 	},
-	schools_challenges: {
-		online_lesson_planning:{
-			type:String
-		},
-		teacher_gradebook:{
-			type:String
-		},
-		students_classwork:{
-			type:String
-		}
+	school_challenges_lesson_planning:{
+		type:String
 	},
-	schools_goals: {
-		online_lesson_planning:{
-			type:String
-		},
-		teacher_gradebook:{
-			type:String
-		},
-		students_classwork:{
-			type:String
-		}
+	school_challenges_teacher_gradebook:{
+		type:String
+	},
+	school_challenges_students_classwork:{
+		type:String
+	},
+	school_goals_lesson_planning:{
+		type:String
+	},
+	school_goals_teacher_gradebook:{
+		type:String
+	},
+	school_goals_students_classwork:{
+		type:String
 	},
 	role: {
 		type: String,
