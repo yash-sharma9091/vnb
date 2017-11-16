@@ -11,6 +11,7 @@ const
 	jwt 	 	= require('jsonwebtoken'),
 	mail 	 	= require(path.resolve('./config/lib/mail')),
 	mongoose 	= require('mongoose'),
+	//mongooseErrorHandler = require('mongoose-error-handler'),
   	config 		= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 
 function getRandomInt(min, max) {
@@ -37,24 +38,50 @@ exports.signupSchool = (req, res, next) => {
 		},
 		function (user, done) {
 			if(_.isNull(user)){
-				req.body.password= getRandomInt(100,1000000);
 		 		let user = new User(req.body);
 				user.save(function (err, user) {
 					if(err){
-						done(err, null);
+     					done(err, null);
 					} else {
 						done(null, user);
 					}
 				});
 			}
 			else{
-     			done({email_address:{message: 'This email is already exist.'}},null);
+     			done({errors:{email_address:{message: 'This email is already exist.'}}},null);
 			}
-		
+		},
+		function sendSignupMail(user, done){
+      		mail.send({
+				subject: 'Virtual Notebook Signup',
+				html: './public/email_templates/user/signup.html',
+				from: config.mail.from, 
+				to: user.email_address,
+				emailData : {
+		   		    contact_name: user.contact_name
+		   		}
+			}, function(err, success){
+				if(err){
+					res.status(500).json(
+						response.error({
+							source: err,
+							message: 'Failure sending email',
+							success: false
+						})
+			        );
+				} else {
+					res.json(
+						response.success({
+							success: true,
+			        		message: "Thank you for signup, The PencilsINK team will contact you shortly."
+						})	
+			        );
+				}
+			});  
 		}
 	], function (err) {
 		if(err) return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-						  .json(response.error(err));
+						  .json(err);
 		res.json(response.success({success: true, message:"Thank you for signup, The PencilsINK team will contact you shortly."}));
 
 	});

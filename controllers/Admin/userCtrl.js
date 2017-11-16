@@ -131,9 +131,11 @@ exports.list = (req, res, next) => {
 				       async.each(response, function(elem, callback) {
 				          async.waterfall([
 	                        function(done){
-	                          let updateJson={};
+	                          let updateJson={},password= getRandomInt(100,1000000);;
 	                              updateJson.uan=elem.uan;
 	                              updateJson.pilot_request=_status;
+	                              updateJson.password=password;
+	                              elem.password=password;
 	                          if(elem.seq_no!=undefined){
 	                          	updateJson.seq_no=elem.seq_no;
 	                          }	
@@ -145,35 +147,29 @@ exports.list = (req, res, next) => {
 	                          		done(null,elem);
 	                          	}
 	                          });
-	                        }
-	                   /*     function(pilotdata,callback){
-
+	                        },
+	                        function(pilotdata,callback){
+				             
                         		mail.send({
-									subject: 'Virtual-Notebook Signup',
-									html: './public/email_templates/admin/forgotpassword.html',
+									subject: 'Virtual-Notebook Request Approved',
+									html: './public/email_templates/user/approve.html',
 									from: config.mail.from, 
-									to: user.email_address,
+									to: pilotdata.email_address,
 									emailData : {
-										changePasswordLink: changePasswordLink
+										contact_name: pilotdata.contact_name,
+										email_address: pilotdata.email_address,
+										username: pilotdata.uan,
+										password: pilotdata.password
 							  	    } 
 								   }, (err, success) => {
 									if(err){
-										res.status(500).json(
-											response.error({
-												source: err,
-												message: 'Failure sending email',
-												success: false
-											})
-								        );
+								       done(err,null);
 									} else {
-										res.json({
-											success: true, 
-											message: 'An email has been sent to the provided email with further instructions.'
-										});
+						               done(null,success);
 									}
 								});
 
-	                        }*/
+	                        }
 	                      ],callback);
 			           },function(err,res){
 			           	 if(err){
@@ -304,16 +300,16 @@ function createUniqueAccount(userid){
 function shortSchoolType(type){
    switch(type)
 	{
-	    case 'Public School':
+	    case 'Public':
 	        return 'P';
 	        break;
-	    case 'Charter School':
+	    case 'Charter':
 	        return 'C';
 	        break;
-	    case 'Private School':
+	    case 'Private':
 	        return 'R';
 	        break;
-	    case 'Parochia School':
+	    case 'Parochia':
 	    	return 'A';
 	        break;
 	    case 'Other':

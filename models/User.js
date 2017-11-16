@@ -16,10 +16,12 @@ UserSchema 	= new Schema({
 	},
     contact_title: {
 		type: String,
-		maxlength: [50, 'Contact Title cannot be more than {MAXLENGTH} characters.']
+		required:"Contact title is required",
+		maxlength: [150, 'Contact Title cannot be more than {MAXLENGTH} characters.']
 	},
 	contact_name: {
 		type: String,
+		required:"Contact name is required",
 		maxlength: [200, 'Contact Name cannot be more than {MAXLENGTH} characters.']
 	},
 	email_address: {
@@ -38,6 +40,7 @@ UserSchema 	= new Schema({
 	},
 	contact_telephoneno: {
 		type: String,
+		required:"Contact telephone is required",
 		maxlength: [20, 'Contact Telephone No cannot be more than {MAXLENGTH} characters.']
 	},
 	school_telephoneno: {
@@ -55,7 +58,8 @@ UserSchema 	= new Schema({
 	no_of_students: {
 		type: Number,
 		default:0,
-		max: [4, 'No of students cannot be more than {MAX} characters.'],
+		min:0,
+		max: [9999, 'No of students cannot be more than {MAX} characters.'],
 	},
 	school_type: {
 		type: String,
@@ -105,9 +109,7 @@ UserSchema 	= new Schema({
 		default: false
 	},
 	password: {
-		type: String,
-		required: 'Password is required',
-		minlength: [6, 'Password must be atleast 6 characters long.']
+		type: String
 	},
 	status: {
 		type: Boolean,
