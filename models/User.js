@@ -8,6 +8,12 @@ uniqueValidator = require('mongoose-unique-validator'),
 Schema 			= mongoose.Schema,
 
 UserSchema 	= new Schema({
+	uan:{
+		type:String
+	},
+	seq_no:{
+        type:Number
+	},
     contact_title: {
 		type: String,
 		maxlength: [50, 'Contact Title cannot be more than {MAXLENGTH} characters.']
@@ -48,7 +54,8 @@ UserSchema 	= new Schema({
 	},
 	no_of_students: {
 		type: Number,
-		default:0
+		default:0,
+		max: [4, 'No of students cannot be more than {MAX} characters.'],
 	},
 	school_type: {
 		type: String,
@@ -103,6 +110,10 @@ UserSchema 	= new Schema({
 		minlength: [6, 'Password must be atleast 6 characters long.']
 	},
 	status: {
+		type: Boolean,
+		default: false 
+	},
+	pilot_request: {
 		type: String,
 		default: "Pending"
 	},

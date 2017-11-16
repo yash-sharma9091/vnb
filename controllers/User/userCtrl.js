@@ -48,7 +48,7 @@ exports.signupSchool = (req, res, next) => {
 				});
 			}
 			else{
-     			done({message: 'This email is already exist.'},null);
+     			done({email_address:{message: 'This email is already exist.'}},null);
 			}
 		
 		}

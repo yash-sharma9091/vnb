@@ -36,7 +36,7 @@ mimicTrading.config(['$stateProvider', '$urlRouterProvider',function($stateProvi
 		url: '/dashboard',
 		controller: 'dashboardCtrl',
 		templateUrl: '/dashboard/views/dashboard.html',
-		data: {pageTitle: 'Dashboard', smallTitle: 'dashboard & statistics'},
+		data: {pageTitle: 'Dashboard'},
 		resolve: {
 		    deps: ['$ocLazyLoad', function($ocLazyLoad) {
 		        return $ocLazyLoad.load({

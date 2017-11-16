@@ -81,7 +81,7 @@ exports.view = (req, res, next) => {
     		if(error){
     			res.json({errors: error});
     		}
-    		result.status=`<span class="label label-sm label-${status_list.class[result.status]}">${status_list.status[result.status]}</span>`
+    		result.pilot_request=`<span class="label label-sm label-${status_list.class[result.pilot_request]}">${status_list.status[result.pilot_request]}</span>`
     		res.json({success: true, result: result});
     	}
     );
@@ -90,6 +90,7 @@ exports.view = (req, res, next) => {
 exports.list = (req, res, next) => {
 	let operation = { role: "schooladmin" }, reqData = req.body;
     let sorting  = datatable.sortingDatatable(req.body.columns,req.body.order);
+    sorting.created_at=-1;
 
 	if( reqData.contact_name ){
 		operation.contact_name = {$regex: new RegExp(`${reqData.contact_name}`), $options:"im"};
@@ -109,16 +110,84 @@ exports.list = (req, res, next) => {
 	if( reqData.no_of_students ){
 		operation.no_of_students = reqData.no_of_students;
 	}
-	if( reqData.status){
-		operation.status = {$regex: new RegExp(`${reqData.status}`), $options:"im"};
+	if( reqData.pilot_request){
+		operation.pilot_request = {$regex: new RegExp(`${reqData.pilot_request}`), $options:"im"};
 	}
 	
 	async.waterfall([
 		function (done) {
 			if( reqData.customActionType === 'group_action' ) {
+
 				let _ids = _.map(reqData.id, mongoose.Types.ObjectId);
 				let _status =  ( reqData.customActionName === 'Approve' ) ? 'Approved' : 'Rejected';
-				User.update({_id: {$in:_ids}},{$set:{status: _status}},{multi:true}, done);
+
+				if(_status=="Rejected"){
+				  User.update({_id: {$in:_ids}},{$set:{pilot_request: _status}},{multi:true}, done);
+				}
+				else{
+			  		createUniqueAccount(_ids)
+			  		.then(response =>{
+				       //console.log("res"+JSON.stringify(response));
+				       async.each(response, function(elem, callback) {
+				          async.waterfall([
+	                        function(done){
+	                          let updateJson={};
+	                              updateJson.uan=elem.uan;
+	                              updateJson.pilot_request=_status;
+	                          if(elem.seq_no!=undefined){
+	                          	updateJson.seq_no=elem.seq_no;
+	                          }	
+	                          User.update({ _id: elem._id },{ $set: updateJson },(err,res)=>{
+	                          	if(err){
+	                          		done(err,null);
+	                          	}
+	                          	else{
+	                          		done(null,elem);
+	                          	}
+	                          });
+	                        }
+	                   /*     function(pilotdata,callback){
+
+                        		mail.send({
+									subject: 'Virtual-Notebook Signup',
+									html: './public/email_templates/admin/forgotpassword.html',
+									from: config.mail.from, 
+									to: user.email_address,
+									emailData : {
+										changePasswordLink: changePasswordLink
+							  	    } 
+								   }, (err, success) => {
+									if(err){
+										res.status(500).json(
+											response.error({
+												source: err,
+												message: 'Failure sending email',
+												success: false
+											})
+								        );
+									} else {
+										res.json({
+											success: true, 
+											message: 'An email has been sent to the provided email with further instructions.'
+										});
+									}
+								});
+
+	                        }*/
+	                      ],callback);
+			           },function(err,res){
+			           	 if(err){
+			           	 	done(err,null);
+			           	 }
+			           	 else{
+			           	 	done(null,res);
+			           	 }
+			           });
+	                })
+			  		.catch(err =>{
+					   done(err,null);
+					});	
+				}
 			}
 			else {
 				done(null, null);
@@ -138,9 +207,136 @@ exports.list = (req, res, next) => {
 		if(err){
 			return res.json({errors: err});
 		}
-		
-		
+				
 		let dataTableObj = datatable.userTable(status_list, result.count, result.records, reqData.draw);
 		res.json(dataTableObj);
 	});
 };
+
+
+function createUniqueAccount(userid){
+   	return new Promise((resolve, reject) => {
+	  if( !userid ) return reject('Id is required');
+	    async.waterfall([
+	    	function createSequence(done){
+
+              User.find({email_address:{$ne:"admin@gmail.com"},pilot_request:"Approved"},(err,userseq) =>{
+                 if(err){
+                   done(err,null);	
+                 }
+                 else{
+                   let uniqseq;
+                   if(userseq.length!=0){
+                   	 uniqseq=userseq[0].seq_no+1;
+                   	 done(null,uniqseq);
+                   }
+                   else{
+                     uniqseq=1;
+                   	 done(null,uniqseq);
+                   }
+                 } 
+              }).sort({_id:-1}).limit(1); 
+	    	},
+	        function getUserInfo(sequence,done){
+  	          User.find({$and:[{_id: {$in:userid}},{pilot_request:{$in:["Pending","Rejected"]}}]},(err,user) => {
+  	          	if(err){
+  	          	  done(err,null);
+  	          	}
+  	          	else{
+  	          	  if(user){
+  	          	    done(null,user,sequence);
+  	          	  }
+  	          	  else{
+                    done({message:"This is already approved."},null);
+  	          	  }	
+  	          	}
+  	          });		
+	        },
+	        function uniqueAccountNo(user,sequence,done){
+	          let uniqueAccArr=[],seqNo=0;	
+	          user.map(function(singleuser){
+	          	let fnlJson={},accountNo='';
+	          	 if(singleuser.school_name!=""){
+     	           accountNo=accountNo+'X'+singleuser.school_name.replace(/ /g,'').substring(0,3).toUpperCase();
+	          	 }
+                 if(singleuser.school_type!=undefined){
+                   accountNo=accountNo+ shortSchoolType(singleuser.school_type);
+                 }
+                 if(singleuser.created_at){
+                   let month=new Date(singleuser.created_at).getMonth() +1;
+                   let year =(new Date(singleuser.created_at).getFullYear()+'').substring(2,4);	
+                   accountNo=accountNo+	month + year;
+                 }
+                 if(singleuser.no_of_students!=undefined){
+                   accountNo=accountNo + noOfStudentDigit(singleuser.no_of_students);
+                 }
+                 if(sequence){
+                 	if(sequence==1){
+                 	  seqNo=seqNo+1;
+                 	  sequence=("000"+seqNo).slice(-4);	
+                      accountNo=accountNo+sequence;
+                      singleuser.seq_no=seqNo;
+                      singleuser.uan=accountNo;
+                      uniqueAccArr.push(singleuser);
+                 	}
+                 	else{
+                 	  let seqDigit=("000"+sequence).slice(-4);	
+                      accountNo=accountNo+seqDigit;
+                      singleuser.uan=accountNo;
+                      singleuser.seq_no=sequence;
+                      uniqueAccArr.push(singleuser);
+                 	}
+                 }
+	          });	
+  	          done(null,uniqueAccArr);
+	        }
+	    ],function(err,res){
+	        if( err ) {
+				reject(err);
+			} else {
+				resolve(res);
+			}
+	    })
+
+	});
+}
+
+function shortSchoolType(type){
+   switch(type)
+	{
+	    case 'Public School':
+	        return 'P';
+	        break;
+	    case 'Charter School':
+	        return 'C';
+	        break;
+	    case 'Private School':
+	        return 'R';
+	        break;
+	    case 'Parochia School':
+	    	return 'A';
+	        break;
+	    case 'Other':
+	 		return 'O';
+	        break;
+	}
+}
+
+function noOfStudentDigit(digit){
+    let studentlength= digit.toString().length;
+	   switch(studentlength)
+		{
+		    case 1:
+		        return "000"+digit;
+		        break;
+		    case 2:
+		        return "00"+digit;
+		        break;
+		    case 3:
+		    	return "0"+digit;
+		        break;
+		    case 4:
+		 		return digit;
+		        break;
+		}
+}

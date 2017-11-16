@@ -17,7 +17,7 @@ mimicTrading.config(['$stateProvider',function($stateProvider){
 		url: '/users',
 		controller: 'userCtrl',
 		templateUrl: '/users/views/userListing.html',
-		data: {pageTitle: 'School Management'},
+		data: {pageTitle: 'School Listing'},
 		resolve: {
 		    deps: ['$ocLazyLoad', function($ocLazyLoad) {
 		        return $ocLazyLoad.load({
@@ -42,7 +42,7 @@ mimicTrading.config(['$stateProvider',function($stateProvider){
 		url: '/view-user/:id',
 		controller: 'userViewCtrl',
 		templateUrl: '/users/views/view_user.html',
-		data: {pageTitle: 'Customer Detail'},
+		data: {pageTitle: 'School View Detail'},
 		authenticate: true,
 		resolve: userResolver
 	})

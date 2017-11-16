@@ -29,7 +29,7 @@ var TableAjax = function () {
                 // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js). 
                 // So when dropdowns used the scrollable div should be removed. 
                 // "dom": "<'row'<'col-md-7 col-sm-12'pli><'col-md-5 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
-                "dom": "<'row'<'col-md-7 col-sm-12'pli><'col-md-5 col-sm-12'<'table-group-actions pull-right'>>r><'table-responsive't><'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>", // datatable layout
+                "dom": "<'row'<'col-md-7 col-sm-12'><'col-md-5 col-sm-12'<'table-group-actions pull-right'>>r><'table-responsive't><'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>", // datatable layout
                 
                 "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
 
@@ -82,16 +82,16 @@ var TableAjax = function () {
                 grid.setAjaxParam("customActionType", "group_action");
                 grid.setAjaxParam("customActionName", action.val());
                 grid.setAjaxParam("id", grid.getSelectedRows());
-                if(action.val()==="remove"){
+                if(action.val()==="Approve" || action.val()==="Reject"){
                   bootbox.confirm({
-                    title: "Delete User",
-                    message: "Are you sure you want to delete?",
+                    title: "Pilot Request",
+                    message: `Are you sure you want to ${action.val()} ?`,
                     buttons: {
                         cancel: {
                             label: '<i class="fa fa-times"></i> Cancel'
                         },
                         confirm: {
-                            label: '<i class="fa fa-check"></i> Confirm'
+                            label: `<i class="fa fa-check"></i> ${action.val()}`
                         }
                     },
                     callback: function (result) {

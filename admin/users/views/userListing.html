@@ -2,16 +2,16 @@
     <div class="col-md-12">
         <!-- Begin: life time stats -->
         <div class="portlet light portlet-fit portlet-datatable bordered">
-            <div class="portlet-title">
+       <!--      <div class="portlet-title">
                 <div class="caption">
                     <i class="fa fa-users"></i> Schools Listing </div>
-        <!--         <div class="actions">
+                <div class="actions">
                     <a href ui-sref="newUser" class="btn btn-outline green ">
                         <i class="fa fa-plus"></i>
                         <span > New Customer </span>
                     </a>
-                </div> -->
-            </div>
+                </div>
+            </div> -->
 
             <div class="portlet-body">
                 <div class="table-container">
@@ -68,7 +68,7 @@
                                     <input type="text" class="form-control form-filter input-sm" name="no_of_students">
                                 </td> -->
                                 <td>
-                                  <select class="form-control form-filter input-sm" name="status">
+                                  <select class="form-control form-filter input-sm" name="pilot_request">
                                         <option value="">Select</option>
                                         <option value="Approved">Approved</option>
                                         <option value="Rejected">Rejected</option>
@@ -77,12 +77,19 @@
                                 </td>
                                 <td>
                                     <div class="margin-bottom-5">
-                                      <button class="btn btn-sm yellow filter-submit margin-bottom tooltips"
-                                        data-original-title="Search">
-                                        <i class="fa fa-search"></i>
-                                      </button>
-                                      <button class="btn btn-sm red filter-cancel tooltips" data-original-title="Reset"><i class="fa fa-refresh"></i>
-                                      </button>
+                                      <div class="row">
+                                        <div class="col-sm-6 col-md-6">
+                                             <button class="btn btn-sm yellow filter-submit margin-bottom tooltips"
+                                            data-original-title="Search">
+                                               <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-6 col-md-6">
+                                              <button class="btn btn-sm red filter-cancel tooltips" data-original-title="Reset"><i class="fa fa-refresh"></i>
+                                              </button> 
+                                        </div>
+                                      </div>
+                            
                                     </div>
                             
                                 </td>

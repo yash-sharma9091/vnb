@@ -18,7 +18,7 @@ exports.userTable = (status_list, recordsTotal, data, draw) => {
 			school_name: data[i].school_name,
 			school_address: data[i].school_address,
 			no_of_students: data[i].no_of_students,  
-			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
+			pilot_request: `<span class="label label-sm label-${status_list.class[data[i].pilot_request]}">${status_list.status[data[i].pilot_request]}</span>`,
 			action: `
 					<div class="btn-group btn-group-solid">
 						<a href="#!/view-user/${data[i]._id}" class="btn btn-sm btn-outline blue tooltips" data-original-title="View">

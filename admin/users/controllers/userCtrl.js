@@ -25,7 +25,7 @@ mimicTrading.controller('userCtrl', ['$scope', '$state', '$rootScope', 'Upload',
 		                { "data": "school_name" },  
 		                { "data": "school_address" },
 		                //{ "data": "no_of_students" },
-		                { "data": "status" },
+		                { "data": "pilot_request" },
 		                { "data": "action", "orderable": false }
 		            ]
 			    });
