@@ -17,7 +17,7 @@ UserSchema 	= new Schema({
     contact_title: {
 		type: String,
 		required:"Contact title is required",
-		maxlength: [150, 'Contact Title cannot be more than {MAXLENGTH} characters.']
+		maxlength: [200, 'Contact Title cannot be more than {MAXLENGTH} characters.']
 	},
 	contact_name: {
 		type: String,
@@ -49,7 +49,7 @@ UserSchema 	= new Schema({
 	},
 	school_name: {
 		type: String,
-		maxlength: [100, 'School Name cannot be more than {MAXLENGTH} characters.']
+		maxlength: [200, 'School Name cannot be more than {MAXLENGTH} characters.']
 	},
 	school_address: {
 		type: String,
@@ -72,34 +72,39 @@ UserSchema 	= new Schema({
 		}
 	},
 	school_level: {
-		type: String,
-		maxlength: [100, 'School Level cannot be more than {MAXLENGTH} characters.']
+		type: String
 	},
 	become_pilot_description: {
 		type: String,
-		maxlength: [160, 'Become Pilot Description cannot be more than {MAXLENGTH} characters.']
+		maxlength: [200, 'Become Pilot Description cannot be more than {MAXLENGTH} characters.']
 	},
 	no_of_students_laptop: {
 		type: Number,
 		default:0
 	},
 	school_challenges_lesson_planning:{
-		type:String
+		type:String,
+		maxlength: [400, 'Challenges lesson planning cannot be more than {MAXLENGTH} characters.']
 	},
 	school_challenges_teacher_gradebook:{
-		type:String
+		type:String,
+		maxlength: [400, 'Challenges teacher gradebook cannot be more than {MAXLENGTH} characters.']
 	},
 	school_challenges_students_classwork:{
-		type:String
+		type:String,
+		maxlength: [400, 'Challenges student classwork cannot be more than {MAXLENGTH} characters.']
 	},
 	school_goals_lesson_planning:{
-		type:String
+		type:String,
+		maxlength: [400, 'Goals lesson planning cannot be more than {MAXLENGTH} characters.']
 	},
 	school_goals_teacher_gradebook:{
-		type:String
+		type:String,
+		maxlength: [400, 'Goals teacher gradebook cannot be more than {MAXLENGTH} characters.']
 	},
 	school_goals_students_classwork:{
-		type:String
+		type:String,
+		maxlength: [400, 'Goals student classwork  cannot be more than {MAXLENGTH} characters.']
 	},
 	role: {
 		type: String,
