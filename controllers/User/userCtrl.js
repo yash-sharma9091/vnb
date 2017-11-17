@@ -87,15 +87,15 @@ exports.signupSchool = (req, res, next) => {
 	});
 };
 
-exports.login = (req, res, next) => {
-	if( !req.body.email || !req.body.password ){
+exports.loginSchool = (req, res, next) => {
+	if( !req.body.uan || !req.body.password ){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-				.json(response.required({message: 'Email and Password is required'}));
+				.json(response.required({message: 'UAN and Password is required'}));
 	}
 	
 	async.waterfall([
 		function(done){
-			User.findOne({ email: req.body.email }, {reset_password: 0, salt: 0},(err, user, next) => {
+			User.findOne({ uan: req.body.uan }, {seq_no:0,__v: 0,reset_password: 0, salt: 0},(err, user, next) => {
 				if(err){
 					done(err,null);
 				} else {
@@ -108,14 +108,8 @@ exports.login = (req, res, next) => {
 							break;
 
 						// 2. IF User Email is not verified
-						case (!user.email_verified):
-							errors = { message: 'Kindly check your inbox/spam folder and verify your email'};
-							error = true;
-							break;
-
-						// 3. IF Admin has Deactivate User Account
-						case (!user.status):
-							errors = { message: 'Your account is deactivated by admin, please contact admin.'};
+						case (user.pilot_request!='Approved'):
+							errors = { message: 'Your account is not approved by admin, please contact admin.'};
 							error = true;
 							break;
 
@@ -141,16 +135,9 @@ exports.login = (req, res, next) => {
 						  .json(response.error(err));
 	// Remove sensitive data before sending user object
 		user.password = undefined;
-		let jwt_user = {
-			_id: user._id,
-			email: user.email,
-			mobile: user.mobile,
-			customer_name: user.customer_name,
-			customer_url: user.customer_url,
-			profile_image: user.profile_image
-		};
-		let token = jwt.sign(jwt_user, new Buffer(config.secret).toString('base64'), {expiresIn: '1 day'});
-		res.json(response.success({success: true, user: jwt_user, token}));
+		
+		let token = jwt.sign(user, new Buffer(config.secret).toString('base64'), {expiresIn: '1 day'});
+		res.json(response.success({success: true, user: user, token}));
 	})
 };
 

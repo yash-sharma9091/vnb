@@ -127,18 +127,15 @@ exports.list = (req, res, next) => {
 				else{
 			  		createUniqueAccount(_ids)
 			  		.then(response =>{
-				       //console.log("res"+JSON.stringify(response));
 				       async.each(response, function(elem, callback) {
 				          async.waterfall([
 	                        function(done){
 	                          let updateJson={},password= getRandomInt(100,1000000);;
 	                              updateJson.uan=elem.uan;
 	                              updateJson.pilot_request=_status;
-	                              updateJson.password=password;
+	                              updateJson.password=crypto.createHmac('sha512',config.salt).update(password).digest('base64');
 	                              elem.password=password;
-	                          if(elem.seq_no!=undefined){
-	                          	updateJson.seq_no=elem.seq_no;
-	                          }	
+	                          	  updateJson.seq_no=elem.seq_no;
 	                          User.update({ _id: elem._id },{ $set: updateJson },(err,res)=>{
 	                          	if(err){
 	                          		done(err,null);

@@ -20,7 +20,7 @@ router.use(expressJWT({
 		/^\/admin\/.*/,
 		'/favicon.ico',
 		'/api/signupSchool',
-		'/api/login',
+		'/api/loginSchool',
 		'/api/forgot_password',
 		'/api/cmsLinks',
 		'/api/settings',
