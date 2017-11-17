@@ -62,9 +62,14 @@ UserSchema 	= new Schema({
 		max: [9999, 'No of students cannot be more than {MAX} characters.'],
 	},
 	school_type: {
-		type: String,
-		maxlength: [100, 'School Type cannot be more than {MAXLENGTH} characters.'],
-		default:"Other"
+		name:{
+          type: String,
+          default:"Other" 
+		},
+		abbreviation:{
+		    type:String,
+		    default:'O'	
+		}
 	},
 	school_level: {
 		type: String,

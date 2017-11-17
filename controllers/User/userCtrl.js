@@ -21,6 +21,7 @@ function getRandomInt(min, max) {
 };
 exports.signupSchool = (req, res, next) => {
 	let reqData= req.body;
+
 	if( !reqData.email_address || !reqData.contact_telephoneno ){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
 				.json(response.required({message: 'Email and Contact No are required.'}));

@@ -253,7 +253,8 @@ function createUniqueAccount(userid){
      	           accountNo=accountNo+'X'+singleuser.school_name.replace(/ /g,'').substring(0,3).toUpperCase();
 	          	 }
                  if(singleuser.school_type!=undefined){
-                   accountNo=accountNo+ shortSchoolType(singleuser.school_type);
+                   //accountNo=accountNo+ shortSchoolType(singleuser.school_type);
+                   accountNo=accountNo+singleuser.school_type.abbreviation;
                  }
                  if(singleuser.created_at){
                    let month=new Date(singleuser.created_at).getMonth() +1;
