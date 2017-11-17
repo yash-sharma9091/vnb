@@ -171,25 +171,15 @@ exports.verifyEmail = (req, res, next) => {
  */
 exports.forgot = (req, res, next) => {
 
-	if( (!req.body.email || !req.body.mobile ) && !req.body.type){
+	if(!req.body.uan ){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-			.json(response.required({message: 'Email or mobile number is required'}));
+			.json(response.required({message: 'UAN is required'}));
 	}
-	if( req.body.type === 'email' && req.body.email ) {
-		forgotByEmail(req, res, next);
-	} else if(req.body.type === 'mobile' && req.body.mobile) {
-		forgotByMobile(req, res, next);
-	} else {
-		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-			.json(response.required({message: 'Email or mobile number is required'}));
-	}
-};
 
-function forgotByEmail(req, res, next) {
 	async.waterfall([
 		// find the user
 		function(done){
-			User.findOne({ email: req.body.email, role: { $ne: "admin" } }, 'email email_verified deactivate status customer_name',function(err, user){
+			User.findOne({ uan: req.body.uan, role: { $ne: "admin" } },function(err, user){
 				if(err){
 					done(err, null);
 				} else {
@@ -197,17 +187,17 @@ function forgotByEmail(req, res, next) {
 					switch(_.isNull(user) || !_.isNull(user)){
 						// 1. IF User Not Found in Database
 						case _.isNull(user):
-							errors = { name: 'Authentication failed', message: 'No account with that email has been found', success: false};
+							errors = { name: 'Authentication failed', message: 'No account with that UAN has been found', success: false};
 							error = true;
 							break;
 
 						// 2. IF User Email is Not Verified
-						case (!user.email_verified):
-							errors = { name: 'Authentication failed', message: 'Your email is not verified, kindly verify your email.', success: false};
+						case (user.pilot_request!="Approved"):
+							errors = { name: 'Authentication failed', message: 'Your account is not approved, please contact admin.', success: false};
 							error = true;
 							break;
 
-						// 3. IF User has deactivate his account
+			/*			// 3. IF User has deactivate his account
 						case (user.deactivate):
 							errors = { name: 'Authentication failed', message: 'Your account is deactivate.', success: false};
 							error = true;
@@ -217,7 +207,7 @@ function forgotByEmail(req, res, next) {
 						case (!user.status && user.email_verified):
 							errors = { name: 'Authentication failed', message: 'Your account is deactivated by admin, please contact admin.', success: false};
 							error = true;
-							break;
+							break;*/
 
 						default: 
 							error = false;
@@ -238,7 +228,6 @@ function forgotByEmail(req, res, next) {
 			User.update(
 				{_id: user._id},
 				{ reset_password: { token: token, timestamp: Date.now() + 86400000, status: true} }, 
-				{ runValidators: true, setDefaultsOnInsert: true },
 				function(err, result){
 					done(err, token, user, result);
 				}
@@ -251,10 +240,10 @@ function forgotByEmail(req, res, next) {
 				subject: 'Reset your password',
 				html: './public/email_templates/user/forgotpassword.html',
 				from: config.mail.from, 
-				to: user.email,
+				to: user.email_address,
 				emailData : {
 		   		    changePasswordLink: `${baseUrl}/api/reset/${token}`,
-		   		    customer_name: user.customer_name
+		   		    contact_name: user.contact_name
 		   		}
 			}, function(err, success){
 				if(err){
@@ -280,7 +269,10 @@ function forgotByEmail(req, res, next) {
 			res.status(500).json( response.error( err ) );
 		}
 	});
-}
+
+};
+
+
 
 function random() {
 	let string = "QWERTYUIOPLKJHGFDSAZXCVBNM12346790";
