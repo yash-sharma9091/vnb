@@ -136,8 +136,12 @@ exports.loginSchool = (req, res, next) => {
 						  .json(response.error(err));
 	// Remove sensitive data before sending user object
 		user.password = undefined;
+		let jwt_data={
+            email_address:user.email_address,
+			contact_name:user.contact_name
+		}
 		
-		let token = jwt.sign(user, new Buffer(config.secret).toString('base64'), {expiresIn: '1 day'});
+		let token = jwt.sign(jwt_data, new Buffer(config.secret).toString('base64'), {expiresIn: '1 day'});
 		res.json(response.success({success: true, user: user, token}));
 	})
 };
