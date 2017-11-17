@@ -12,8 +12,99 @@
 		        </div>
 		    </div>
 		    <div class="portlet-body form">
+		    <div class="row">
+		    	<div class="col-md-8 col-md-offset-2">
+		    	  <table class="table table-bordered marginTop10">
+				    <thead></thead>
+				    <tbody>
+	    		      <tr>
+				        <th>Contact Name:</th>
+				        <td>{{userinfo.contact_name}}</td>
+				      </tr>
+				      <tr>
+				        <th>Contact Title:</th>
+						<td>{{userinfo.contact_title}}</td>
+				      </tr>
+				      <tr>
+				      	<th>Email Address:</th>
+				      	<td>{{userinfo.email_address}}</td>
+				      </tr>
+				      <tr>
+				      	<th>Contact Telephone No:</th>
+				      	 <td>{{userinfo.contact_telephoneno}}</td>
+				      </tr>
+				      <tr>
+				      	 <th>School Telephone No:</th>
+				      	  <td>{{userinfo.school_telephoneno}}</td>
+				      </tr>
+				      <tr>
+				      	<th>School Name:</th>
+				      	<td>{{userinfo.school_name}}</td>
+				      </tr>
+				      <tr>
+				      	<th>School Address:</th>
+				      	<td>{{userinfo.school_address}}</td>
+				      </tr>
+				      <tr>
+				      	<th>Total No of Students:</th>
+				      	<td>{{userinfo.no_of_students}}</td>
+				      </tr>
+				      <tr>
+				      	 <th>Type of School:</th>
+				      	 <td>{{userinfo.school_type}}</td>
+				      </tr>
+				      <tr>
+				      	<th>School Levels:</th>
+				      	<td>{{userinfo.school_level}}</td>
+				      </tr>
+				      <tr>
+				      	<th>Become Pilot Descriptions:</th>
+				      	<td>{{userinfo.become_pilot_description}}</td>
+				      </tr>
+				      <tr>
+				      	<th>No of Student Laptops:</th>
+				      	<td>{{userinfo.no_of_students_laptop}}</td>
+				      </tr>
+				      <tr>
+				      	<th>Challenges relate to lesson planning:</th>
+				      	<td>
+				      	{{userinfo.school_challenges_lesson_planning}}
+				      	</td>
+				      </tr>
+				      <tr>
+				      	<th>Challenges relate to teacher's gradebook:</th>
+				      	<td>
+				      	{{userinfo.school_challenges_teacher_gradebook}}
+				      	</td>
+				      </tr>
+				      <tr>
+				      	<th>Challenges relate to student's classwork:</th>
+				      	<td>{{userinfo.school_challenges_students_classwork}}
+				      	</td>
+				      </tr>
+				      <tr>
+				      	<th>Goals relate to lesson planning:</th>
+				      	<td>{{userinfo.school_goals_lesson_planning}}</td>
+				      </tr>
+				      <tr>
+				      	<th>Goals relate to teacher's gradebook:</th>
+				      	<td>{{userinfo.school_goals_teacher_gradebook}}</td>
+				      </tr>
+				      <tr>
+				      	<th>Goals relate to student's classwork:</th>
+				      	<td>
+				      	{{userinfo.school_goals_students_classwork}}
+				      	</td>
+				      </tr>
+				    </tbody>
+			  </table>
+		    	</div>
+		    </div>
+
+
+
 		        <!-- BEGIN FORM-->
-		        <form class="form-horizontal" role="form">
+		  <!--       <form class="form-horizontal" role="form">
 		            <div class="form-body">
 		              
 		                <div class="row">
@@ -36,7 +127,6 @@
 		                        </div>
 		                    </div>
 		                </div>
-		                <!--/row-->
 		                <div class="row">
 		                    <div class="col-md-6">
 		                        <div class="form-group">
@@ -103,7 +193,6 @@
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <!--/span-->
 		                    <div class="col-md-6">
 		                        <div class="form-group">
 		                            <label class="control-label col-md-3">No of Students:</label>
@@ -112,7 +201,6 @@
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <!--/span-->
 		                </div>
 
                         <div class="row">
@@ -135,7 +223,6 @@
 		                    </div>
 		       
 		                </div>
-		                <!--/row-->
 		                <div class="row">
                            <div class="col-md-6">
 		                        <div class="form-group">
@@ -145,7 +232,6 @@
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <!--/span-->
 		                    <div class="col-md-6">
 		                        <div class="form-group">
 		                            <label class="control-label col-md-3">Status:</label>
@@ -154,7 +240,6 @@
 		                            </div>
 		                        </div>
 		                    </div>
-		                    <!--/span-->
 		                </div>
 
                         <hr />
@@ -216,15 +301,13 @@
 		                        </div>
 		                    </div>
 		                </div>
-		       		                <!--/row-->
 		            </div>
 		            <div class="form-actions">
 		                <div class="row">
 		                    <div class="col-md-6">
 		                        <div class="row">
 		                            <div class="col-md-offset-3 col-md-9">
-		                            <!--     <button type="button" ng-click="goToEdit()" class="btn green">
-		                                    <i class="fa fa-pencil"></i> Edit</button> -->
+		                  
 		                                <button type="button" ng-click="goBack()" class="btn default">Back</button>
 		                            </div>
 		                        </div>
@@ -232,7 +315,7 @@
 		                    <div class="col-md-6"> </div>
 		                </div>
 		            </div>
-		        </form>
+		        </form> -->
 		        <!-- END FORM-->
 		    </div>
 		</div>

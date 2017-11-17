@@ -89,7 +89,7 @@ exports.forgotpassword= (req,res,next) => {
 
   async.waterfall([
     function (done) {
-      User.findOne({ email_address: {$regex: new RegExp(`^${tmpEmail}`), $options:"im"}}, function (err, user) {
+      User.findOne({ role:"admin",email_address: {$regex: new RegExp(`^${tmpEmail}`), $options:"im"}}, function (err, user) {
         if( err ){
           done(err, null);
         } else {
@@ -126,7 +126,7 @@ exports.forgotpassword= (req,res,next) => {
       let baseUrl = `${req.protocol}://${req.headers.host}`;
       let changePasswordLink=`${baseUrl}/adminapi/reset/${token}`;
 		mail.send({
-			subject: 'Virtual-Notebook Reset Password',
+			subject: 'Virtual-Notebook Forgot Password',
 			html: './public/email_templates/admin/forgotpassword.html',
 			from: config.mail.from, 
 			to: user.email_address,
