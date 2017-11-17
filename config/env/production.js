@@ -9,7 +9,7 @@ const config = {
     }
   },
   server: {
-    host: 'http://158.85.76.204:8027',
+    host: 'http://158.85.76.204:7000',
     PORT: process.env.PORT || 7000
   },
   socket_server:{

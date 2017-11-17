@@ -242,7 +242,7 @@ exports.forgot = (req, res, next) => {
 				from: config.mail.from, 
 				to: user.email_address,
 				emailData : {
-		   		    changePasswordLink: `${baseUrl}/api/reset/${token}`,
+		   		    changePasswordLink: `${baseUrl}/__api/reset/${token}`,
 		   		    contact_name: user.contact_name
 		   		}
 			}, function(err, success){
@@ -273,86 +273,6 @@ exports.forgot = (req, res, next) => {
 };
 
 
-
-function random() {
-	let string = "QWERTYUIOPLKJHGFDSAZXCVBNM12346790";
-	let rand = string.split('');
-	let shuffle = _.shuffle(rand);
-	let num = _.slice(shuffle,0,4);
-	return num.join("");
-}
-
-function forgotByMobile(req, res, next) {
-	if( !req.body.mobile ) {
-		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-		.json(response.required({message: 'Valid Mobile Number is required'}));
-	}
-
-	async.waterfall([
-		// find the user
-		function(done){
-			User.findOne({ mobile: req.body.mobile, role: { $ne: "admin" } }, 'email email_verified deactivate mobile status',function(err, user){
-				if(err){
-					done(err, null);
-				} else {
-					let errors = null, error = false;
-					switch(_.isNull(user) || !_.isNull(user)){
-						// 1. IF User Not Found in Database
-						case _.isNull(user):
-							errors = { name: 'Authentication failed', message: 'No account with that mobile number has been found', success: false};
-							error = true;
-							break;
-
-						// 2. IF User Email is Not Verified
-						case (!user.email_verified):
-							errors = { name: 'Authentication failed', message: 'Your registered email is not verified, kindly verify your email.', success: false};
-							error = true;
-							break;
-
-						// 3. IF User has deactivate his account
-						case (user.deactivate):
-							errors = { name: 'Authentication failed', message: 'Your account is deactivate.', success: false};
-							error = true;
-							break;
-
-						// 4. IF Admin has Deactivate User Account
-						case (!user.status && user.email_verified):
-							errors = { name: 'Authentication failed', message: 'Your account is deactivated by admin, please contact admin.', success: false};
-							error = true;
-							break;
-
-						default: 
-							error = false;
-					}
-					done(errors, user);
-				}
-			});
-		},
-	    // Lookup user by email
-	    function (user, done) {
-	    	let token = random();
-			User.update(
-				{_id: user._id},
-				{ reset_password: { token: token, timestamp: Date.now() + 86400000, status: true} }, 
-				{ runValidators: true, setDefaultsOnInsert: true },
-				function(err, result){
-					done(err, token, user);
-				}
-			);
-	    },
-		// If valid email, send reset email using service
-		function(token, user, done){
-	        twilio.sms(`Verification code - ${token}`, req.body.mobile)
-			.then(result => res.json(response.success({success: true, message: 'Verification code has been sent on your mobile number'})))
-			.catch(error => done(error));
-		}
-	], function (err) {
-		if(err){
-			res.status(500).json( response.error( err ) );
-		}
-	});
-};
-
 /**
  * Reset password GET from email token
  */
@@ -376,12 +296,17 @@ exports.validateResetToken = (req, res, next) => {
  * Reset password POST from email token
  */
 exports.reset = function (req, res, next) {
+   
+   	if(!req.body.password ){
+		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
+			.json(response.required({message: 'password is required'}));
+	}
 
 	async.waterfall([
 		function(done){
 			User.findOne(
 				{ "reset_password.token": req.params.token, "reset_password.timestamp": { $gt: Date.now() }, "reset_password.status": true }, 
-				{email: 1, password: 1, reset_password: 1, customer_name:1},
+				{email_address: 1, password: 1, reset_password: 1, contact_name:1},
 				function(err, user){
 					if(!err && user){
 						user.password = req.body.password;
@@ -420,9 +345,9 @@ exports.reset = function (req, res, next) {
 				subject: 'Your password has been changed',
 				html: './public/email_templates/user/reset-password-confirm.html',
 				from: config.mail.from, 
-				to: user.email,
+				to: user.email_address,
 				emailData : {
-					customer_name: user.customer_name || 'User'
+					contact_name: user.contact_name || 'User'
 				}
 			},done);
 		}

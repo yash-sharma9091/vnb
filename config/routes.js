@@ -31,6 +31,7 @@ router.use(expressJWT({
 		'/api/cron',
 		/^\/api\/cms\/.*/,
 		/^\/api\/(reset|reset_password)\/.*/,
+		/^\/__api\/(reset|reset_password)\/.*/,
 		/^\/api\/verify_email\/.*/,
 	]
 }));
@@ -55,7 +56,7 @@ admin.use(expressJWT({
 		'/adminapi/forgotpassword',
 		/^\/adminapi\/reset|reset_password\/.*/,
 		'/admin/forgot',
-		/^\/admin\/reset|reset_password\/.*/,
+		/^\/__adminapi\/reset|reset_password\/.*/,
 		/^\/admin\/generate-password\/.*/,
 		/^\/adminapi\/verify_email\/.*/,
 	]
