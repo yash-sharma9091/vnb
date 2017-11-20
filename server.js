@@ -81,7 +81,7 @@ app.use('/adminapi', routes.admin);
 app.use('/__adminapi', routes.admin);
 
 if(process.env.NODE_ENV === 'production'){
-	app.get(/^((?!\/(api|adminapi|admin)).)*$/, function (req, res) {
+	app.get(/^((?!\/(api|adminapi|__admin)).)*$/, function (req, res) {
 		res.sendFile(path.resolve('./build/index.html'));
 	});
 }
