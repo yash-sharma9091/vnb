@@ -9,7 +9,7 @@ const config = {
     }
   },
   server: {
-    host: 'http://158.85.76.204:7000',
+    host: 'http://virtualnotebook.flexsin.org:7000',
     PORT: process.env.PORT || 7000
   },
   socket_server:{
@@ -26,7 +26,8 @@ const config = {
           pass: process.env.PASSWORD
         }
     },
-    from: 'Virtual Notebook <noreply@virtualnotebook.com>'
+    from: 'Virtual Notebook <noreply@virtualnotebook.com>',
+    testing: 'flexsin.nodejs@gmail.com'
   },
   log: {
       // logging with Morgan - https://github.com/expressjs/morgan

@@ -76,7 +76,9 @@ app.use(morgan('dev'));
 app.use(helmet());
 /* Register all your routes */
 app.use('/api', routes.router);
+app.use('/__api', routes.router);
 app.use('/adminapi', routes.admin);
+app.use('/__adminapi', routes.admin);
 
 if(process.env.NODE_ENV === 'production'){
 	app.get(/^((?!\/(api|adminapi|admin)).)*$/, function (req, res) {

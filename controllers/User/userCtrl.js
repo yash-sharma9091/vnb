@@ -96,7 +96,7 @@ exports.loginSchool = (req, res, next) => {
 	
 	async.waterfall([
 		function(done){
-			User.findOne({ uan: req.body.uan }, {seq_no:0,__v: 0,reset_password: 0, salt: 0},(err, user, next) => {
+			User.findOne({ uan: _.trim(req.body.uan) }, {seq_no:0,__v: 0,reset_password: 0, salt: 0},(err, user, next) => {
 				if(err){
 					done(err,null);
 				} else {
@@ -179,7 +179,7 @@ exports.forgot = (req, res, next) => {
 	async.waterfall([
 		// find the user
 		function(done){
-			User.findOne({ uan: req.body.uan, role: { $ne: "admin" } },function(err, user){
+			User.findOne({ uan: _.trim(req.body.uan), role: { $ne: "admin" } },function(err, user){
 				if(err){
 					done(err, null);
 				} else {
@@ -240,7 +240,7 @@ exports.forgot = (req, res, next) => {
 				subject: 'Reset your password',
 				html: './public/email_templates/user/forgotpassword.html',
 				from: config.mail.from, 
-				to: user.email_address,
+				to: user.email_address || config.mail.testing,
 				emailData : {
 		   		    changePasswordLink: `${baseUrl}/__api/reset/${token}`,
 		   		    contact_name: user.contact_name
@@ -258,7 +258,7 @@ exports.forgot = (req, res, next) => {
 					res.json(
 						response.success({
 							success: true,
-			        		message: 'An email has been sent to the provided email with further instructions.'
+			        		message: 'An email has been sent to your registered email with further instructions.'
 						})	
 			        );
 				}
@@ -277,16 +277,19 @@ exports.forgot = (req, res, next) => {
  * Reset password GET from email token
  */
 exports.validateResetToken = (req, res, next) => {
+	
 	User.count({ "reset_password.token": req.params.token, "reset_password.timestamp": { $gt: Date.now() }, "reset_password.status": true } , function(err, user){
+		
     	if(user === 0){
     		if(process.env.NODE_ENV === 'test'){
     			return res.sendStatus(400);
     		}
-    		return res.redirect('/invalid');
+    		return res.redirect(`${config.server.host}/invalid`);	
     	} else {
 	    	if(process.env.NODE_ENV === 'test'){
 				return res.sendStatus(200);
 			}
+			
 			res.redirect(`${config.server.host}/reset-password/${req.params.token}`);	
     	}
     });
@@ -297,9 +300,9 @@ exports.validateResetToken = (req, res, next) => {
  */
 exports.reset = function (req, res, next) {
    
-   	if(!req.body.password ){
+   	if(!req.body.new_password ){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-			.json(response.required({message: 'password is required'}));
+			.json(response.required({message: 'New password is required'}));
 	}
 
 	async.waterfall([
@@ -309,7 +312,7 @@ exports.reset = function (req, res, next) {
 				{email_address: 1, password: 1, reset_password: 1, contact_name:1},
 				function(err, user){
 					if(!err && user){
-						user.password = req.body.password;
+						user.password = req.body.new_password;
 						user.reset_password = {
 							status: false
 						};
@@ -322,7 +325,7 @@ exports.reset = function (req, res, next) {
 								res.json(
 									response.success({
 										success: true,
-										message: 'Password has been changed successfully.'
+										message: 'Password reset successfully'
 									})	
 								);
 								done(err, user);
@@ -342,7 +345,7 @@ exports.reset = function (req, res, next) {
 		},
 		function(user, done){
 			mail.send({
-				subject: 'Your password has been changed',
+				subject: 'Password reset confirmation',
 				html: './public/email_templates/user/reset-password-confirm.html',
 				from: config.mail.from, 
 				to: user.email_address,

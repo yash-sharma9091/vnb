@@ -9,7 +9,7 @@ const config = {
     }
 	},
 	server: {
-    host: 'http://localhost:7000',
+    host: 'http://localhost:3000',
 		PORT: 7000
 	},
   socket_server:{
@@ -26,7 +26,8 @@ const config = {
 		    	pass: process.env.PASSWORD
 		    }
 		},
-		from: 'Virtual Notebook <noreply@virtualnotebook.com>'
+		from: 'Virtual Notebook <noreply@virtualnotebook.com>',
+    testing: 'flexsin.nodejs@gmail.com'
 	},
   log: {
     // logging with Morgan - https://github.com/expressjs/morgan
