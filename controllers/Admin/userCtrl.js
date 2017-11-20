@@ -148,7 +148,7 @@ exports.list = (req, res, next) => {
 	                        function(pilotdata,callback){
 				             
                         		mail.send({
-									subject: 'Virtual-Notebook Request Approved',
+									subject: 'Pilot school approval confirmation',
 									html: './public/email_templates/user/approve.html',
 									from: config.mail.from, 
 									to: pilotdata.email_address,

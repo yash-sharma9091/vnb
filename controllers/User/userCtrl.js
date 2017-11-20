@@ -54,7 +54,7 @@ exports.signupSchool = (req, res, next) => {
 		},
 		function sendSignupMail(user, done){
       		mail.send({
-				subject: 'Virtual Notebook Signup',
+				subject: 'Welcome to PencilsINK',
 				html: './public/email_templates/user/signup.html',
 				from: config.mail.from, 
 				to: user.email_address,
@@ -62,6 +62,8 @@ exports.signupSchool = (req, res, next) => {
 		   		    contact_name: user.contact_name
 		   		}
 			}, function(err, success){
+				console.log('err',err);
+				console.log('success',success);
 				if(err){
 					res.status(500).json(
 						response.error({

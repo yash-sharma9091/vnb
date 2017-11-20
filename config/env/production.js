@@ -26,7 +26,7 @@ const config = {
           pass: process.env.PASSWORD
         }
     },
-    from: 'Virtual Notebook <noreply@virtualnotebook.com>',
+    from: 'PencilsINK <noreply@pencilsink.com>',
     testing: 'flexsin.nodejs@gmail.com'
   },
   log: {

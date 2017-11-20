@@ -86,7 +86,11 @@ if(process.env.NODE_ENV === 'production'){
 	});
 }
 app.get(/^((?!\/(adminapi)).)*$/, function (req, res) {
-	res.sendFile(path.resolve('./admin/index.html'));
+	if( req.url.indexOf('/__admin') !== -1 ) {
+		res.sendFile(path.resolve('./admin/index.html'));	
+	} else {
+		res.sendFile(path.resolve('./build/index.html'));	
+	}
 });
 
 // Global Error Handler
