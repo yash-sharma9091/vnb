@@ -6,33 +6,15 @@ const   mongoose  = require('mongoose'),
         Schema          = mongoose.Schema,
 
 settingSchema 	= new Schema({
-
     banner_img : {
-        type : Array
+        type:Array
     },
-    how_it_works: {
+    how_pencilink_works: {
         video_url: {
             type: String
-        },
-        video_text: {
-            type: String
         }    
     },
-    site: {
-        address:{
-            type:String
-        },
-        fax:{
-            type:String
-        },
-        phone:{
-            type:String
-        },
-        domain:{
-            type:String
-        }    
-    },
-    simple_steps: {
+    what_we_do_steps:{
         step1:{
             title: {
                 type:String    
@@ -56,8 +38,33 @@ settingSchema 	= new Schema({
             text: {
                 type:String      
             }
-        } 
-    }
+        },
+        step4:{
+            title: {
+                type:String    
+            },
+            text: {
+                type:String      
+            }
+        }
+    },
+    footer:{
+        social:[
+          {
+            title:{
+                type:String
+            },
+            url:{
+                type:String
+            }
+          }
+        ],
+        copyright_text:{
+            type:String
+        }
+    },
+    type:String
+
        
 }, { timestamps : { createdAt: 'created_at' ,  updatedAt: 'updated_at'}});
 

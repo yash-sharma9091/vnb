@@ -18,97 +18,97 @@
 				    <thead></thead>
 				    <tbody>
 	    		      <tr>
-				        <th>Contact Name:</th>
+				        <th>Contact Name</th>
 				        <td>{{userinfo.contact_name}}</td>
 				      </tr>
 				      <tr>
-				        <th>Contact Title:</th>
+				        <th>Contact Title</th>
 						<td>{{userinfo.contact_title}}</td>
 				      </tr>
 				      <tr>
-				      	<th>Email Address:</th>
+				      	<th>Email Address</th>
 				      	<td>{{userinfo.email_address}}</td>
 				      </tr>
 				      <tr>
-				      	<th>Contact Telephone No:</th>
+				      	<th>Contact Telephone No</th>
 				      	 <td>{{userinfo.contact_telephoneno}}</td>
 				      </tr>
 				      <tr>
-				      	 <th>School Telephone No:</th>
+				      	 <th>School Telephone No</th>
 				      	  <td>{{userinfo.school_telephoneno}}</td>
 				      </tr>
 				      <tr>
-				      	<th>School Name:</th>
+				      	<th>School Name</th>
 				      	<td>{{userinfo.school_name}}</td>
 				      </tr>
 				      <tr>
-				      	<th>School Address:</th>
+				      	<th>School Address</th>
 				      	<td>{{userinfo.school_address}}</td>
 				      </tr>
 				      <tr>
-				      	<th>Total No of Students:</th>
+				      	<th>Total No of Students</th>
 				      	<td>{{userinfo.no_of_students}}</td>
 				      </tr>
 				      <tr>
-				      	 <th>Type of School:</th>
+				      	 <th>Type of School</th>
 				      	 <td>{{userinfo.school_type.name}}</td>
 				      </tr>
 				      <tr>
-				      	<th>School Levels:</th>
+				      	<th>School Levels</th>
 				      	<td>{{userinfo.school_level}}</td>
 				      </tr>
 				      <tr>
-				      	<th>Become Pilot Descriptions:</th>
+				      	<th>Why Pilot Program</th>
 				      	<td>{{userinfo.become_pilot_description}}</td>
 				      </tr>
 				      <tr>
-				      	<th>No of Student Laptops:</th>
+				      	<th>No of Student Laptops</th>
 				      	<td>{{userinfo.no_of_students_laptop}}</td>
 				      </tr>
 				      <tr>
-				      	<th>Challenges relate to lesson planning:</th>
+				      	<th>Challenges relate to lesson planning</th>
 				      	<td>
 				      	{{userinfo.school_challenges_lesson_planning}}
 				      	</td>
 				      </tr>
 				      <tr>
-				      	<th>Challenges relate to teacher's gradebook:</th>
+				      	<th>Challenges relate to teacher's gradebook</th>
 				      	<td>
 				      	{{userinfo.school_challenges_teacher_gradebook}}
 				      	</td>
 				      </tr>
 				      <tr>
-				      	<th>Challenges relate to student's classwork:</th>
+				      	<th>Challenges relate to student's classwork</th>
 				      	<td>{{userinfo.school_challenges_students_classwork}}
 				      	</td>
 				      </tr>
 				      <tr>
-				      	<th>Goals relate to lesson planning:</th>
+				      	<th>Goals relate to lesson planning</th>
 				      	<td>{{userinfo.school_goals_lesson_planning}}</td>
 				      </tr>
 				      <tr>
-				      	<th>Goals relate to teacher's gradebook:</th>
+				      	<th>Goals relate to teacher's gradebook</th>
 				      	<td>{{userinfo.school_goals_teacher_gradebook}}</td>
 				      </tr>
 				      <tr>
-				      	<th>Goals relate to student's classwork:</th>
+				      	<th>Goals relate to student's classwork</th>
 				      	<td>
 				      	{{userinfo.school_goals_students_classwork}}
 				      	</td>
 				      </tr>
 
 				      <tr>
-				      	<th>Status:</th>
+				      	<th>Status</th>
 				      	<td>
-				      	{{userinfo.pilot_request}}
+           			       <p ng-bind-html="userinfo.pilot_request"></p>
 				      	</td>
 				      </tr>
 				      <tr>
-				      	<th>Action:</th>
+				      	<th>Action</th>
 				      	<td>
-				      		<button class="btn btn-success btn-sm" ng-click="approveSingleReq()">Approve
+				      		<button class="btn btn-success btn-sm" ng-click="approveSingleReq(userinfo)">Approve
 				      		</button>
-	      		     		<button class="btn btn-danger btn-sm" ng-click="rejectSingleReq()">Reject
+	      		     		<button class="btn btn-danger btn-sm" ng-click="rejectSingleReq(userinfo)">Reject
 				      		</button>
 				      	</td>
 				      </tr>

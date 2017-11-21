@@ -4,6 +4,7 @@ const path 	 	= require('path'),
 	_ 			= require('lodash'),
 	mongoose 	= require('mongoose'),
 	crypto      = require('crypto'),
+	response 	= require(path.resolve('config/lib/response')),
 	User 	 	= require(path.resolve('./models/User')),
 	mail 	 	= require(path.resolve('./config/lib/mail')),
 	datatable 	= require(path.resolve('./config/lib/datatable')),
@@ -213,7 +214,7 @@ function createUniqueAccount(userid){
 	    async.waterfall([
 	    	function createSequence(done){
 
-              User.find({email_address:{$ne:"admin@gmail.com"},pilot_request:"Approved"},(err,userseq) =>{
+              User.find({role:{$ne:"admin"},pilot_request:"Approved"},(err,userseq) =>{
                  if(err){
                    done(err,null);	
                  }
@@ -295,27 +296,6 @@ function createUniqueAccount(userid){
 	});
 }
 
-function shortSchoolType(type){
-   switch(type)
-	{
-	    case 'Public':
-	        return 'P';
-	        break;
-	    case 'Charter':
-	        return 'C';
-	        break;
-	    case 'Private':
-	        return 'R';
-	        break;
-	    case 'Parochia':
-	    	return 'A';
-	        break;
-	    case 'Other':
-	 		return 'O';
-	        break;
-	}
-}
-
 function noOfStudentDigit(digit){
     let studentlength= digit.toString().length;
 	   switch(studentlength)
@@ -334,3 +314,78 @@ function noOfStudentDigit(digit){
 		        break;
 		}
 }
+
+
+exports.approverejectsingle= (req,res,next) => {
+	let reqData= req.body;
+	if( !req.body._id ){
+		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
+				.json(response.required({message: 'Id is required'}));
+	}
+
+	let _ids = [reqData._id];
+	let _status =  ( reqData.status === 'Approve' ) ? 'Approved' : 'Rejected';
+
+	if(_status=="Rejected"){
+	  User.update({_id: {$in:_ids}},{$set:{pilot_request: _status}},(err,result) => {
+	  	 if(err)next(err);	
+        res.json(response.success({success: true, message:'Your request has been rejected by admin'}));
+	  });
+	}
+	else{
+  		createUniqueAccount(_ids)
+  		.then(uanresult =>{
+  	      let userUAN=uanresult[0]; 		
+          async.waterfall([
+            function(done){
+              let updateJson={},password= getRandomInt(100,1000000);
+                  updateJson.uan=userUAN.uan;
+                  updateJson.pilot_request=_status;
+                  updateJson.password=crypto.createHmac('sha512',config.salt).update(password).digest('base64');
+                  userUAN.password=password;
+              	  updateJson.seq_no=userUAN.seq_no;
+              User.update({ _id: userUAN._id },{ $set: updateJson },(err,res)=>{
+              	if(err){
+              		done(err,null);
+              	}
+              	else{
+              		done(null,userUAN);
+              	}
+              });
+            },
+            function(pilotdata,done){
+             
+        		mail.send({
+					subject: "Pencl's INK approval confirmation",
+					html: './public/email_templates/user/approve.html',
+					from: config.mail.from, 
+					to: pilotdata.email_address,
+					emailData : {
+						contact_name: pilotdata.contact_name,
+						email_address: pilotdata.email_address,
+						username: pilotdata.uan,
+						password: pilotdata.password
+			  	    } 
+				   }, done);
+            }
+          ],function(err,result){
+           	 if(err){
+           	 	return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
+						  .json(err);
+           	 }
+           	 else{
+           	 	console.log("ddddddd"+JSON.stringify(result));
+           	 	console.log("success"+response.success({success: true, message:'Your request has been approved by admin'}))
+		        res.json(response.success({success: true, message:'Your request has been approved by admin'}));
+           	 }
+           });
+   
+        })
+  		.catch(err =>{
+		 	return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
+						  .json(err);
+		});	
+	}
+
+
+};

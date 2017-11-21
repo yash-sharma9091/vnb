@@ -22,7 +22,7 @@ router.use(expressJWT({
 		'/api/signupSchool',
 		'/api/loginSchool',
 		'/api/forgot_password',
-		'/api/cmsLinks',
+		'/api/setting_homepage',
 		'/api/settings',
 		'/api/customer',
 		'/api/contactus',

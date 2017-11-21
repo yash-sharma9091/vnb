@@ -189,7 +189,7 @@ exports.forgot = (req, res, next) => {
 					switch(_.isNull(user) || !_.isNull(user)){
 						// 1. IF User Not Found in Database
 						case _.isNull(user):
-							errors = { name: 'Authentication failed', message: 'No account with that UAN has been found', success: false};
+							errors = { name: 'Authentication failed', message: 'No account with entered UAN has found', success: false};
 							error = true;
 							break;
 

@@ -1,6 +1,6 @@
 'use strict';
-mimicTrading.controller('userViewCtrl', ['$scope', '$state','user','appSvr',
-	($scope, $state, user, appSvr) => {
+mimicTrading.controller('userViewCtrl', ['$scope', '$state','user','appSvr','userSvr',
+	($scope, $state, user, appSvr,userSvr) => {
 		$scope.$on('$viewContentLoaded', () => {
 			/**
 			 * Initialize the jquery components when view contents loaded properly
@@ -21,11 +21,49 @@ mimicTrading.controller('userViewCtrl', ['$scope', '$state','user','appSvr',
 		 * 
 		 */
 		$scope.approveSingleReq = (userdata) => {
-			console.log("approve--"+JSON.stringify(userdata));
+			let inputJson={};
+			    inputJson._id=userdata._id;
+			    inputJson.status="Approve";
+			bootbox.confirm({ 
+			  size: "small",
+			  message: "Are you sure You want to approve?", 
+			  callback: function(result){ 
+		  	    if(result===true){
+	     			userSvr.approveReject(inputJson).then((result) =>{
+						console.log("res-------"+JSON.stringify(result));
+					}).catch((err) => {
+		              console.log(err);
+					});	
+                }
+                else{
+                   return;
+                }
+			  }
+			})    
 		};
 
 		$scope.rejectSingleReq = (userdata) => {
-		  console.log("reejct--"+JSON.stringify(userdata));
+			let inputJson={};
+			    inputJson._id=userdata._id;
+			    inputJson.status="Reject";
+
+			bootbox.confirm({ 
+			  size: "small",
+			  message: "Are you sure You want to reject?", 
+			  callback: function(result){ 
+  	            if(result===true){
+	     			userSvr.approveReject(inputJson).then((result) =>{
+						console.log("res-------"+JSON.stringify(result));
+					}).catch((err) => {
+		              console.log(err);
+					});	
+                }
+                else{
+                   return;
+                }
+			   }
+			})      
+
 		};
 
 		$scope.goBack = () => {

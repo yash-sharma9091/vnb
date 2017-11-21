@@ -46,7 +46,7 @@ exports.createContactUs = (req, res, next) => {
 					res.json(
 						response.success({
 						success: true, 
-						message: 'You will receive an email, as soon as your request will proccessed!!'
+						message: 'Thank you for contacting us, We will contact you as soon as we review your message.'
 					}));
 				}
 		     });
