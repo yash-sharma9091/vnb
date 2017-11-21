@@ -39,3 +39,10 @@ multiselect .dropdown-menu>li>a>[class*=" glyphicon-"], .dropdown-menu>li>a>[cla
 .page-header .page-header-top .page-logo .logo-default {
   margin: 17.5px 0 0;
 }
+.gradient-color {
+  background: -webkit-linear-gradient(right,#070703 35%,#0a4cac);
+    color: #3645d9;
+        -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

@@ -20,8 +20,12 @@ mimicTrading.controller('userViewCtrl', ['$scope', '$state','user','appSvr',
 		 * it would take you to the edit page
 		 * 
 		 */
-		$scope.goToEdit = () => {
-			$state.go('editUser', {id: $state.params.id});
+		$scope.approveSingleReq = (userdata) => {
+			console.log("approve--"+JSON.stringify(userdata));
+		};
+
+		$scope.rejectSingleReq = (userdata) => {
+		  console.log("reejct--"+JSON.stringify(userdata));
 		};
 
 		$scope.goBack = () => {

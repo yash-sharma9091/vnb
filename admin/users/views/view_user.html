@@ -4,7 +4,7 @@
 		    <div class="portlet-title">
 		        <div class="caption">
 		            <i class="icon-equalizer font-green-haze"></i>
-		            <span class="caption-subject font-green-haze bold uppercase">View School Info - {{userinfo.school_name}}</span>
+		            <span class="caption-subject font-green-haze bold uppercase">{{userinfo.school_name}}</span>
 		            <!-- <span class="caption-helper">some info...</span> -->
 		        </div>
 		        <div class="tools">
@@ -94,6 +94,22 @@
 				      	<th>Goals relate to student's classwork:</th>
 				      	<td>
 				      	{{userinfo.school_goals_students_classwork}}
+				      	</td>
+				      </tr>
+
+				      <tr>
+				      	<th>Status:</th>
+				      	<td>
+				      	{{userinfo.pilot_request}}
+				      	</td>
+				      </tr>
+				      <tr>
+				      	<th>Action:</th>
+				      	<td>
+				      		<button class="btn btn-success btn-sm" ng-click="approveSingleReq()">Approve
+				      		</button>
+	      		     		<button class="btn btn-danger btn-sm" ng-click="rejectSingleReq()">Reject
+				      		</button>
 				      	</td>
 				      </tr>
 				    </tbody>
