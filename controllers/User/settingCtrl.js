@@ -36,10 +36,6 @@ exports.settingHomepage = (req, res, next) => {
                     cms_content:cmsdata,
 					footer:footerresponse.footer
 				};
-
-                //console.log("settingdata"+settingdata);
-                //console.log("cmsdata"+cmsdata);
-                console.log("footer"+JSON.stringify(fnlresult));
 				done(null, fnlresult);
 			 })
 			.catch(err => done(err,null)); 
