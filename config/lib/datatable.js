@@ -22,7 +22,7 @@ exports.userTable = (status_list, recordsTotal, data, draw) => {
 			pilot_request: `<span class="label label-sm tooltips label-${status_list.class[data[i].pilot_request]}" data-original-title="${status_list.status[data[i].pilot_request]}">${extractFirstLetter(status_list.status[data[i].pilot_request])}</span>`,
 			action: `
 					<div class="btn-group btn-group-solid">
-						<a href="#!/view-user/${data[i]._id}" class="btn btn-sm btn-outline blue tooltips" data-original-title="View">
+						<a href="#!/view-user/${data[i]._id}" class="btn btn-xs btn-outline blue tooltips" data-original-title="View">
 							<i class="fa fa-eye"></i>
 						</a>
 					</div>`
@@ -45,28 +45,23 @@ exports.sortingDatatable = (col,order) => {
     return result;
 }
 
-exports.subscriptionTable = (status_list, recordsTotal, data, draw) => {
+exports.socialLinkTable = (status_list, recordsTotal, data, draw) => {
 	
 	let result = [];
 	for (var i = data.length - 1; i >= 0; i--) {
-		result[i] = {
+	result[i] = {
 			id:`<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
 					<input name="id[]" type="checkbox" class="checkboxes" value="${data[i]._id}"/>
 					<span></span>
 				</label>`,
-			name: data[i].name || '-',
-			description: data[i].description || '-',
-			price: data[i].price,
-			features: data[i].features, 
-			type:data[i].type, 
+			title: data[i].title,
+			url: data[i].url,
 			created_date: moment(data[i].created_at).format('MMM D, YYYY'),
 			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
 			action: `
 					<div class="btn-group btn-group-solid">
-						<a href="#!/view-subscription/${data[i]._id}" class="btn btn-sm btn-outline blue tooltips" data-original-title="View">
-							<i class="fa fa-search"></i>
-						</a>
-						<a href="#!/edit-subscription/${data[i]._id}" class="btn btn-sm btn-outline grey-salsa tooltips" data-original-title="Edit">
+					
+						<a href="#!/edit-sociallink/${data[i]._id}" class="btn btn-sm btn-outline grey-salsa tooltips" data-original-title="Edit">
 							<i class="fa fa-pencil"></i>
 						</a>
 					</div>`

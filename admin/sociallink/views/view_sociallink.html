@@ -4,11 +4,11 @@
 		    <div class="portlet-title">
 		        <div class="caption">
 		            <i class="icon-equalizer font-green-haze"></i>
-		            <span class="caption-subject font-green-haze bold uppercase">View CMS Info - {{cms.title}}</span>
-		            <span class="caption-helper"><i>(last update on {{cms.updated_at | date: format : 'dd/m/y'}})</i></span>
+		            <span class="caption-subject font-green-haze bold uppercase">View Social Link Info - {{sociallink.title}}</span>
+		            <span class="caption-helper"><i>(last update on {{sociallink.updated_at | date: format : 'dd/m/y'}})</i></span>
 		        </div>
 		        <div class="tools">
-		            <button ui-sref="cms" class="btn default">Back</button>
+		            <button ui-sref="sociallink" class="btn default">Back</button>
 		        </div>
 		    </div>
 		    <div class="portlet-body form">
@@ -16,13 +16,13 @@
 		        <form class="form-horizontal" role="form">
 		            <div class="form-body">
 		                <!-- <h2 class="margin-bottom-20"> View User Info - Bob Nilson </h2> -->
-		                <h3 class="form-section">CMS Section Info</h3>
+		                <h3 class="form-section">Social Link Section Info</h3>
 		                <div class="row">
 		                    <div class="col-md-6">
 		                        <div class="form-group">
 		                            <label class="control-label col-md-3">Title:</label>
 		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{cms.title}} </p>
+		                                <p class="form-control-static"> {{sociallink.title}} </p>
 		                            </div>
 		                        </div>
 		                    </div>
@@ -31,7 +31,7 @@
 		                        <div class="form-group">
 		                            <label class="control-label col-md-3">Date:</label>
 		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{cms.created_at | date: format : 'dd/m/y'}}  </p>
+		                                <p class="form-control-static"> {{sociallink.created_at | date: format : 'dd/m/y'}}  </p>
 		                            </div>
 		                        </div>
 		                    </div>
@@ -41,9 +41,9 @@
 		                <div class="row">
 		                    <div class="col-md-6">
 		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Description:</label>
+		                            <label class="control-label col-md-3">Url:</label>
 		                            <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="cms.description">  </p>
+		                                <p class="form-control-static" ng-bind-html="sociallink.url">  </p>
 		                            </div>
 		                        </div>
 		                    </div>
@@ -53,49 +53,13 @@
 		                            <label class="control-label col-md-3">Status:</label>
 		                            <div class="col-md-9">
 		                                <p class="form-control-static"> 
-		                                	<status-label status="cms.status"></status-label>
+		                                	<status-label status="sociallink.status"></status-label>
 		                                </p>
 		                            </div>
 		                        </div>
 		                    </div>
 		                </div>
-		                <!--/row-->
-		                         <!--/row-->
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Meta Title:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="cms.meta_title">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Meta Keyword:</label>
-		                           <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="cms.meta_keyword">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <!--/row-->
-
-	                    <div class="row">
-		               
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Meta Description:</label>
-		                           <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="cms.meta_description">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-	                         <div class="col-md-6">
-		                
-		                    </div>
-		                </div>
+		                  
 		            </div>
 		            <div class="form-actions">
 		                <div class="row">
@@ -104,7 +68,7 @@
 		                            <div class="col-md-offset-3 col-md-9">
 		                                <button type="button" ng-click="goToEdit()" class="btn green">
 		                                    <i class="fa fa-pencil"></i> Edit</button>
-		                                <a href ui-sref="cms" class="btn default">Back</a>
+		                                <a href ui-sref="sociallink" class="btn default">Back</a>
 		                            </div>
 		                        </div>
 		                    </div>

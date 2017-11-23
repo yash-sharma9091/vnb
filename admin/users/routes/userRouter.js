@@ -42,7 +42,7 @@ mimicTrading.config(['$stateProvider',function($stateProvider){
 		url: '/view-user/:id',
 		controller: 'userViewCtrl',
 		templateUrl: '/users/views/view_user.html',
-		//data: {pageTitle: 'School View Detail'},
+		data: {pageTitle: 'School View Detail'},
 		authenticate: true,
 		resolve: userResolver
 	})

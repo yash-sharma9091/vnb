@@ -35,8 +35,9 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
                         <li>
-                            <a href="#">
-                                <i class="icon-user"></i> My Profile </a>
+                            <a href ui-sref="myaccount">
+                                <i class="icon-user"></i> My Profile
+                            </a>
                         </li>
                         <li>
                             <a href ng-click="clearToken()">
@@ -55,7 +56,7 @@
 <div class="page-header-menu">
     <div class="container-fluid">
         <!-- BEGIN HEADER SEARCH BOX -->
-        <form class="search-form" action="page_general_search.html" method="GET">
+  <!--       <form class="search-form" action="page_general_search.html" method="GET">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" name="query">
                 <span class="input-group-btn">
@@ -64,7 +65,7 @@
                     </a>
                 </span>
             </div>
-        </form>
+        </form> -->
         <!-- END HEADER SEARCH BOX -->
         <!-- BEGIN MEGA MENU -->
         <!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
@@ -75,10 +76,7 @@
                     <a href ui-sref="dashboard"> Dashboard
                     </a>
                 </li>
-           <!-- <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown">
-                    <a href ui-sref="schools"> School Management
-                    </a>
-                </li> -->
+     
                 <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown">
                     <a href ui-sref="users"> School Management
                     </a>
@@ -87,14 +85,23 @@
                     <a href="javascript:;" > CMS Management </a>
                     <ul class="dropdown-menu pull-left">
                         <li aria-haspopup="true" class=" ">
-                            <a href ui-sref="cms" class="nav-link  "> Manage CMS </a>
+                            <a href ui-sref="cms" class="nav-link "> Manage CMS </a>
                         </li> 
-              <!--           <li aria-haspopup="true" class=" ">
-                            <a href ui-sref="viewhomepage" class="nav-link  "> Manage Home Page </a>
+                        <li aria-haspopup="true" class=" ">
+                            <a href ui-sref="viewhomepage" class="nav-link  "> What we do for you</a>
                         </li>
                         <li aria-haspopup="true" class=" ">
-                            <a href ui-sref="viewhomepage" class="nav-link  "> Manage Footer </a>
-                        </li>    -->            
+                            <a href ui-sref="sociallink" class="nav-link  "> Manage Social link </a>
+                        </li>   
+                        <li aria-haspopup="true" class=" ">
+                            <a href ui-sref="viewhomepage" class="nav-link  "> Homepage banner</a>
+                        </li>  
+                        <li aria-haspopup="true" class=" ">
+                            <a href ui-sref="viewhomepage" class="nav-link  "> How pencil ink work</a>
+                        </li>    
+                       <li aria-haspopup="true" class=" ">
+                            <a href ui-sref="viewhomepage" class="nav-link  "> Join pilot study</a>
+                        </li>             
          
                     </ul>
                 </li>               

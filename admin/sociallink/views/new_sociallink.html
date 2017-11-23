@@ -1,0 +1,66 @@
+<div class="row fade-in-up">
+    <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class=" icon-user font-green"></i>
+                    <span class="caption-subject font-green sbold uppercase">Add New Social Link Section</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="new_sociallink(newSocialLinkForm.$valid)" class="form-horizontal" name="newSocialLinkForm" ng-keydown="clear($event.target.name, newSocialLinkForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': newSocialLinkForm.title.$touched && newSocialLinkForm.title.$invalid || newSocialLinkForm.title.$invalid && newSocialLinkForm.$submitted }">
+                            <label class="col-md-2 control-label" for="title">Title <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="title" ng-model="sociallink.title" class="form-control" id="title" placeholder="Enter your sociallink title" required>
+                                <div ng-messages="newSocialLinkForm.title.$error"
+                                    ng-show="newSocialLinkForm.title.$touched || newSocialLinkForm.$submitted">
+                                    <span class="help-block" ng-message="required">Title is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                          
+                                 
+                         <div class="form-group form-md-line-input" ng-class="{ 'has-error': newSocialLinkForm.url.$touched && newSocialLinkForm.url.$invalid || newSocialLinkForm.url.$invalid && newSocialLinkForm.$submitted }">
+                            <label class="col-md-2 control-label" for="url">Url <span class="required">*</span></label>
+                            <div class="col-md-10">
+                            <input type="text" name="url" ng-model="sociallink.url" class="form-control" id="url" placeholder="Enter your sociallink url" required>
+                         
+                            <div ng-messages="newSocialLinkForm.url.$error"
+                                    ng-show="newSocialLinkForm.url.$touched || newSocialLinkForm.$submitted">
+                                    <span class="help-block" ng-message="required">Url is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                       
+                       <div class="form-group form-md-line-input" ng-class="{ 'has-error': newSocialLinkForm.status.$touched && newSocialLinkForm.status.$invalid || newSocialLinkForm.status.$invalid && newSocialLinkForm.$submitted }">
+                            <label class="col-md-2 control-label" for="status">Status <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <select id="status" class="form-control" name="status" ng-model="sociallink.status" required ng-options="trade.value as trade.text for trade in [{text: 'Active', value:true},{text: 'Inactive', value: false}]">
+                                </select>
+                                <div ng-messages="newSocialLinkForm.status.$error"
+                                    ng-show="newSocialLinkForm.status.$touched || newSocialLinkForm.$submitted">
+                                    <span class="help-block" ng-message="required">Status is required.</span>
+                                </div>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-9">
+                                <button type="submit" ladda="isLoading" class="btn green">Submit</button>
+                                <a href ui-sref="sociallink" class="btn default">cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+</div>

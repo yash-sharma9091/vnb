@@ -23,6 +23,9 @@ CMSSchema   = new Schema({
     meta_title: {
         type: String
     },
+    meta_keyword:{
+        type:String
+    },
     meta_description: {
         type: String
     },

@@ -106,6 +106,30 @@ var TableAjax = function () {
                     size:"small"
                  });
                 }
+                else if(action.val()==="remove"){
+                  bootbox.confirm({
+                    title: "Delete ",
+                    message: "Are you sure you want to delete?",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Cancel'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Confirm'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result===true){
+                          grid.getDataTable().ajax.reload();
+                          grid.clearAjaxParams();
+                        }
+                        else{
+                           return;
+                        }
+                    },
+                    size:"small"
+                 });
+                }
                 else{
                   grid.getDataTable().ajax.reload();
                   grid.clearAjaxParams();

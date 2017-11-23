@@ -1,5 +1,5 @@
 'use strict';
-mimicTrading.controller('cmsCtrl', ['$scope', '$state', 'RestSvr', '$rootScope','appSvr',
+mimicTrading.controller('myaccountCtrl', ['$scope', '$state', 'RestSvr', '$rootScope','appSvr',
 	($scope, $state, RestSvr, $rootScope, appSvr) => {
 		
 		$scope.$on('$viewContentLoaded', () => {
@@ -8,19 +8,19 @@ mimicTrading.controller('cmsCtrl', ['$scope', '$state', 'RestSvr', '$rootScope',
 			 */
 			appSvr.init();			
 
-		    TableAjax.init({
-		    	url: 'cms/list/',
+	/*	    TableAjax.init({
+		    	url: 'myaccount/list/',
 		    	columns: [
 	                { "data": "id", "orderable": false },
                     { "data": "title" },
-                    //{ "data": "description"},
+                    { "data": "description"},
                     { "data": "meta_title" },
                     { "data": "meta_description" },
                     { "data": "status" },
                     { "data": "created_date" },
                     { "data": "action", "orderable": false }
 	            ]
-		    });
+		    });*/
 		});
 	}
 ]);

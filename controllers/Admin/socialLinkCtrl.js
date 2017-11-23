@@ -3,12 +3,13 @@ const path 	 	= require('path'),
 	async 	 	= require('async'),
 	_ 			= require('lodash'),
 	mongoose 	= require('mongoose'),
-	CMS         = require(path.resolve('./models/CMS')),
+	Setting     = require(path.resolve('./models/Setting')),
 	datatable 	= require(path.resolve('./config/lib/datatable')),
   	config 		= require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
   	paginate    = require(path.resolve('./config/lib/paginate'));
 
 exports.add = (req, res, next) => {
+	let reqData=req.body;
 	if(!req.body.title ) {
 		res.status(422).json({
 			errors: {
@@ -19,17 +20,16 @@ exports.add = (req, res, next) => {
 		return;
 	}	 
     
-    let cms = new CMS(req.body);
-    cms.save()
-    .then(result => res.json({success: true}))
-    .catch(error => res.json({errors: error}));
+    Setting.update({type: "footer"},{$push: {"footer.social_links": reqData}})
+        .then(result => res.json({success: true}))
+        .catch(error => res.json({errors: error}));
 };
 
 exports.edit = (req, res, next) => {
-	if(!req.body.slug) {
+	if(!req.body._id) {
 		res.status(422).json({
 			errors: {
-				message: 'Slug is required', 
+				message: 'Id is required', 
 				success: false,
 			}	
 		});
@@ -37,7 +37,8 @@ exports.edit = (req, res, next) => {
 	}	 
   let reqData=req.body;
     
-    CMS.update({slug: req.body.slug},{$set: { title: reqData.title, slug: reqData.slug, description: reqData.description, meta_title:reqData.meta_title,meta_description:reqData.meta_description,status:reqData.status }}, 
+    Setting.update({type: "footer","footer.social_links._id": req.body._id},
+    	           {$set: { "footer.social_links.$.title": reqData.title, "footer.social_links.$.url": reqData.url,"footer.social_links.$.status":reqData.status }}, 
     	function (error, result) {
     		if(error){
     			res.json({errors: error});
@@ -48,60 +49,41 @@ exports.edit = (req, res, next) => {
 };
 
 exports.view = (req, res, next) => {
-	if(!req.params.slug) {
+	if(!req.params._id) {
 		res.status(422).json({
 			errors: {
-				message: 'Slug is required', 
+				message: 'Id is required', 
 				success: false,
 			}	
 		});
 		return;
 	}	 
-    
-    
-    CMS.findOne({slug: req.params.slug}, 
+        
+    Setting.findOne({type:"footer","footer.social_links._id":req.params._id},{ "footer.social_links.$": 1},   
     	function (error, result) {
     		if(error){
     			res.json({errors: error});
     		}
-    		res.json({success: true, result: result});
+    		res.json({success: true, result: result.footer.social_links[0]});
     	}
     );
 };
 
 exports.list = (req, res, next) => {
 	
-	let operation = {}, reqData = req.body;
-	if( reqData.title ){
-		operation.title = {$regex: new RegExp(`${reqData.title}`), $options:"im"};
-	}
+	let operation = {type:"footer"}, reqData = req.body;
 
-	if( reqData.description ){
-		operation.description = {$regex: new RegExp(`${reqData.description}`), $options:"im"};
-	}
-	if( reqData.meta_title ){
-		operation.meta_title = {$regex: new RegExp(`${reqData.meta_title}`), $options:"im"};
-	}
-    if( reqData.meta_description ){
-		operation.meta_description= {$regex: new RegExp(`${reqData.meta_description}`), $options:"im"};
-	}
-	if( reqData.status === "true" || reqData.status === "false" ){
-		operation.status = reqData.status == "true" ? true : false;
-	}
-	if( reqData.from_date || reqData.to_date ) {
-		operation.created_at = {$gte: reqData.from_date, $lte: reqData.to_date };
-	}
 	async.waterfall([
 		function (done) {
 		
 			if( reqData.customActionType === 'group_action' && reqData.customActionName === 'remove') {
 				let _ids = _.map(reqData.id, mongoose.Types.ObjectId);
-				CMS.remove({_id: {$in:_ids}},done);
+				Setting.remove({"footer.social_links._id": {$in:_ids}},done);
 			} 
 			else if( reqData.customActionType === 'group_action' ) {
 				let _ids = _.map(reqData.id, mongoose.Types.ObjectId);
 				let _status =  ( reqData.customActionName === 'inactive' ) ? false : true;
-				CMS.update({_id: {$in:_ids}},{$set:{status: _status}},{multi:true}, done);
+				Setting.update({"footer.social_links._id": {$in:_ids}},{$set:{"footer.social_links.$.status": _status}},{multi:true}, done);
 			} 
 			else {
 				done(null, null);
@@ -110,10 +92,10 @@ exports.list = (req, res, next) => {
 		function (data, done) {
 			async.parallel({
 				count: (done) => {
-					CMS.count(operation,done);
+					Setting.count(operation,done);
 				},
 				records: (done) => {
-					CMS.find(operation,done);	
+					Setting.find(operation,{_id:0,"footer.social_links":1},done);	
 				}
 			}, done);	
 		}
@@ -131,8 +113,8 @@ exports.list = (req, res, next) => {
 				false : "InActive"	
 			}
 		};
-		
-		let dataTableObj = datatable.cmsTable(status_list, result.count, result.records, reqData.draw);
+
+		let dataTableObj = datatable.socialLinkTable(status_list, result.count, result.records[0].footer.social_links, reqData.draw);
 		res.json(dataTableObj);
 	});
 };

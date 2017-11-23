@@ -40,9 +40,21 @@
                             <label class="col-md-2 control-label" for="meta_title">Meta Title <span class="required">*</span></label>
                             <div class="col-md-10">
                                 <input type="text" name="meta_title" ng-model="cms.meta_title" class="form-control" id="meta_title" placeholder="Enter your cms meta title" required>
-                                <div ng-messages="newCMSForm.metaTitle.$error"
+                                <div ng-messages="newCMSForm.meta_title.$error"
                                     ng-show="newCMSForm.meta_title.$touched || newCMSForm.$submitted">
                                     <span class="help-block" ng-message="required">Meta Title is required.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': newCMSForm.meta_keyword.$touched && newCMSForm.meta_keyword.$invalid || newCMSForm.meta_keyword.$invalid && newCMSForm.$submitted }">
+                            <label class="col-md-2 control-label" for="meta_keyword">Meta Keyword <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="meta_keyword" ng-model="cms.meta_keyword" class="form-control" id="meta_keyword" placeholder="Enter your cms meta keyword" required>
+                                <div ng-messages="newCMSForm.meta_keyword.$error"
+                                    ng-show="newCMSForm.meta_keyword.$touched || newCMSForm.$submitted">
+                                    <span class="help-block" ng-message="required">Meta keyword is required.</span>
                                 </div>
                             </div>
                         </div>
@@ -56,6 +68,18 @@
                                     <span class="help-block" ng-message="required">Meta Description is required.</span>
                                 </div>
                             </div>
+                        </div>
+
+                       <div class="form-group form-md-line-input" ng-class="{ 'has-error': newCMSForm.status.$touched && newCMSForm.status.$invalid || newCMSForm.status.$invalid && newCMSForm.$submitted }">
+                            <label class="col-md-2 control-label" for="status">Status <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <select id="status" class="form-control" name="status" ng-model="cms.status" required ng-options="trade.value as trade.text for trade in [{text: 'Active', value:true},{text: 'Inactive', value: false}]">
+                                </select>
+                                <div ng-messages="newCMSForm.status.$error"
+                                    ng-show="newCMSForm.status.$touched || newCMSForm.$submitted">
+                                    <span class="help-block" ng-message="required">Status is required.</span>
+                                </div>
+                            </div>    
                         </div>
                     </div>
                     <div class="form-actions">

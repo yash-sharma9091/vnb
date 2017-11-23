@@ -33,7 +33,8 @@ exports.adminVendorList = [
 	"./bower_components/angular-ui-mask/dist/mask.min.js",
 	"./bower_components/textAngular/dist/textAngular-rangy.min.js",
 	"./bower_components/textAngular/dist/textAngular-sanitize.min.js",
-	"./bower_components/textAngular/dist/textAngular.min.js"
+	"./bower_components/textAngular/dist/textAngular.min.js",
+	"./assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js"
 ];
 
 /*
@@ -63,6 +64,7 @@ exports.adminVendorCSSListFirst = [
 	"./assets/global/plugins/bootstrap/css/bootstrap.min.css",
 	"./assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css",
 	"./bower_components/ladda/dist/ladda-themeless.min.css",
+	"./assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css",
 	"./bower_components/textAngular/dist/textAngular.css"
 	
 ];

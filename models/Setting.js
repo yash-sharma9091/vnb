@@ -2,8 +2,10 @@
 
 const   mongoose  = require('mongoose'),
         path            = require('path'),
-        config          = require(require(path.resolve('./config/env')).getEnv),
-        Schema          = mongoose.Schema,
+        slug            = require('mongoose-slug-generator'),
+        config          = require(require(path.resolve('./config/env')).getEnv);
+        mongoose.plugin(slug);
+const   Schema          = mongoose.Schema,
 
 settingSchema 	= new Schema({
     banner_img : {
@@ -49,13 +51,17 @@ settingSchema 	= new Schema({
         }
     },
     footer:{
-        social:[
+        social_links:[
           {
             title:{
                 type:String
             },
             url:{
                 type:String
+            },
+            status:{
+                type: Boolean,
+                default: true
             }
           }
         ],
