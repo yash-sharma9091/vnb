@@ -35,14 +35,14 @@ mimicTrading.controller('loginCtrl', ['$scope','$rootScope','$state','$http','Re
 	   	     let inputjson={email:$scope.email};
 			$http.post('adminapi/forgotpassword', inputjson)
 			.then(response => {
-               App.alert({type: ('info'), icon: ( 'info'), message: response.data.message, container: $rootScope.settings.errorContainer, place: 'prepend'});
+               App.alert({type: ('success'), message: response.data.message, container: $rootScope.settings.errorContainer, place: 'prepend'});
 	           setTimeout(function(){
                  $scope.showForgetPasswordForm=false;
                },3000);
 			   //$state.go('login');	
 			})
 			.catch(errors => {
-				$scope.message = errors.message;
+                App.alert({type: ('danger'), message: errors.data.errors.message, container: $rootScope.settings.errorContainer, place: 'prepend'});
 			})
 			.then(() => {
 				$scope.isLoading = false;

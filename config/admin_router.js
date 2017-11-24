@@ -24,6 +24,17 @@ let uploadImage = multer({
     
 });
 
+let uploadHomepageBanner = multer({
+    limits: config.fileLimits,
+    storage: multer.diskStorage({
+      destination: 'assets/homepage_banner/',
+      filename: function (req, file, cb) {
+        cb(null, Date.now() + '.' + config.file_extensions[file.mimetype]);
+      }
+    }),
+    fileFilter: fileFilter
+    
+});
 
 let uploadTestimonialImage = multer({
     limits: config.fileLimits,
@@ -77,6 +88,13 @@ module.exports = {
       { url: '/sociallink/list', method: ctrls.socialLinkCtrl.list, type: 'post' },
       { url: '/sociallink/edit', method: ctrls.socialLinkCtrl.edit, type: 'put' },
       { url: '/sociallink/view/:_id', method: ctrls.socialLinkCtrl.view, type: 'get' },
+      { url: '/whatdosteps/add', method: ctrls.whatDoStepCtrl.add, type: 'post' },
+      { url: '/whatdosteps/list', method: ctrls.whatDoStepCtrl.list, type: 'post' },
+      { url: '/whatdosteps/edit', method: ctrls.whatDoStepCtrl.edit, type: 'put' },
+      { url: '/whatdosteps/view/:slug', method: ctrls.whatDoStepCtrl.view, type: 'get' },
+      { url: '/homepage/edit', mwear:uploadHomepageBanner.any(),method: ctrls.homepageCtrl.edit, type: 'post' },
+      { url: '/homepage/view', method: ctrls.homepageCtrl.view, type: 'get' },
+
       { url: '/privacypolicy/add',  method: ctrls.privacypolicyCtrl.add, type: 'post' },
       { url: '/privacypolicy/list', method: ctrls.privacypolicyCtrl.list, type: 'post' },
       { url: '/privacypolicy/edit', method: ctrls.privacypolicyCtrl.edit, type: 'put' },

@@ -14,28 +14,37 @@ const
 exports.settingHomepage = (req, res, next) => {
     
    	async.waterfall([
-		function findSettingData(done) {
-			Setting.findOne({type:{$ne:"footer"}},{_id:0})
-			.then(response => done(null, response))
-			.catch(err => done(err,null));
-		},
-		function findCMSData(settingdata, done) {
+		
+		function findCMSData(done) {
 		   	CMS.find({},{_id:0,slug:1,title:1})
-			.then(cmsresponse => done(null, settingdata,cmsresponse))
+			.then(cmsresponse => done(null,cmsresponse))
 			.catch(err => done(err,null)); 
 		},
-		function findFooterData(settingdata,cmsdata, done){
-           	Setting.findOne({type:"footer"},{_id:0,footer:1})
-			.then(footerresponse => {
-				settingdata.cms=cmsdata;
-				settingdata.footer=footerresponse.footer;
+		function findStepsData(cmsdata, done) {
+		   	Setting.find({type:"whatdostep"},{_id:0,title:1,short_description:1,order:1,slug:1})
+			.then(stepresponse => done(null,cmsdata,stepresponse))
+			.catch(err => done(err,null)); 
+		},
+		function findHomepageData(cmsdata,stepdata, done) {
+		   	Setting.findOne({type:"homepage"},{_id:0,type:0,updated_at:0,status:0})
+			.then(homeresponse => done(null,cmsdata,stepdata,homeresponse))
+			.catch(err => done(err,null)); 
+		},
+
+		function findSocialData(cmsdata,stepdata,homeresponse, done){
+           	Setting.find({type:"social"},{_id:0,created_at:0,updated_at:0,type:0,status:0,banner_img:0,__v:0})
+			.then(socialresponse => {
+				homeresponse.banner_img.text=homeresponse.banner_text;
 				let fnlresult={
-					banner_img:settingdata.banner_img,
-                    how_pencilink_works: settingdata.how_pencilink_works,
-                    what_we_do_steps:settingdata.what_we_do_steps,
+					banner_img:homeresponse.banner_img,
+                    how_pencilink_works: {video_url:homeresponse.video_url},
+                    what_we_do_steps:stepdata,
                     cms_content:cmsdata,
-					footer:footerresponse.footer
+				    social_links:socialresponse,
+				    copyright_text:homeresponse.copyright_text,
+				    join_pilot_study:homeresponse.join_pilot_study
 				};
+
 				done(null, fnlresult);
 			 })
 			.catch(err => done(err,null)); 

@@ -72,7 +72,7 @@ UserSchema 	= new Schema({
 		}
 	},
 	school_level: {
-		type: String
+		type: Object
 	},
 	become_pilot_description: {
 		type: String,

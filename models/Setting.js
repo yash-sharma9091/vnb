@@ -9,69 +9,51 @@ const   Schema          = mongoose.Schema,
 
 settingSchema 	= new Schema({
     banner_img : {
-        type:Array
+        type:Object
     },
-    how_pencilink_works: {
-        video_url: {
-            type: String
-        }    
+    banner_text:{
+        type:String
     },
-    what_we_do_steps:{
-        step1:{
-            title: {
-                type:String    
-            },
-            text: {
-                type:String      
-            }
-        },
-        step2:{
-            title: {
-                type:String    
-            },
-            text: {
-                type:String      
-            }
-        },
-        step3:{
-            title: {
-                type:String    
-            },
-            text: {
-                type:String      
-            }
-        },
-        step4:{
-            title: {
-                type:String    
-            },
-            text: {
-                type:String      
-            }
-        }
+    video_url: {
+        type: String
     },
-    footer:{
-        social_links:[
-          {
-            title:{
-                type:String
-            },
-            url:{
-                type:String
-            },
-            status:{
-                type: Boolean,
-                default: true
-            }
-          }
-        ],
-        copyright_text:{
+    title: {
+        type:String    
+    },
+    text: {
+        type:String      
+    },
+    short_description: {
+        type:String    
+    },
+    long_description: {
+        type:String      
+    },
+    url:{
+        type:String
+    },
+    status:{
+        type: Boolean,
+        default: true
+    },
+    copyright_text:{
             type:String
-        }
     },
-    type:String
-
-       
+    type:{
+        type:String    
+    },
+    slug:{
+        type: String, 
+        slug: "title",
+        unique:true 
+    },
+    order:{
+        type:Number
+    },
+    join_pilot_study:{
+        type:String
+    }
+         
 }, { timestamps : { createdAt: 'created_at' ,  updatedAt: 'updated_at'}});
 
 module.exports = mongoose.model('setting', settingSchema);

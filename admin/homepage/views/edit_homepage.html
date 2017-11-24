@@ -1,0 +1,106 @@
+<div class="row fade-in-up">
+    <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class=" icon-user font-green"></i>
+                    <span class="caption-subject font-green sbold uppercase">Update Homepage Section</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="update_homepage(updateHomepageForm.$valid, homepage)" class="form-horizontal" name="updateHomepageForm">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" ng-class="{ 'has-error': updateHomepageForm.banner.$touched && updateHomepageForm.banner.$invalid || updateHomepageForm.banner.$invalid && updateHomepageForm.$submitted }">
+                            <label class="col-md-3 control-label" for="banner">Homepage Banner Image  <p><small>(Min width. (1903px) - Height (659px))<small></p></label>
+                            <div class="col-md-9">
+                                <input ngf-pattern="'image/*'" type="file"  ngf-select name="banner" 
+                                ngf-min-width="1903" ngf-min-height="659"
+                                ngf-accept="'.jpg,.jpeg,.png'"
+                                ng-model="homepage.banner_img" class="form-control" id="banner" placeholder="Click to select file">
+                                <div ng-messages="updateHomepageForm.banner.$error"
+                                ng-show="updateHomepageForm.banner.$touched || updateHomepageForm.$submitted">
+                                <span class="help-block" ng-message="required">Banner Image is required.</span>
+                                <span class="help-block" ng-message="minWidth">Banner Image width can not be less than 1903px.</span>
+                                <span class="help-block" ng-message="minHeight">Banner Image height can not be less than 659px.</span>
+                                <span class="help-block" ng-message="pattern">You can upload only png, jpg and jpeg image</span>
+                          </div>  
+                            </div>
+                        </div>
+
+                        <div class="row"  ng-show="homepage.banner_img">
+                            <div class="col-sm-12 col-md-8 col-md-offset-3" >
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="thumbnail" style="width: 200px;">
+                                        <img class="img-responsive" ngf-thumbnail="homepage.banner_img" alt="Preview">
+                                    </div>
+                                </div>
+                            </div>    
+                        </div>
+
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': updateHomepageForm.banner_text.$touched && updateHomepageForm.banner_text.$invalid || updateHomepageForm.banner_text.$invalid && updateHomepageForm.$submitted }">
+                            <label class="col-md-3 control-label" for="banner_text">Banner Text<span class="required">*</span></label>
+                            <div class="col-md-9">
+                                <input type="text" name="banner_text" ng-model="homepage.banner_text" class="form-control" id="banner_text" placeholder="Enter banner text" ng-maxlength="60" required>
+                                <div ng-messages="updateHomepageForm.banner_text.$error"
+                                    ng-show="updateHomepageForm.banner_text.$touched || updateHomepageForm.$submitted">
+                                    <span class="help-block" ng-message="required">Banner Text is required.</span>
+                                    <span class="help-block" ng-message="maxlength">Banner text can not be greater than 60 characters.</span>
+                                </div>
+                            </div>
+                        </div>
+                      <hr/>
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': updateHomepageForm.video_url.$touched && updateHomepageForm.video_url.$invalid || updateHomepageForm.video_url.$invalid && updateHomepageForm.$submitted }">
+                            <label class="col-md-3 control-label" for="video_url">How PencilINK Works Video URL<span class="required">*</span></label>
+                            <div class="col-md-9">
+                                <input type="text" name="video_url" ng-model="homepage.video_url" ng-pattern="/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/" class="form-control" id="video_url" placeholder="Enter your video url" required>
+                                <div ng-messages="updateHomepageForm.video_url.$error"
+                                    ng-show="updateHomepageForm.video_url.$touched || updateHomepageForm.$submitted">
+                                    <span class="help-block" ng-message="required">URL is required.</span>
+                                    <span class="help-block" ng-message="pattern">Invalid Youtube URL.</span>
+                                </div>
+                            </div>
+                        </div>
+                       <hr/>
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': updateHomepageForm.copyright_text.$touched && updateHomepageForm.copyright_text.$invalid || updateHomepageForm.copyright_text.$invalid && updateHomepageForm.$submitted }">
+                            <label class="col-md-3 control-label" for="copyright_text">Copyright Text<span class="required">*</span></label>
+                            <div class="col-md-9">
+                                <input type="text" name="copyright_text" ng-model="homepage.copyright_text" class="form-control" id="copyright_text" ng-maxlength="40" placeholder="Enter copyright text" required>
+                                <div ng-messages="updateHomepageForm.copyright_text.$error"
+                                    ng-show="updateHomepageForm.copyright_text.$touched || updateHomepageForm.$submitted">
+                                    <span class="help-block" ng-message="required">Copyright Text is required.</span>
+                                    <span class="help-block" ng-message="maxlength">Copyright text can not be greater than 40 characters.</span>
+                                </div>
+                            </div>
+                        </div>
+                     <hr/>
+                         <div class="form-group form-md-line-input" ng-class="{ 'has-error': updateHomepageForm.join_pilot_study.$touched && updateHomepageForm.join_pilot_study.$invalid || updateHomepageForm.join_pilot_study.$invalid && updateHomepageForm.$submitted }">
+                             <label class="col-md-3 control-label" for="join_pilot_study">Join Pilot Study Text<span class="required">*</span></label>
+                             <div class="col-md-9">
+                                 <textarea rows="3" name="join_pilot_study" ng-model="homepage.join_pilot_study" class="form-control" id="join_pilot_study" placeholder="Enter your join_pilot_study" required></textarea>
+                                 <div ng-messages="updateHomepageForm.join_pilot_study.$error"
+                                     ng-show="updateHomepageForm.join_pilot_study.$touched || updateHomepageForm.$submitted">
+                                     <span class="help-block" ng-message="required"> Join pilot study text is required.</span>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-9">
+                                <button type="submit" ladda="isLoading" class="btn green">Submit</button>
+                                <a href ui-sref="viewhomepage" class="btn default">cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+</div>

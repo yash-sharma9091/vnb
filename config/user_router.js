@@ -42,6 +42,7 @@ module.exports = {
       { url: '/reset_password/:token', method: ctrls.userCtrl.reset, type: 'post' },
       { url: '/change_password/:id', method: ctrls.userCtrl.changePassword, type: 'post' },
       { url: '/contactus',method: ctrls.contactUsCtrl.createContactUs, type: 'post' },
+      { url: '/getfaq',method: ctrls.cmsCtrl.getFAQ, type: 'get' },
       { url: '/setting_homepage',method: ctrls.settingCtrl.settingHomepage, type: 'get' },
       { url: '/profile', mwear: uploadProfileImage.any(),method: ctrls.userCtrl.updateProfile, type: 'post' },
      

@@ -1,0 +1,92 @@
+<div class="row fade-in-up">
+    <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class=" icon-user font-green"></i>
+                    <span class="caption-subject font-green sbold uppercase">Update CMS Detail</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="edit_whatdosteps(updateWhatDoStepForm.$valid)" class="form-horizontal" name="updateWhatDoStepForm" ng-keydown="clear($event.target.name, updateWhatDoStepForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" 
+                        ng-class="{ 'has-error': updateWhatDoStepForm.title.$touched && updateWhatDoStepForm.title.$invalid || updateWhatDoStepForm.title.$invalid && updateWhatDoStepForm.$submitted }">
+                            <label class="col-md-2 control-label" for="title">Title <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="title" ng-model="whatdosteps.title" class="form-control" id="title" placeholder="Enter your whatdosteps title" required>
+                                <div ng-messages="updateWhatDoStepForm.title.$error"
+                                    ng-show="updateWhatDoStepForm.title.$touched || updateWhatDoStepForm.$submitted">
+                                    <span class="help-block" ng-message="required">Title is required.</span>
+                                </div>
+                            </div>
+                        </div>
+                      
+                                 
+                        <div class="form-group form-md-line-input" ng-class="{ 'has-error': updateWhatDoStepForm.short_description.$touched && updateWhatDoStepForm.short_description.$invalid || updateWhatDoStepForm.short_description.$invalid && updateWhatDoStepForm.$submitted }">
+                            <label class="col-md-2 control-label" for="short_description">Short Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                
+                             <textarea rows="4" name="short_description" ng-model="whatdosteps.short_description" class="form-control" id="short_description" placeholder="Enter your short description" ng-maxlength="160" ng-minlength="130" required></textarea>
+                            <div ng-messages="updateWhatDoStepForm.short_description.$error" ng-show="updateWhatDoStepForm.short_description.$touched || updateWhatDoStepForm.$submitted">
+                                <span class="help-block" ng-message="required">Short Description is required.</span>
+                                 <span class="help-block" ng-message="maxlength">Short Description cannot be greater than 160 characters</span>
+                                 <span class="help-block" ng-message="minlength">Short Description cannot be less than 130 characters</span>
+                                </div>
+                            </div>
+                        </div>
+
+                          <div class="form-group form-md-line-input" ng-class="{ 'has-error': updateWhatDoStepForm.long_description.$touched && updateWhatDoStepForm.long_description.$invalid || updateWhatDoStepForm.long_description.$invalid && updateWhatDoStepForm.$submitted }">
+                            <label class="col-md-2 control-label" for="long_description">Long Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                
+                                <text-angular ng-required="true" ng-model="whatdosteps.long_description"></text-angular>
+                                <div ng-messages="updateWhatDoStepForm.long_description.$error"
+                                    ng-show="updateWhatDoStepForm.long_description.$touched || updateWhatDoStepForm.$submitted">
+                                    <span class="help-block" ng-message="required">Long Description is required.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input" ng-class="{ 'has-error': updateWhatDoStepForm.order.$touched && updateWhatDoStepForm.order.$invalid || updateWhatDoStepForm.order.$invalid && updateWhatDoStepForm.$submitted }">
+                            <label class="col-md-2 control-label" for="order">Order <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <select id="order" class="form-control" name="order" ng-model="whatdosteps.order" required ng-options="v as v for v in [1,2,3,4]">
+                                </select>
+                                <div ng-messages="updateWhatDoStepForm.order.$error"
+                                    ng-show="updateWhatDoStepForm.order.$touched || updateWhatDoStepForm.$submitted">
+                                    <span class="help-block" ng-message="required">Order is required.</span>
+                                </div>
+                            </div>    
+                        </div>
+
+                       <div class="form-group form-md-line-input" ng-class="{ 'has-error': updateWhatDoStepForm.status.$touched && updateWhatDoStepForm.status.$invalid || updateWhatDoStepForm.status.$invalid && updateWhatDoStepForm.$submitted }">
+                            <label class="col-md-2 control-label" for="status">Status <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <select id="status" class="form-control" name="status" ng-model="whatdosteps.status" required ng-options="trade.value as trade.text for trade in [{text: 'Active', value:true},{text: 'Inactive', value: false}]">
+                                </select>
+                                <div ng-messages="updateWhatDoStepForm.status.$error"
+                                    ng-show="updateWhatDoStepForm.status.$touched || updateWhatDoStepForm.$submitted">
+                                    <span class="help-block" ng-message="required">Status is required.</span>
+                                </div>
+                            </div>    
+                        </div>
+
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-9">
+                                <button type="submit" ladda="isLoading" class="btn green">Update</button>
+                                <a href ui-sref="whatdosteps" class="btn default">cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+</div>

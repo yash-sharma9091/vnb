@@ -4,18 +4,18 @@
         <div class="portlet light portlet-fit portlet-datatable bordered">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-database"></i> Manage CMS </div>
-           <!--      <div class="actions">
-                    <a href ui-sref="newcms" class="btn btn-outline green">
+                    <i class="fa fa-database"></i> Manage What Do Step </div>
+            <!--     <div class="actions">
+                    <a href ui-sref="newwhatdosteps" class="btn btn-outline green">
                         <i class="fa fa-plus"></i>
-                        <span> Add New CMS Sections</span>
+                        <span> Add New What DO Steps </span>
                     </a>
                 </div> -->
             </div>
 
             <div class="portlet-body">
                 <div class="table-container">
-               <!--      <div class="table-actions-wrapper">
+             <!--        <div class="table-actions-wrapper">
                         <span> </span>
                         <select class="table-group-action-input form-control input-inline input-small input-sm">
                             <option value="">Select...</option>
@@ -36,26 +36,31 @@
                                     </label>
                                 </th> -->
                                 <th width="10%"> Title </th>
-                                <th width="15%"> Meta Title </th>
-                                <th width="20%"> Meta Description </th>
-                                <!-- <th width="10%"> Status </th> -->
+                                <th width="15%"> Short Description </th>
+                                <th width="20%"> Long Description </th>
+                                <th width="20%"> Order </th>
+                      <!--           <th width="10%"> Status </th> -->
                                 <th width="15%"> Date </th>
                                 <th width="10%"> Actions </th>
                             </tr>
                             <tr role="row" class="filter">
-<!--                                 <td> </td>
- -->                                <td>
-                                    <input type="text" class="form-control form-filter input-sm" placeholder="search by title" name="title"> 
+                               <!--  <td> </td> -->
+                                <td>
+                                    <input type="text" class="form-control form-filter input-sm" name="title"
+                                    placeholder="search by title" > 
                                 </td>
                                                            
                                 <td>
-                                    <input type="text" class="form-control form-filter input-sm" placeholder="search by meta title" name="meta_title"> 
+                                    <input type="text" class="form-control form-filter input-sm" name="short_description" placeholder="search by short description"> 
                                 </td>
                                  <td>
-                                    <input type="text" class="form-control form-filter input-sm" name="meta_description" placeholder="search by meta description"> 
+                                    <input type="text" class="form-control form-filter input-sm" name="long_description" placeholder="search by long description"> 
+                                </td>
+                               <td>
+                                    <input type="text" class="form-control form-filter input-sm" placeholder="search by order" name="order"> 
                                 </td>
                       
-                    <!--             <td>
+                       <!--          <td>
                                    <select class="form-control form-filter input-sm" name="status">
                                         <option value="">Select</option>
                                         <option value="true">Active</option>

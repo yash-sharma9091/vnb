@@ -78,12 +78,9 @@ exports.login = (req, res, next) => {
 exports.forgotpassword= (req,res,next) => {
 
  if(!req.body.email) {
-	    return res.json({responsedata: {
-	        message: 'Email is required', 
-	        name: 'Authentication failed', 
-	        success: 0} 
-	      });
-	  }
+	return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
+			.json(response.required({message: 'Email is required'}));
+  }
   let email = req.body.email,
   tmpEmail = _.escapeRegExp(req.body.email);
 
@@ -138,7 +135,7 @@ exports.forgotpassword= (req,res,next) => {
 				res.status(500).json(
 					response.error({
 						source: err,
-						message: 'Failure sending email',
+						message: 'we are facing some technical issue while sending email, please try after sometime.',
 						success: false
 					})
 		        );
@@ -152,9 +149,9 @@ exports.forgotpassword= (req,res,next) => {
     }
   ], function (err, result) {
     if(err){
-      return res.json({responsedata:{name:"error",status:0,message:err.message}});
+      return res.status(500).json(response.error(err));
     }
-      return res.json({responsedata:{name:"success",status:1,message:result}});
+      return res.json(response.success(result));
   });
 }
 /**

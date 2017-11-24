@@ -75,25 +75,28 @@ exports.socialLinkTable = (status_list, recordsTotal, data, draw) => {
 	};
 };
 
-exports.paymentTable = (status_list, recordsTotal, data, draw) => {
+exports.whatdoStepTable = (status_list, recordsTotal, data, draw) => {
 	
-	let result = [];
+		let result = [];
 	for (var i = data.length - 1; i >= 0; i--) {
-		result[i] = {
-			customer_name: data[i].customer_name, 
-			email:`<a href="#!/view-user/${data[i].user_id}/payment">${data[i].email}</a>`,
-			amount: `${data[i].amount/100}$`,
-			balance_transaction: data[i].balance_transaction || '-',
-			description: data[i].description,
-			plan_name:data[i].plan_name, 
-			plan_price:data[i].plan_price, 
-			plan_description:data[i].plan_description, 
+	result[i] = {
+			id:`<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+					<input name="id[]" type="checkbox" class="checkboxes" value="${data[i]._id}"/>
+					<span></span>
+				</label>`,
+			title: data[i].title,
+			short_description: data[i].short_description,
+			long_description: data[i].long_description,
+			order: data[i].order,
 			created_date: moment(data[i].created_at).format('MMM D, YYYY'),
-			status: `<span class="label label-sm label-info">Completed</span>`,
+			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
 			action: `
 					<div class="btn-group btn-group-solid">
-						<a href="#!/view-payment/${data[i]._id}" class="btn btn-sm btn-outline blue tooltips" data-original-title="View">
+					 	<a href="#!/view-whatdosteps/${data[i].slug}" class="btn btn-sm btn-outline blue tooltips" data-original-title="View">
 							<i class="fa fa-search"></i>
+						</a>
+						<a href="#!/edit-whatdosteps/${data[i].slug}" class="btn btn-sm btn-outline grey-salsa tooltips" data-original-title="Edit">
+							<i class="fa fa-pencil"></i>
 						</a>
 					</div>`
 		};
@@ -117,9 +120,9 @@ exports.cmsTable = (status_list, recordsTotal, data, draw) => {
 					<span></span>
 				</label>`,
 			title: data[i].title,
-			description: data[i].description,
-			meta_title: data[i].meta_title || '-',
+			meta_title: data[i].meta_title,
 			meta_description: data[i].meta_description || '-',
+			order: data[i].order || '-',
 			created_date: moment(data[i].created_at).format('MMM D, YYYY'),
 			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
 			action: `

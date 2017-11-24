@@ -1,0 +1,105 @@
+<div class="row fade-in-up">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+		    <div class="portlet-title">
+		        <div class="caption">
+		            <i class="icon-equalizer font-green-haze"></i>
+		            <span class="caption-subject font-green-haze bold uppercase">Homepage Info </span>
+		            <span class="caption-helper"><i>(last update on {{homepage.updated_at | date: format : 'dd/m/y'}})</i></span>
+		        </div>
+		    <!--     <div class="tools">
+		            <button ui-sref="homepage" class="btn default">Back</button>
+		        </div> -->
+		    </div>
+		    <div class="portlet-body form">
+		        <!-- BEGIN FORM-->
+		        <form class="form-horizontal" role="form">
+		            <div class="form-body">
+		                <!-- <h2 class="margin-bottom-20"> View User Info - Bob Nilson </h2> -->
+		       
+		               	<div class="row">
+		                    <div class="col-md-3">
+		                        <div class="form-group">
+		                           <label class="control-label col-md-12">Banner images:</label>
+		       	                </div>
+		                    </div>
+		                    <div class="col-md-9">
+	                          <div class="form-group">
+			         		    <div class="col-sm-12 col-md-4">
+	                                <div class="thumbnail" style="width: 200px;">
+	                                 <img class="img-responsive" ngf-thumbnail="homepage.banner_img.path" alt="Preview">
+  	                                </div>
+	                                
+	                            </div>  
+			                   </div>
+		    	            </div>
+		                </div>
+	                   	<div class="row">
+		                    <div class="col-md-3">
+		                        <div class="form-group">
+		                           <label class="control-label col-md-12">Banner Text:</label>
+		       	                </div>
+		                    </div>
+		                    <div class="col-md-9">
+	                          <div class="form-group">
+			         		    <div class="col-sm-12 col-md-4">
+	                                <p class="form-control-static" ng-bind-html="homepage.banner_text"> </p>
+	                                
+	                            </div>  
+			                   </div>
+		    	            </div>
+		                </div>
+		                <hr/>
+  		                <div class="row">
+		                    <div class="col-md-12">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">How PencilINK Works Video URL:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static"> <a href="https://www.youtube.com/watch?v={{homepage.video_url}}" target="_blank">https://www.youtube.com/watch?v={{homepage.video_url}} </a></p>
+		                            </div>
+		                        </div>
+		                    </div>
+ 		                </div>
+		                <hr/>
+  		                <div class="row">
+		                    <div class="col-md-12">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Copyright Text:</label>
+		                            <div class="col-md-9">
+		                              <p class="form-control-static" ng-bind-html="homepage.copyright_text">  </p>
+		                            </div>
+		                        </div>
+		                    </div>
+ 		                </div>
+ 		                 <hr/>
+
+		                <div class="row">
+		                    <div class="col-md-12">
+		                        <div class="form-group">
+		                            <label class="control-label col-md-3">Join Pilot Study Text:</label>
+		                            <div class="col-md-9">
+		                                <p class="form-control-static" ng-bind-html="homepage.join_pilot_study">  </p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="form-actions">
+		                <div class="row">
+		                    <div class="col-md-6">
+		                        <div class="row">
+		                            <div class="col-md-offset-3 col-md-9">
+		                                <button type="button" ng-click="goToEdit()" class="btn green">
+		                                    <i class="fa fa-pencil"></i> Edit</button>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="col-md-6"> </div>
+		                </div>
+		            </div>
+		        </form>
+		        <!-- END FORM-->
+		    </div>
+		</div>
+	</div>
+</div>		

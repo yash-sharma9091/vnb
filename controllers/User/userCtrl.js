@@ -62,16 +62,18 @@ exports.signupSchool = (req, res, next) => {
 		   		    contact_name: user.contact_name
 		   		}
 			}, function(err, success){
-				console.log('err',err);
-				console.log('success',success);
 				if(err){
+
 					res.status(500).json(
 						response.error({
 							source: err,
-							message: 'Failure sending email',
+							message: 'we are facing some technical issue while sending email, please try after sometime.',
 							success: false
 						})
 			        );
+	        		User.remove({email_address:user.email_address})
+			            .then(response => done(null, response))
+			            .catch(err => done(err,null));
 				} else {
 					res.json(
 						response.success({
@@ -142,9 +144,11 @@ exports.loginSchool = (req, res, next) => {
             email_address:user.email_address,
 			contact_name:user.contact_name
 		}
+		//var _user = JSON.parse(JSON.stringify(user)); 
+		   // _user.school_type=user.school_type.abbreviation;
 		
 		let token = jwt.sign(jwt_data, new Buffer(config.secret).toString('base64'), {expiresIn: '1 day'});
-		res.json(response.success({success: true, user: user, token}));
+		res.json(response.success({success: true, user:user, token}));
 	})
 };
 

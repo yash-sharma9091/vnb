@@ -3,6 +3,7 @@ const path 	 	= require('path'),
 	async 	 	= require('async'),
 	_ 			= require('lodash'),
 	mongoose 	= require('mongoose'),
+	response 	= require(path.resolve('config/lib/response')),
 	Setting     = require(path.resolve('./models/Setting')),
 	datatable 	= require(path.resolve('./config/lib/datatable')),
   	config 		= require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
@@ -10,7 +11,7 @@ const path 	 	= require('path'),
 
 exports.add = (req, res, next) => {
 	let reqData=req.body;
-	    reqData.type="social";
+	    reqData.type="whatdostep";
 	if(!req.body.title ) {
 		res.status(422).json({
 			errors: {
@@ -19,18 +20,38 @@ exports.add = (req, res, next) => {
 			}	
 		});
 		return;
-	}	 
-    let setting = new Setting(req.body);
-    setting.save()
-    .then(result => res.json({success: true}))
-    .catch(error => res.json({errors: error}));
+	}
+	async.waterfall([
+		function(done){
+			Setting.count({type:"whatdostep"},done);
+		},
+		function(count,done){
+			if(count>=4){
+			  done({errors:{message:"You can not add more tahn 4 step"}},null);
+			}
+			else{
+			   let setting = new Setting(req.body);
+			   setting.save()
+			    .then(result => done({success: true}))
+			    .catch(error => done({errors: error}));
+			}
+		}
+	],function(err,result){
+       if(err) {
+       	 res.status(500).json(err);
+       }
+       else{
+       	 res.json(result);
+       }
+	})
+
 };
 
 exports.edit = (req, res, next) => {
-	if(!req.body._id) {
+	if(!req.body.slug) {
 		res.status(422).json({
 			errors: {
-				message: 'Id is required', 
+				message: 'Slug is required', 
 				success: false,
 			}	
 		});
@@ -39,7 +60,7 @@ exports.edit = (req, res, next) => {
    
   let reqData=req.body;
 
-  Setting.update({type:"social",_id: req.body._id},{$set: { title: reqData.title,url: reqData.url,status:reqData.status }}, 
+  Setting.update({type:"whatdostep",slug: req.body.slug},{$set: { title: reqData.title,order:reqData.order,short_description: reqData.short_description,long_description: reqData.long_description,status:reqData.status }}, 
     	function (error, result) {
     		if(error){
     			res.json({errors: error});
@@ -50,7 +71,7 @@ exports.edit = (req, res, next) => {
 };
 
 exports.view = (req, res, next) => {
-	if(!req.params._id) {
+	if(!req.params.slug) {
 		res.status(422).json({
 			errors: {
 				message: 'Id is required', 
@@ -60,7 +81,7 @@ exports.view = (req, res, next) => {
 		return;
 	}	 
         
-    Setting.findOne({type:"social",_id: req.params._id}, 
+    Setting.findOne({type:"whatdostep",slug: req.params.slug}, 
     	function (error, result) {
     		if(error){
     			res.json({errors: error});
@@ -71,7 +92,7 @@ exports.view = (req, res, next) => {
 };
 
 exports.list = (req, res, next) => {
-let operation = {type:"social"}, reqData = req.body;
+let operation = {type:"whatdostep"}, reqData = req.body;
 	async.waterfall([
 		function (done) {
 		
@@ -113,7 +134,7 @@ let operation = {type:"social"}, reqData = req.body;
 			}
 		};
 		
-		let dataTableObj = datatable.socialLinkTable(status_list, result.count, result.records, reqData.draw);
+		let dataTableObj = datatable.whatdoStepTable(status_list, result.count, result.records, reqData.draw);
 		res.json(dataTableObj);
 	});
 };

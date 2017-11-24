@@ -26,7 +26,7 @@ router.use(expressJWT({
 		'/api/settings',
 		'/api/customer',
 		'/api/contactus',
-		'/api/trail',
+		'/api/getfaq',
 		'/api/plans_list',
 		'/api/cron',
 		/^\/api\/cms\/.*/,

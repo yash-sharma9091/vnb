@@ -1,5 +1,5 @@
 'use strict';
-mimicTrading.controller('sociallinkCtrl', ['$scope', '$state', 'RestSvr', '$rootScope','appSvr',
+mimicTrading.controller('whatdostepsCtrl', ['$scope', '$state', 'RestSvr', '$rootScope','appSvr',
 	($scope, $state, RestSvr, $rootScope, appSvr) => {
 		
 		$scope.$on('$viewContentLoaded', () => {
@@ -9,12 +9,14 @@ mimicTrading.controller('sociallinkCtrl', ['$scope', '$state', 'RestSvr', '$root
 			appSvr.init();			
 
 		    TableAjax.init({
-		    	url: 'sociallink/list/',
+		    	url: 'whatdosteps/list/',
 		    	columns: [
 	               // { "data": "id", "orderable": false },
                     { "data": "title" },
-                    { "data": "url" },
-                  //  { "data": "status" },
+                    { "data": "short_description" },
+                    { "data": "long_description" },
+                    { "data": "order" },
+                   // { "data": "status" },
                     { "data": "created_date" },
                     { "data": "action", "orderable": false }
 	            ]

@@ -11,12 +11,12 @@ mimicTrading.controller('cmsCtrl', ['$scope', '$state', 'RestSvr', '$rootScope',
 		    TableAjax.init({
 		    	url: 'cms/list/',
 		    	columns: [
-	                { "data": "id", "orderable": false },
+	               // { "data": "id", "orderable": false },
                     { "data": "title" },
                     //{ "data": "description"},
                     { "data": "meta_title" },
                     { "data": "meta_description" },
-                    { "data": "status" },
+                   // { "data": "status" },
                     { "data": "created_date" },
                     { "data": "action", "orderable": false }
 	            ]
