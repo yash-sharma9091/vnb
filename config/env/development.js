@@ -68,7 +68,7 @@ const config = {
  	image_path: 'assets/images/default-user.png',
  	image_name: 'default-user.png',
  	fileLimits: {
-      fileSize: 2000000, //the max file size (in bytes)
+      fileSize: 10000000, //the max file size (in bytes)
       files: 10 //the max number of file
   },
   docLimit: 10,
