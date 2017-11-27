@@ -20,11 +20,11 @@ settingSchema 	= new Schema({
     video_url: {
         type: String
     },
+    video_url_id:{
+        type:String
+    },
     title: {
         type:String    
-    },
-    text: {
-        type:String      
     },
     short_description: {
         type:String    

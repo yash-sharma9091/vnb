@@ -3,7 +3,6 @@ const
 	path 		= require('path'),
 	response 	= require(path.resolve('config/lib/response')),
 	User 		= require(path.resolve('models/User')),
-	Subscription= require(path.resolve('./models/Subscription')),
 	async 		= require('async'),
 	paginate 	= require(path.resolve('./config/lib/paginate')),
 	crypto 		= require('crypto'),
