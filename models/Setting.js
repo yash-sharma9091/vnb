@@ -11,6 +11,9 @@ settingSchema 	= new Schema({
     banner_img : {
         type:Object
     },
+    thumb:{
+        type:Object
+    },
     banner_text:{
         type:String
     },

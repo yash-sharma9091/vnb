@@ -56,12 +56,13 @@
                         ng-class="{ 'has-error': updateHomepageForm.video_url.$touched && updateHomepageForm.video_url.$invalid || updateHomepageForm.video_url.$invalid && updateHomepageForm.$submitted }">
                             <label class="col-md-3 control-label" for="video_url">How PencilINK Works Video URL<span class="required">*</span></label>
                             <div class="col-md-9">
-                                <input type="text" name="video_url" ng-model="homepage.video_url" ng-pattern="/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/" class="form-control" id="video_url" placeholder="Enter your video url" required>
+                                <input type="text" name="video_url" ng-model="homepage.video_url" class="form-control" id="video_url" placeholder="Enter your video url" required>
                                 <div ng-messages="updateHomepageForm.video_url.$error"
                                     ng-show="updateHomepageForm.video_url.$touched || updateHomepageForm.$submitted">
                                     <span class="help-block" ng-message="required">URL is required.</span>
                                     <span class="help-block" ng-message="pattern">Invalid Youtube URL.</span>
                                 </div>
+                              <!--   ng-pattern="/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/" -->
                             </div>
                         </div>
                        <hr/>

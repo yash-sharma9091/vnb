@@ -25,7 +25,22 @@ mimicTrading.controller('homepageEditCtrl', ['$scope', '$state', 'RestSvr', '$ro
 				data: data
 			})
 			.then(function (response) {
-				$state.go('viewhomepage');
+				return Upload.resize(data.banner_img, {width:60,height:60})
+				.then(function(resizedFile){
+					return resizedFile;
+				});
+				
+			}).then(function(response){
+				if(Upload.isFile(data.banner_img)){
+					Upload.upload({
+						url: baseUrl('homepage/bannerthumb'),
+						data: {_id:data._id,resize_image: response}
+					}).then(function(result){
+						$state.go('viewhomepage');
+					}).catch(function(errors){
+					    App.alert({type: ('danger'), icon: ( 'warning'), message: errors.message, container: $rootScope.settings.errorContainer, place: 'prepend'});
+					})
+				}
 			})
 			.catch(function (errors) {
 				App.alert({type: ('danger'), icon: ( 'warning'), message: errors.message, container: $rootScope.settings.errorContainer, place: 'prepend'});

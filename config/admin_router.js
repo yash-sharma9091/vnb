@@ -94,11 +94,8 @@ module.exports = {
       { url: '/whatdosteps/view/:slug', method: ctrls.whatDoStepCtrl.view, type: 'get' },
       { url: '/homepage/edit', mwear:uploadHomepageBanner.any(),method: ctrls.homepageCtrl.edit, type: 'post' },
       { url: '/homepage/view', method: ctrls.homepageCtrl.view, type: 'get' },
-
-      { url: '/privacypolicy/add',  method: ctrls.privacypolicyCtrl.add, type: 'post' },
-      { url: '/privacypolicy/list', method: ctrls.privacypolicyCtrl.list, type: 'post' },
-      { url: '/privacypolicy/edit', method: ctrls.privacypolicyCtrl.edit, type: 'put' },
-      { url: '/privacypolicy/view/:id', method: ctrls.privacypolicyCtrl.view, type: 'get'},
+      { url: '/homepage/bannerthumb', mwear:uploadHomepageBanner.any(),method: ctrls.homepageCtrl.bannerThumb, type: 'post' },
+     
       { url: '/blog/add', mwear: uploadImage.any(), method: ctrls.blogCtrl.add, type: 'post' },
   		{ url: '/blog/list', method: ctrls.blogCtrl.list, type: 'post' },
   		{ url: '/blog/view/:slug', method: ctrls.blogCtrl.view, type: 'get' },

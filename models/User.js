@@ -129,6 +129,21 @@ UserSchema 	= new Schema({
 		type: String,
 		default: "Pending"
 	},
+	country:{
+		type:String
+	},
+	state:{
+		type:String
+	},
+	city:{
+		type:String
+	},
+	school_code:{
+		type:String
+	},
+	school_logo:{
+		type:Object
+	},
 	reset_password: {type: Object},
 	salt: { type: String },
 	lastLoggedIn: { type: Date },

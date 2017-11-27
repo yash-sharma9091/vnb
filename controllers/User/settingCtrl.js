@@ -37,6 +37,7 @@ exports.settingHomepage = (req, res, next) => {
 				homeresponse.banner_img.text=homeresponse.banner_text;
 				let fnlresult={
 					banner_img:homeresponse.banner_img,
+					thumb:homeresponse.thumb,
                     how_pencilink_works: {video_url:homeresponse.video_url},
                     what_we_do_steps:stepdata,
                     cms_content:cmsdata,

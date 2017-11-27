@@ -18,8 +18,6 @@ exports.edit = (req, res, next) => {
 	} else {
 		delete req.body.banner_img
 	}
-	console.log("req--"+JSON.stringify(req.body));
-	
     Setting.update({_id:req.body._id,type:"homepage"},{$set:req.body})
     .then(result => res.json({success: true}))
     .catch(error => res.json({errors: error}));
@@ -35,5 +33,22 @@ exports.view = (req, res, next) => {
     		res.json({success: true, result: result});
     	}
     );
+};
+
+exports.bannerThumb = (req,res,next) => {
+		let image = {};
+	if(req.files.length > 0){
+		req.files.forEach((file) => {
+			image.name = file.filename;
+			image.original_name = file.originalname;
+			image.path = file.path;
+		});
+     req.body.thumb = image;	
+	} else {
+		delete req.body.thumb
+	}
+   Setting.update({_id:req.body._id,type:"homepage"},{$set:req.body})
+    .then(result => res.json({success: true}))
+    .catch(error => res.json({errors: error}));
 };
 
