@@ -4,7 +4,6 @@
 mimicTrading.config(['$stateProvider',function($stateProvider){
 
 	let faqResolver = ['faqSvr', '$stateParams', (faqSvr, $stateParams) => faqSvr.getFaqById($stateParams.id)];
-
 	$stateProvider
 	.state('faq',{
 		url: '/faq',

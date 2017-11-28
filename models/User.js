@@ -129,14 +129,11 @@ UserSchema 	= new Schema({
 		type: String,
 		default: "Pending"
 	},
-	country:{
-		type:String
+	location:{
+		type:Object
 	},
-	state:{
-		type:String
-	},
-	city:{
-		type:String
+	address:{
+		type:Object
 	},
 	school_code:{
 		type:String
