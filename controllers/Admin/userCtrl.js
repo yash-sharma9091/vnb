@@ -104,7 +104,7 @@ exports.list = (req, res, next) => {
 				let _status =  ( reqData.customActionName === 'Approve' ) ? 'Approved' : 'Rejected';
 
 				if(_status=="Rejected"){
-				  User.update({_id: {$in:_ids}},{$set:{pilot_request: _status}},{multi:true}, done);
+				  User.update({_id: {$in:_ids}},{$set:{pilot_request: _status,reject_reason:reqData.reject_reason}},{multi:true}, done);
 				}
 				else{
 			  		createUniqueAccount(_ids)

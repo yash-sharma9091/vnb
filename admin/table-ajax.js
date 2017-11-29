@@ -86,34 +86,104 @@ var TableAjax = function () {
         grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
             e.preventDefault();
             var action = $(".table-group-action-input", grid.getTableWrapper());
+            var selectedRows=grid.getSelectedRows();
+                      
             if (action.val() !== "" && grid.getSelectedRowsCount() > 0) {
                 grid.setAjaxParam("customActionType", "group_action");
                 grid.setAjaxParam("customActionName", action.val());
                 grid.setAjaxParam("id", grid.getSelectedRows());
-                if(action.val()==="Approve" || action.val()==="Reject"){
-                  bootbox.confirm({
-                    title: "Pilot Request",
-                    message: `Are you sure you want to ${action.val()} ?`,
-                    buttons: {
-                        cancel: {
-                            label: '<i class="fa fa-times"></i> Cancel'
+              
+              if(action.val()==="Approve"){
+                let approveCheck=true,id=[];
+                  selectedRows.map(function(row){
+                     row=JSON.parse(row);
+                     id.push(row._id);
+                     if(row.pilot_request=="Approved"){
+                        App.alert({
+                            type: 'danger',
+                            icon: 'warning',
+                            message: 'You can Approved only pending and rejected request.',
+                            container: grid.getTableWrapper(),
+                            place: 'prepend'
+                        });
+                        approveCheck=false;
+                        return;
+                     }
+                  });
+                  if(approveCheck){
+                      bootbox.confirm({
+                        title: "Pilot Request",
+                        message: `Are you sure you want to ${action.val()} ?`,
+                        buttons: {
+                            cancel: {
+                                label: '<i class="fa fa-times"></i> Cancel'
+                            },
+                            confirm: {
+                                label: `<i class="fa fa-check"></i> ${action.val()}`
+                            }
                         },
-                        confirm: {
-                            label: `<i class="fa fa-check"></i> ${action.val()}`
-                        }
-                    },
-                    callback: function (result) {
-                        if(result===true){
-                          grid.getDataTable().ajax.reload();
-                          grid.clearAjaxParams();
-                        }
-                        else{
-                           return;
-                        }
-                    },
-                    size:"small"
-                 });
+                        callback: function (result) {
+                            if(result===true){
+                              grid.setAjaxParam("id", id);    
+                              grid.getDataTable().ajax.reload();
+                              grid.clearAjaxParams();
+                            }
+                            else{
+                               return;
+                            }
+                        },
+                        size:"small"
+                      });
+                  }
+
                 }
+                else if(action.val()==="Reject"){
+                    let rejectCheck=true,id=[];
+                  selectedRows.map(function(row){
+                     row=JSON.parse(row);
+                     id.push(row._id);
+                     if(row.pilot_request=="Approved"){
+                        App.alert({
+                            type: 'danger',
+                            icon: 'warning',
+                            message: 'You can Reject only pending request.',
+                            container: grid.getTableWrapper(),
+                            place: 'prepend'
+                        });
+                        rejectCheck=false;
+                        return;
+                     }
+                  });
+                    if(rejectCheck){
+                      bootbox.prompt({
+                        title: `Are you sure you want to ${action.val()} ?`,
+                        inputType: 'text',
+                        placeholder: 'Please Enter Reason',
+                        buttons: {
+                            cancel: {
+                                label: '<i class="fa fa-times"></i> Cancel'
+                            },
+                            confirm: {
+                                label: `<i class="fa fa-check"></i> ${action.val()}`
+                            }
+                        },
+                        callback: function (result) {
+                            console.log("res--"+result)
+                            if(result!=null){
+                              grid.setAjaxParam("id", id);  
+                              grid.setAjaxParam("reject_reason", result);   
+                              grid.getDataTable().ajax.reload();
+                              grid.clearAjaxParams();
+                            }
+                            else{
+                               return;
+                            }
+                        },
+                        size:"small"
+                      });
+                    }
+                }
+
                 else if(action.val()==="remove"){
                   bootbox.confirm({
                     title: "Delete ",

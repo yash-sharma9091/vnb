@@ -65,6 +65,10 @@ const config = {
     'text/comma-separated-values':'csv'
   },
   blog_image_destination: 'assets/blog',
+  default_school_logo:{
+     original_name: "default-logo.png",
+     path:"assets/schoolprofile_image/default-logo.png"
+  },
  	image_path: 'assets/images/default-user.png',
  	image_name: 'default-user.png',
  	fileLimits: {

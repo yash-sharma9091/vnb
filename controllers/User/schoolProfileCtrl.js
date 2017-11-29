@@ -13,12 +13,15 @@ const
 
 exports.schoolProfileStep1 = (req, res, next) => {
 	let image = {}, _body;
-	if( req.files.length > 0 ) {
-		req.files.forEach(x => {
-			image.name = file.filename;
-			image.path = x.path;
-			image.original_name = x.originalname;
-		});
+	if( !_.isUndefined(req.files)) {
+		if(req.files.length > 0){
+		  req.files.forEach(x => {
+			 image.name = x.filename;
+			 image.path = x.path;
+			 image.original_name = x.originalname;
+		  });
+		}
+
 	}
 	if( !_.isEmpty(image) ) {
 		_body = _.assign(req.body, {school_logo: image});	
@@ -38,23 +41,22 @@ exports.schoolProfileStep1 = (req, res, next) => {
                 coordinates: [_body.lng, _body.lat]
 			};
         }
-	
-		_body.school_logo.original_name="default-logo.png";
-		_body.school_logo.path="assets/schoolprofile_image/default-logo.png"
-
 	}
 	async.waterfall([
 		function (done) {
-			User.update(
+			User.findOneAndUpdate(
 				{ _id: _body._id },
-				{$set:_body},done);
+				{$set:_body},
+				{ runValidators: true, setDefaultsOnInsert:true,context: 'query' },
+				done
+			);
 		},
 		function (result, done) {
-			User.findOne({_id: _body._id},{password:0, salt: 0}, done);
+			User.findOne({_id: _body._id},{seq_no:0,salt:0,password:0,reset_password:0,email_verified:0,role:0,password:0, salt: 0}, done);
 		}
 	],function (err, user) {
 			if(err){
-				return res.json(response.error(err));
+				return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(err);
 			}
 			res.json(response.success(user));
 		}

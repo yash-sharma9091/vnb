@@ -7,9 +7,14 @@ exports.userTable = (status_list, recordsTotal, data, draw) => {
 	let result = [];
 	for (var i = data.length - 1; i >= 0; i--) {
 		let srno=i+1;
+		let inputJson={
+			_id:data[i]._id,
+			pilot_request:data[i].pilot_request
+		};
+		let rowid=JSON.stringify(inputJson);
 		result[i] = {
 			id:`<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-					<input name="id[]" type="checkbox" class="checkboxes" value="${data[i]._id}"/>
+					<input name="id[]" type="checkbox" class="checkboxes" value='${rowid}'/>
 					<span></span>
 				</label>`,
 			sr_no: srno,

@@ -7,19 +7,14 @@ mimicTrading.controller('userViewCtrl', ['$scope', '$state','user','appSvr','use
 			 */
 			appSvr.init();
 		});
-
-		/**
-		 * Request would only sent if state params has id
-		 * @param  {integer} $state.params.id [user id]
-		 * @return {Object}                  [user data]
-		 */
-		 
+        
         $scope.userinfo = user.record;
-
 		/**
-		 * it would take you to the edit page
-		 * 
-		 */
+		 * Request send for approve or reject (single user)
+		 * @json  {_id,status}
+		 * @return {Object} 
+		*/
+
 		$scope.approveRejectRequest=function(isValid,userdata) {
             if( !isValid ){
 				return;
@@ -49,6 +44,10 @@ mimicTrading.controller('userViewCtrl', ['$scope', '$state','user','appSvr','use
            }
 		};
 
+	    /**
+		 * it would take you to the edit page
+		 * 
+		 */
 		$scope.goBack = () => {
 			$state.go('users');
 			// var queryString = $location.search();

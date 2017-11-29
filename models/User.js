@@ -139,7 +139,21 @@ UserSchema 	= new Schema({
 		type:String
 	},
 	school_logo:{
-		type:Object
+		name: {
+			type: String,
+			default: ""
+		},
+		path: {
+			type: String,
+			default: config.default_school_logo.path
+		},
+		original_name:{
+			type:String,
+			default:config.default_school_logo.original_name
+		}
+	},
+	reject_reason:{
+		typeL:String
 	},
 	reset_password: {type: Object},
 	salt: { type: String },
