@@ -15,7 +15,7 @@ mimicTrading.controller('faqCtrl', ['$scope', '$state', 'RestSvr', '$rootScope',
                     { "data": "question" },
                     { "data": "order" },
                     { "data": "status" },
-                    { "data": "created_date" },
+                    { "data": "updated_date" },
                     { "data": "action", "orderable": false }
 	            ]
 		    });

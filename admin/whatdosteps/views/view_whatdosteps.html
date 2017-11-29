@@ -11,94 +11,68 @@
 		            <button ui-sref="whatdosteps" class="btn default">Back</button>
 		        </div>
 		    </div>
-		    <div class="portlet-body form">
-		        <!-- BEGIN FORM-->
-		        <form class="form-horizontal" role="form">
-		            <div class="form-body">
-		                <!-- <h2 class="margin-bottom-20"> View User Info - Bob Nilson </h2> -->
-		                <h3 class="form-section">What Do Step Section Info</h3>
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Title:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{whatdosteps.title}} </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Date:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{whatdosteps.created_at | date: format : 'dd/m/y'}}  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                </div>
-		                <!--/row-->
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Short Description:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="whatdosteps.short_description">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Status:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> 
-		                                	<status-label status="whatdosteps.status"></status-label>
-		                                </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <!--/row-->
-		                         <!--/row-->
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Long Description:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="whatdosteps.long_description">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Order:</label>
-		                           <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="whatdosteps.order">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		    
-		            </div>
-		            <div class="form-actions">
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="row">
-		                            <div class="col-md-offset-3 col-md-9">
-		                                <button type="button" ng-click="goToEdit()" class="btn green">
-		                                    <i class="fa fa-pencil"></i> Edit</button>
-		                                <a href ui-sref="whatdosteps" class="btn default">Back</a>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-6"> </div>
-		                </div>
-		            </div>
-		        </form>
-		        <!-- END FORM-->
-		    </div>
+           <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="edit_whatdosteps(updateWhatDoStepForm.$valid)" class="form-horizontal" name="updateWhatDoStepForm" ng-keydown="clear($event.target.name, updateWhatDoStepForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="title">Title <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="title" ng-model="whatdosteps.title" class="form-control" id="title" placeholder="Enter your whatdosteps title" readonly>
+                         </div>
+                        </div>
+                      
+                                 
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="short_description">Short Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                
+                             <textarea rows="4" name="short_description" ng-model="whatdosteps.short_description" class="form-control" id="short_description" placeholder="Enter your short description" ng-maxlength="160" ng-minlength="130" readonly></textarea>
+                           </div>
+                        </div>
+
+                          <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="long_description">Long Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <text-angular ng-required="true" ng-model="whatdosteps.long_description" ta-disabled="true"></text-angular>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="order">Order <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <select id="order" class="form-control" name="order" ng-model="whatdosteps.order" disabled="true" ng-options="v as v for v in [1,2,3,4]">
+                                </select>
+                            </div>    
+                        </div>
+
+                       <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="status">Status <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <select id="status" class="form-control" name="status" ng-model="whatdosteps.status" disabled="true" ng-options="trade.value as trade.text for trade in [{text: 'Active', value:true},{text: 'Inactive', value: false}]">
+                                </select>
+                            </div>    
+                        </div>
+
+                      <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="button" ng-click="goToEdit()" class="btn green">
+                                            <i class="fa fa-pencil"></i> Edit</button>
+                                        <a href ui-sref="whatdosteps" class="btn default">Back</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"> </div>
+                        </div>
+                      </div>
+
+                    </div>
+               </form>
+                <!-- END FORM-->
+            </div>
 		</div>
 	</div>
 </div>		

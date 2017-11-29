@@ -71,7 +71,11 @@ exports.view = (req, res, next) => {
 };
 
 exports.list = (req, res, next) => {
-let operation = {type:"social"}, reqData = req.body;
+	let reqData = req.body,length = Number(reqData.length),
+	    start = Number(reqData.start);
+	let regexsearch={$regex: new RegExp(`${reqData.search.value}`), $options:"im"};
+	let operation = {type:"social",$or: [ { title: regexsearch },{url:regexsearch}]};
+
 	async.waterfall([
 		function (done) {
 		
@@ -94,7 +98,7 @@ let operation = {type:"social"}, reqData = req.body;
 					Setting.count(operation,done);
 				},
 				records: (done) => {
-					Setting.find(operation,done);	
+					Setting.find(operation,done).skip(start).limit(length);	
 				}
 			}, done);	
 		}

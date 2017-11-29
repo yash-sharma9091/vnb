@@ -11,109 +11,75 @@
 		            <button ui-sref="cms" class="btn default">Back</button>
 		        </div>
 		    </div>
-		    <div class="portlet-body form">
-		        <!-- BEGIN FORM-->
-		        <form class="form-horizontal" role="form">
-		            <div class="form-body">
-		                <!-- <h2 class="margin-bottom-20"> View User Info - Bob Nilson </h2> -->
-		                <h3 class="form-section">CMS Section Info</h3>
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Title:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{cms.title}} </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Date:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{cms.created_at | date: format : 'dd/m/y'}}  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                </div>
-		                <!--/row-->
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Description:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="cms.description">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Status:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> 
-		                                	<status-label status="cms.status"></status-label>
-		                                </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <!--/row-->
-		                         <!--/row-->
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Meta Title:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="cms.meta_title">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Meta Keyword:</label>
-		                           <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="cms.meta_keyword">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <!--/row-->
+		    <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate class="form-horizontal" name="updateCMSForm" ng-keydown="clear($event.target.name, updateCMSForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="title">Title <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="title" ng-model="cms.title" class="form-control" id="title" placeholder="Enter your cms title" readonly>
+                           </div>
+                        </div>
+                      
+                                 
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="description">Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <text-angular ng-required="true" ng-model="cms.description" ta-disabled="true"></text-angular>
+                             </div>
+                        </div>
 
-	                    <div class="row">
-		               
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Meta Description:</label>
-		                           <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="cms.meta_description">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-	                         <div class="col-md-6">
-		                
-		                    </div>
-		                </div>
-		            </div>
-		            <div class="form-actions">
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="row">
-		                            <div class="col-md-offset-3 col-md-9">
-		                                <button type="button" ng-click="goToEdit()" class="btn green">
-		                                    <i class="fa fa-pencil"></i> Edit</button>
-		                                <a href ui-sref="cms" class="btn default">Back</a>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-6"> </div>
-		                </div>
-		            </div>
-		        </form>
-		        <!-- END FORM-->
-		    </div>
+                       <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="meta_title">Meta Title <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="meta_title" ng-model="cms.meta_title" class="form-control" id="meta_title" placeholder="Enter your cms meta_title" readonly>
+                            </div>
+                        </div>
+
+                    <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="meta_keyword">Meta Keyword <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="meta_keyword" ng-model="cms.meta_keyword" class="form-control" id="meta_keyword" placeholder="Enter your cms meta keyword" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="meta_description">Meta Description <span class="required">*</span></label>
+                            <div class="col-md-10">
+                             <textarea rows="4" name="meta_description" ng-model="cms.meta_description" class="form-control" id="meta_description" placeholder="Enter your meta description" readonly></textarea>
+                           </div>
+                        </div>
+
+
+                       <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="status">Status <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <select id="status" class="form-control" name="status" ng-model="cms.status" disabled="true" readonly ng-options="trade.value as trade.text for trade in [{text: 'Active', value:true},{text: 'Inactive', value: false}]">
+                                </select>
+                            </div>    
+                        </div>
+
+                     <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="button" ng-click="goToEdit()" class="btn green">
+                                            <i class="fa fa-pencil"></i> Edit</button>
+                                        <a href ui-sref="cms" class="btn default">Back</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"> </div>
+                        </div>
+                    </div>
+
+                    </div>
+    
+                </form>
+                <!-- END FORM-->
+            </div>
 		</div>
 	</div>
 </div>		

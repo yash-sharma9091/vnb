@@ -70,20 +70,11 @@ exports.view = (req, res, next) => {
 };
 
 exports.list = (req, res, next) => {
-	
-	let operation = {}, reqData = req.body;
-	if( reqData.title ){
-		operation.title = {$regex: new RegExp(`${reqData.title}`), $options:"im"};
-	}
-	if( reqData.order_no ){
-		operation.order = {$regex: new RegExp(`${reqData.order_no}`), $options:"im"};
-	}
-	if( reqData.status === "true" || reqData.status === "false" ){
-		operation.status = reqData.status == "true" ? true : false;
-	}
-	if( reqData.from_date || reqData.to_date ) {
-		operation.created_at = {$gte: reqData.from_date, $lte: reqData.to_date };
-	}
+	let reqData = req.body,length = Number(reqData.length),
+	    start = Number(reqData.start);
+	let regexsearch={$regex: new RegExp(`${reqData.search.value}`), $options:"im"};
+	let operation = {$or: [ { question: regexsearch }]};
+
 	async.waterfall([
 		function (done) {
 			if( reqData.customActionType === 'group_action' ) {
@@ -100,7 +91,7 @@ exports.list = (req, res, next) => {
 					FAQ.count(operation,done);
 				},
 				records: (done) => {
-					FAQ.find(operation,done);	
+					FAQ.find(operation,done).skip(start).limit(length);	
 				}
 			}, done);	
 		}

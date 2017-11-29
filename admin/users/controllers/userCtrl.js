@@ -20,7 +20,7 @@ mimicTrading.controller('userCtrl', ['$scope', '$state', '$rootScope', 'Upload',
 			    	columns: [
 		                { "data": "id", "orderable": false },
 		                { "data": "sr_no" ,"orderable": false},
-		                { "data": "contact_name" },
+		                //{ "data": "contact_name" },
 		                { "data": "contact_telephoneno" },
                       	{ "data": "email_address" },
 		                { "data": "school_name" },  

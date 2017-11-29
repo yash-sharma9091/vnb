@@ -22,6 +22,7 @@ form .hint { font-size: 12px; color: grey;}
 .btn.green:not(.btn-outline), .md-confirm-button{color: #fff!important;background-color: #0ECF9A!important;border-color: #0ECF9A!important;}
 .btn.green:not(.btn-outline):hover, .md-confirm-button:hover{color: #fff!important;background-color: #21A37B!important;border-color:#21A37B!important;}
 .btn.blue:not(.btn-outline){color: #fff;background-color: #0c59cf!important;border-color: #0c59cf!important;}
+.btn.red:not(.btn-outline){color: ##FF0000;background-color: #0c59cf!important;border-color: #0c59cf!important;}
 .btn.blue:not(.btn-outline):hover{color: #fff;background-color: #0c59cf!important;border-color:#0c59cf!important;}
 /**End Start All Button**/
 

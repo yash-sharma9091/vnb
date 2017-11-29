@@ -22,7 +22,7 @@ exports.userTable = (status_list, recordsTotal, data, draw) => {
 			pilot_request: `<span class="label label-sm tooltips label-${status_list.class[data[i].pilot_request]}" data-original-title="${status_list.status[data[i].pilot_request]}">${extractFirstLetter(status_list.status[data[i].pilot_request])}</span>`,
 			action: `
 					<div class="btn-group btn-group-solid">
-						<a href="#!/view-user/${data[i]._id}" class="btn btn-xs btn-outline blue tooltips" data-original-title="View">
+						<a href="#!/view-user/${data[i]._id}" class="btn btn-xs blue tooltips" data-original-title="View">
 							<i class="fa fa-eye"></i>
 						</a>
 					</div>`
@@ -57,12 +57,18 @@ exports.socialLinkTable = (status_list, recordsTotal, data, draw) => {
 			title: data[i].title,
 			url: data[i].url,
 			created_date: moment(data[i].created_at).format('MMM D, YYYY'),
+			updated_date: moment(data[i].updated_at).format('MMM D, YYYY'),
 			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
 			action: `
 					<div class="btn-group btn-group-solid">
-					
-						<a href="#!/edit-sociallink/${data[i]._id}" class="btn btn-sm btn-outline grey-salsa tooltips" data-original-title="Edit">
+						<a href="#!/view-sociallink/${data[i]._id}" class="btn btn-xs blue tooltips" data-original-title="View">
+							<i class="fa fa-search"></i>
+						</a>
+						<a href="#!/edit-sociallink/${data[i]._id}" class="btn btn-xs yellow tooltips" data-original-title="Edit">
 							<i class="fa fa-pencil"></i>
+						</a>
+						<a data-click="deleteCms(${data[i].slug})" disabled="true" class="btn btn-xs red tooltips" data-original-title="Delete">
+							<i class="fa fa-remove"></i>
 						</a>
 					</div>`
 		};
@@ -89,14 +95,18 @@ exports.whatdoStepTable = (status_list, recordsTotal, data, draw) => {
 			long_description: data[i].long_description,
 			order: data[i].order,
 			created_date: moment(data[i].created_at).format('MMM D, YYYY'),
+			updated_date: moment(data[i].updated_at).format('MMM D, YYYY'),
 			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
 			action: `
 					<div class="btn-group btn-group-solid">
-					 	<a href="#!/view-whatdosteps/${data[i].slug}" class="btn btn-sm btn-outline blue tooltips" data-original-title="View">
+					 	<a href="#!/view-whatdosteps/${data[i].slug}" class="btn btn-xs blue tooltips" data-original-title="View">
 							<i class="fa fa-search"></i>
 						</a>
-						<a href="#!/edit-whatdosteps/${data[i].slug}" class="btn btn-sm btn-outline grey-salsa tooltips" data-original-title="Edit">
+						<a href="#!/edit-whatdosteps/${data[i].slug}" class="btn btn-xs yellow tooltips" data-original-title="Edit">
 							<i class="fa fa-pencil"></i>
+						</a>
+						<a data-click="deleteCms(${data[i].slug})" disabled="true" class="btn btn-xs red tooltips" data-original-title="Delete">
+							<i class="fa fa-remove"></i>
 						</a>
 					</div>`
 		};
@@ -120,18 +130,20 @@ exports.cmsTable = (status_list, recordsTotal, data, draw) => {
 					<span></span>
 				</label>`,
 			title: data[i].title,
-			meta_title: data[i].meta_title,
-			meta_description: data[i].meta_description || '-',
-			order: data[i].order || '-',
+			slug: data[i].slug,
 			created_date: moment(data[i].created_at).format('MMM D, YYYY'),
-			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
+			updated_date: moment(data[i].updated_at).format('MMM D, YYYY'),
+			status: `<span class="label label-xs label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
 			action: `
 					<div class="btn-group btn-group-solid">
-						<a href="#!/view-cms/${data[i].slug}" class="btn btn-sm btn-outline blue tooltips" data-original-title="View">
+						<a href="#!/view-cms/${data[i].slug}" class="btn btn-xs blue tooltips" data-original-title="View">
 							<i class="fa fa-search"></i>
 						</a>
-						<a href="#!/edit-cms/${data[i].slug}" class="btn btn-sm btn-outline grey-salsa tooltips" data-original-title="Edit">
+						<a href="#!/edit-cms/${data[i].slug}" class="btn btn-xs yellow tooltips" data-original-title="Edit">
 							<i class="fa fa-pencil"></i>
+						</a>
+						<a data-click="deleteCms(${data[i].slug})" disabled="true" class="btn btn-xs red tooltips" data-original-title="Delete">
+							<i class="fa fa-remove"></i>
 						</a>
 					</div>`
 		};
@@ -143,6 +155,43 @@ exports.cmsTable = (status_list, recordsTotal, data, draw) => {
 		draw: draw
 	};
 };
+
+exports.faqTable = (status_list, recordsTotal, data, draw) => {
+	
+	let result = [];
+	for (var i = data.length - 1; i >= 0; i--) {
+		result[i] = {
+			id:`<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+					<input name="id[]" type="checkbox" class="checkboxes" value="${data[i]._id}"/>
+					<span></span>
+				</label>`,
+			question: data[i].question,
+			order: data[i].order,
+			created_date: moment(data[i].created_at).format('MMM D, YYYY'),
+			updated_date: moment(data[i].updated_at).format('MMM D, YYYY'),
+			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
+			action: `
+					<div class="btn-group btn-group-solid">
+						<a href="#!/view-faq/${data[i]._id}" class="btn btn-xs blue tooltips" data-original-title="View">
+							<i class="fa fa-search"></i>
+						</a>
+						<a href="#!/edit-faq/${data[i]._id}" class="btn btn-xs yellow tooltips" data-original-title="Edit">
+							<i class="fa fa-pencil"></i>
+						</a>
+						<a data-click="deleteCms(${data[i].slug})" disabled="true" class="btn btn-xs red tooltips" data-original-title="Delete">
+							<i class="fa fa-remove"></i>
+						</a>
+					</div>`
+		};
+	}
+	return {
+		recordsTotal: recordsTotal,
+		data: result,
+		recordsFiltered: result.length,
+		draw: draw
+	};
+};
+
 exports.privacypolicyTable = (status_list, recordsTotal, data, draw) => {
 	
 		let result = [];
@@ -208,68 +257,6 @@ exports.blogTable = (status_list, recordsTotal, data, draw) => {
 };
 
 
-exports.faqTable = (status_list, recordsTotal, data, draw) => {
-	
-	let result = [];
-	for (var i = data.length - 1; i >= 0; i--) {
-		result[i] = {
-			id:`<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-					<input name="id[]" type="checkbox" class="checkboxes" value="${data[i]._id}"/>
-					<span></span>
-				</label>`,
-			question: data[i].question,
-			order: data[i].order,
-			created_date: moment(data[i].created_at).format('MMM D, YYYY'),
-			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
-			action: `
-					<div class="btn-group btn-group-solid">
-						<a href="#!/view-faq/${data[i]._id}" class="btn btn-sm btn-outline blue tooltips" data-original-title="View">
-							<i class="fa fa-search"></i>
-						</a>
-						<a href="#!/edit-faq/${data[i]._id}" class="btn btn-sm btn-outline grey-salsa tooltips" data-original-title="Edit">
-							<i class="fa fa-pencil"></i>
-						</a>
-					</div>`
-		};
-	}
-	return {
-		recordsTotal: recordsTotal,
-		data: result,
-		recordsFiltered: result.length,
-		draw: draw
-	};
-};
-exports.cmsLinkTable = (status_list, recordsTotal, data, draw) => {
-	
-	let result = [];
-	for (var i = data.length - 1; i >= 0; i--) {
-		result[i] = {
-			id:`<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-					<input name="id[]" type="checkbox" class="checkboxes" value="${data[i]._id}"/>
-					<span></span>
-				</label>`,
-			title: data[i].title,
-			url: data[i].url || '-',
-			created_date: moment(data[i].created_at).format('MMM D, YYYY'),
-			status: `<span class="label label-sm label-${status_list.class[data[i].status]}">${status_list.status[data[i].status]}</span>`,
-			action: `
-					<div class="btn-group btn-group-solid">
-						<a href="#!/view-cms-link/${data[i]._id}" class="btn btn-sm btn-outline blue tooltips" data-original-title="View">
-							<i class="fa fa-search"></i>
-						</a>
-						<a href="#!/edit-cms-link/${data[i]._id}" class="btn btn-sm btn-outline grey-salsa tooltips" data-original-title="Edit">
-							<i class="fa fa-pencil"></i>
-						</a>
-					</div>`
-		};
-	}
-	return {
-		recordsTotal: recordsTotal,
-		data: result,
-		recordsFiltered: result.length,
-		draw: draw
-	};
-};
 exports.testimonialTable = (status_list, recordsTotal, data, draw) => {
 	
 	let result = [];

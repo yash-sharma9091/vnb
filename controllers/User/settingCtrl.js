@@ -16,7 +16,7 @@ exports.settingHomepage = (req, res, next) => {
    	async.waterfall([
 		
 		function findCMSData(done) {
-		   	CMS.find({},{_id:0,slug:1,title:1})
+		   	CMS.find({},{_id:0,slug:1,title:1,meta_title:1,meta_keyword:1,meta_description:1})
 			.then(cmsresponse => done(null,cmsresponse))
 			.catch(err => done(err,null)); 
 		},
@@ -38,7 +38,7 @@ exports.settingHomepage = (req, res, next) => {
 				let fnlresult={
 					banner_img:homeresponse.banner_img,
 					thumb:homeresponse.thumb,
-                    how_pencilink_works: {video_url:homeresponse.video_url},
+                    how_pencilink_works: {video_url:homeresponse.video_url_id},
                     what_we_do_steps:stepdata,
                     cms_content:cmsdata,
 				    social_links:socialresponse,

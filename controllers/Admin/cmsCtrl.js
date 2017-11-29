@@ -71,26 +71,11 @@ exports.view = (req, res, next) => {
 
 exports.list = (req, res, next) => {
 	
-	let operation = {}, reqData = req.body;
-	if( reqData.title ){
-		operation.title = {$regex: new RegExp(`${reqData.title}`), $options:"im"};
-	}
+	let reqData = req.body,length = Number(reqData.length),
+	start = Number(reqData.start);
+	let regexsearch={$regex: new RegExp(`${reqData.search.value}`), $options:"im"};
+	let operation = {$or: [ { title: regexsearch },{meta_title:regexsearch},{meta_description:regexsearch}]};
 
-	if( reqData.description ){
-		operation.description = {$regex: new RegExp(`${reqData.description}`), $options:"im"};
-	}
-	if( reqData.meta_title ){
-		operation.meta_title = {$regex: new RegExp(`${reqData.meta_title}`), $options:"im"};
-	}
-    if( reqData.meta_description ){
-		operation.meta_description= {$regex: new RegExp(`${reqData.meta_description}`), $options:"im"};
-	}
-	if( reqData.status === "true" || reqData.status === "false" ){
-		operation.status = reqData.status == "true" ? true : false;
-	}
-	if( reqData.from_date || reqData.to_date ) {
-		operation.created_at = {$gte: reqData.from_date, $lte: reqData.to_date };
-	}
 	async.waterfall([
 		function (done) {
 		
@@ -113,7 +98,7 @@ exports.list = (req, res, next) => {
 					CMS.count(operation,done);
 				},
 				records: (done) => {
-					CMS.find(operation,done);	
+					CMS.find(operation,done).skip(start).limit(length);	
 				}
 			}, done);	
 		}

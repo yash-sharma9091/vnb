@@ -11,57 +11,33 @@
 		            <button ui-sref="faq" class="btn default">Back</button>
 		        </div>
 		    </div>
-		    <div class="portlet-body form">
-		        <!-- BEGIN FORM-->
-		        <form class="form-horizontal" role="form">
-		            <div class="form-body">
-		                <!-- <h2 class="margin-bottom-20"> View User Info - Bob Nilson </h2> -->
-		                <h3 class="form-section">FAQ Section Info</h3>
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Question:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{faq.question}} </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Date:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{faq.created_at | date: format : 'dd/m/y'}}  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                </div>
-		                <!--/row-->
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Answer:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static" >{{faq.answer}} </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Status:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> 
-		                                	<status-label status="faq.status"></status-label>
-		                                </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <!--/row-->
-		            </div>
-		            <div class="form-actions">
+       <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate ng-submit="new_faq(newFaqForm.$valid)" class="form-horizontal" name="newFaqForm" ng-keydown="clear($event.target.name, newFaqForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="question">Question <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="question" ng-model="faq.question" class="form-control" id="question" placeholder="Enter your question" readonly>
+                       
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="answer">Answer <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <textarea rows="4" name="answer" ng-model="faq.answer" class="form-control" id="answer" placeholder="Enter your answer" readonly></textarea>
+                   
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="order">Order <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="order" ng-model="faq.order" ng-pattern="/^\d+$/" class="form-control" id="order" placeholder="Enter your faq order" readonly>
+                   
+                            </div>
+                        </div>
+                    </div>
+                   <div class="form-actions">
 		                <div class="row">
 		                    <div class="col-md-6">
 		                        <div class="row">
@@ -75,9 +51,12 @@
 		                    <div class="col-md-6"> </div>
 		                </div>
 		            </div>
-		        </form>
-		        <!-- END FORM-->
-		    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
 		</div>
 	</div>
 </div>		
+
+
+ 

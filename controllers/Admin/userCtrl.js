@@ -89,32 +89,13 @@ exports.view = (req, res, next) => {
 };
 
 exports.list = (req, res, next) => {
-	let operation = { role: "schooladmin" }, reqData = req.body;
+	let reqData = req.body,length = Number(reqData.length),start = Number(reqData.start);
+	let regexsearch={$regex: new RegExp(`${reqData.search.value}`), $options:"im"};
+	let operation = {role: "schooladmin",$or: [ { contact_telephoneno: regexsearch },{email_address:regexsearch},
+					{school_name:regexsearch},{school_address:regexsearch}]};
     let sorting  = datatable.sortingDatatable(req.body.columns,req.body.order);
     sorting.created_at=-1;
 
-	if( reqData.contact_name ){
-		operation.contact_name = {$regex: new RegExp(`${reqData.contact_name}`), $options:"im"};
-	}
-	if( reqData.contact_telephoneno ){
-		operation.contact_telephoneno = {$regex: new RegExp(`${reqData.contact_telephoneno}`), $options:"im"};
-	}
-	if( reqData.school_name ){
-		operation.school_name = {$regex: new RegExp(`${reqData.school_name}`), $options:"im"};
-	}
-	if( reqData.school_type ){
-		operation.school_type = {$regex: new RegExp(`${reqData.school_type}`), $options:"im"};
-	}
-	if( reqData.school_level ){
-		operation.school_level = {$regex: new RegExp(`${reqData.school_level}`), $options:"im"};
-	}
-	if( reqData.no_of_students ){
-		operation.no_of_students = reqData.no_of_students;
-	}
-	if( reqData.pilot_request){
-		operation.pilot_request = {$regex: new RegExp(`${reqData.pilot_request}`), $options:"im"};
-	}
-	
 	async.waterfall([
 		function (done) {
 			if( reqData.customActionType === 'group_action' ) {
@@ -193,7 +174,7 @@ exports.list = (req, res, next) => {
 					User.count(operation,done);
 				},
 				records: (done) => {
-					User.find(operation,done).sort(sorting);	
+					User.find(operation,done).sort(sorting).skip(start).limit(length);	
 				}
 			}, done);	
 		}

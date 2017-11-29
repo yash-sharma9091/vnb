@@ -18,6 +18,6 @@ exports.getFAQ = (req, res, next) => {
     		}
     		res.json(response.success(result));
     	}
-    );
+    ).sort({order:1});
 };
 

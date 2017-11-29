@@ -49,5 +49,16 @@ multiselect .dropdown-menu>li>a>[class*=" glyphicon-"], .dropdown-menu>li>a>[cla
 
 /* Datatables table header font size */
 .table thead tr th { font-size: 12px!important; text-align: center;}
-.table td, .table th { font-size: 13px!important; }
+.table td, .table th { font-size: 12px!important; }
 table.dataTable thead th {padding: 8px 10px 8px 5px!important;}
+.fullLftNW div.dataTables_filter{width: 100%; text-align: left;}
+
+.fullLftNW div.dataTables_filter label{width: 100%;}
+.fullLftNW div.dataTables_filter input {width: 30% !important; height: 30px !important}
+.btn:not(.md-skip):not(.bs-select-all):not(.bs-deselect-all).btn-sm {
+  font-size: 10px;
+  padding: 3px 9px;
+}
+.input-sm { height: 24px!important; padding: 1px 10px!important;}
+.input-mini { width: 40px!important; }
+div.dataTables_wrapper div.dataTables_length select { width: 60px!important; }

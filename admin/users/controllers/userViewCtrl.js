@@ -20,36 +20,19 @@ mimicTrading.controller('userViewCtrl', ['$scope', '$state','user','appSvr','use
 		 * it would take you to the edit page
 		 * 
 		 */
-		$scope.approveSingleReq = (userdata) => {
-			let inputJson={};
-			    inputJson._id=userdata._id;
-			    inputJson.status="Approve";
-			bootbox.confirm({ 
-			  size: "small",
-			  message: "Are you sure You want to approve?", 
-			  callback: function(result){ 
-		  	    if(result===true){
-	     			userSvr.approveReject(inputJson).then((result) =>{
-						console.log("res-------"+JSON.stringify(result));
-					}).catch((err) => {
-		              console.log(err);
-					});	
-                }
-                else{
-                   return;
-                }
-			  }
-			})    
-		};
+		$scope.approveRejectRequest=function(isValid,userdata) {
+            if( !isValid ){
+				return;
+			}
 
-		$scope.rejectSingleReq = (userdata) => {
-			let inputJson={};
+           if(userdata.request_status=="Approve" || userdata.request_status=="Reject"){
+   			 let inputJson={};
 			    inputJson._id=userdata._id;
-			    inputJson.status="Reject";
+			    inputJson.status=userdata.request_status;
 
 			bootbox.confirm({ 
 			  size: "small",
-			  message: "Are you sure You want to reject?", 
+			  message: `Are you sure You want to ${inputJson.status}?`, 
 			  callback: function(result){ 
   	            if(result===true){
 	     			userSvr.approveReject(inputJson).then((result) =>{
@@ -62,8 +45,8 @@ mimicTrading.controller('userViewCtrl', ['$scope', '$state','user','appSvr','use
                    return;
                 }
 			   }
-			})      
-
+			})  
+           }
 		};
 
 		$scope.goBack = () => {

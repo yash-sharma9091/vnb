@@ -24,12 +24,16 @@ var TableAjax = function () {
             },
             loadingMessage: 'Loading...',
             dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options 
-
+                language: {
+                    searchPlaceholder: "Type to search...",
+                    search: "",
+                    emptyTable: 'No records found to show'
+                },
                 // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
                 // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js). 
                 // So when dropdowns used the scrollable div should be removed. 
                 // "dom": "<'row'<'col-md-7 col-sm-12'pli><'col-md-5 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
-                "dom": "<'row'<'col-md-7 col-sm-12'><'col-md-5 col-sm-12'<'table-group-actions pull-right'>>r><'table-responsive't><'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>", // datatable layout
+                "dom": "<'row'<'col-md-7 col-sm-12 fullLftNW'f><'col-md-5 col-sm-12'<'table-group-actions pull-right'>>r><'table-responsive't><'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>", // datatable layout
                 
                 "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
 
@@ -68,6 +72,10 @@ var TableAjax = function () {
                     }
                 },
                 "columns": options.columns,
+                "processing": true,
+                "serverSide": true,
+                "searchable":true,
+
                 //dom:"<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-6'p><'col-sm-3'l><'col-sm-3'i>>"
                 //"paging": false
                 // "order": [[ 3, "asc" ]] // set first column as a default sort by asc
@@ -155,7 +163,7 @@ var TableAjax = function () {
             }
         });
     };
-
+     
     return {
 
         //main function to initiate the module

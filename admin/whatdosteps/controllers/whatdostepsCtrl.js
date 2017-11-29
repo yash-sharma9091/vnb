@@ -14,10 +14,9 @@ mimicTrading.controller('whatdostepsCtrl', ['$scope', '$state', 'RestSvr', '$roo
 	               // { "data": "id", "orderable": false },
                     { "data": "title" },
                     { "data": "short_description" },
-                    { "data": "long_description" },
-                    { "data": "order" },
-                   // { "data": "status" },
-                    { "data": "created_date" },
+                    //{ "data": "long_description" },
+                    { "data": "status" },
+                    { "data": "updated_date" },
                     { "data": "action", "orderable": false }
 	            ]
 		    });

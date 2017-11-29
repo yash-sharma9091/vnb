@@ -14,10 +14,9 @@ mimicTrading.controller('cmsCtrl', ['$scope', '$state', 'RestSvr', '$rootScope',
 	               // { "data": "id", "orderable": false },
                     { "data": "title" },
                     //{ "data": "description"},
-                    { "data": "meta_title" },
-                    { "data": "meta_description" },
-                   // { "data": "status" },
-                    { "data": "created_date" },
+                    { "data": "slug" },
+                    { "data": "updated_date" },
+                    { "data": "status" },
                     { "data": "action", "orderable": false }
 	            ]
 		    });

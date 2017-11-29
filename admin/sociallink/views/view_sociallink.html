@@ -11,57 +11,35 @@
 		            <button ui-sref="sociallink" class="btn default">Back</button>
 		        </div>
 		    </div>
-		    <div class="portlet-body form">
-		        <!-- BEGIN FORM-->
-		        <form class="form-horizontal" role="form">
-		            <div class="form-body">
-		                <!-- <h2 class="margin-bottom-20"> View User Info - Bob Nilson </h2> -->
-		                <h3 class="form-section">Social Link Section Info</h3>
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Title:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{sociallink.title}} </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Date:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> {{sociallink.created_at | date: format : 'dd/m/y'}}  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                </div>
-		                <!--/row-->
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Url:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static" ng-bind-html="sociallink.url">  </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <!--/span-->
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            <label class="control-label col-md-3">Status:</label>
-		                            <div class="col-md-9">
-		                                <p class="form-control-static"> 
-		                                	<status-label status="sociallink.status"></status-label>
-		                                </p>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                  
-		            </div>
-		            <div class="form-actions">
+	            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <form novalidate class="form-horizontal" name="updateSocialLinkForm" ng-keydown="clear($event.target.name, updateSocialLinkForm)">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="title">Title <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <input type="text" name="title" ng-model="sociallink.title" class="form-control" id="title" placeholder="Enter your sociallink title" readonly>
+	                          </div>
+                        </div>
+                      
+                                 
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="url">Url <span class="required">*</span></label>
+                            <div class="col-md-10">
+                             <input type="text" name="url" ng-model="sociallink.url" class="form-control" id="url"  readonly>   
+                           </div>
+                        </div>
+
+                       <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="status">Status <span class="required">*</span></label>
+                            <div class="col-md-10">
+                                <select id="status" class="form-control" name="status" ng-model="sociallink.status"  ng-options="trade.value as trade.text for trade in [{text: 'Active', value:true},{text: 'Inactive', value: false}]" disabled="true">
+                                </select>
+                             </div>    
+                        </div>
+
+                    </div>
+                  <div class="form-actions">
 		                <div class="row">
 		                    <div class="col-md-6">
 		                        <div class="row">
@@ -75,9 +53,12 @@
 		                    <div class="col-md-6"> </div>
 		                </div>
 		            </div>
-		        </form>
-		        <!-- END FORM-->
-		    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
 		</div>
 	</div>
 </div>		
+
+
+  

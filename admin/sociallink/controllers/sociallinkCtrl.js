@@ -14,8 +14,8 @@ mimicTrading.controller('sociallinkCtrl', ['$scope', '$state', 'RestSvr', '$root
 	               // { "data": "id", "orderable": false },
                     { "data": "title" },
                     { "data": "url" },
-                  //  { "data": "status" },
-                    { "data": "created_date" },
+                    { "data": "status" },
+                    { "data": "updated_date" },
                     { "data": "action", "orderable": false }
 	            ]
 		    });

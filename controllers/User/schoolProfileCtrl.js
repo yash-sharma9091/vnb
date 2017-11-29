@@ -24,16 +24,23 @@ exports.schoolProfileStep1 = (req, res, next) => {
 		_body = _.assign(req.body, {school_logo: image});	
 	} else {
 		_body = req.body;
-		_body.address={
-			country:_body.country,
-			state  :_body.state,
-			city   :_body.city,
-			postal_code:_body.postal_code
-		};
-		_body.location={
-			type       : "Point",
-            coordinates: [_body.lng, _body.lat]
-		};
+		if(!_.isUndefined(_body.country) || !_.isUndefined(_body.state) || !_.isUndefined(_body.city)){
+			_body.address={
+				country:_body.country,
+				state  :_body.state,
+				city   :_body.city,
+				postal_code:_body.postal_code
+		   };
+		}
+        if(!_.isUndefined(_body.lng) || !_.isUndefined(_body.lat)){
+    		_body.location={
+			    type       : "Point",
+                coordinates: [_body.lng, _body.lat]
+			};
+        }
+	
+		_body.school_logo.original_name="default-logo.png";
+		_body.school_logo.path="assets/schoolprofile_image/default-logo.png"
 
 	}
 	async.waterfall([

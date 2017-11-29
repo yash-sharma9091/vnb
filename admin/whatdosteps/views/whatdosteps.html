@@ -5,17 +5,17 @@
             <div class="portlet-title">
                 <div class="caption">
                     <i class="fa fa-database"></i> Manage What Do Step </div>
-        <!--         <div class="actions">
-                    <a href ui-sref="newwhatdosteps" class="btn btn-outline green">
+                <div class="actions">
+                    <a href disabled="true" class="btn btn-outline green">
                         <i class="fa fa-plus"></i>
                         <span> Add New What DO Steps </span>
                     </a>
-                </div> -->
+                </div>
             </div>
 
             <div class="portlet-body">
                 <div class="table-container">
-             <!--        <div class="table-actions-wrapper">
+             <!--  newwhatdosteps      <div class="table-actions-wrapper">
                         <span> </span>
                         <select class="table-group-action-input form-control input-inline input-small input-sm">
                             <option value="">Select...</option>
@@ -36,14 +36,13 @@
                                     </label>
                                 </th> -->
                                 <th width="10%"> Title </th>
-                                <th width="15%"> Short Description </th>
-                                <th width="20%"> Long Description </th>
-                                <th width="20%"> Order </th>
-                      <!--           <th width="10%"> Status </th> -->
-                                <th width="15%"> Date </th>
+                                <th width="20%"> Short Description </th>
+                             <!--    <th width="20%"> Long Description </th> -->
+                                <th width="10%"> Status </th>
+                                <th width="10%"> Updated On</th>
                                 <th width="10%"> Actions </th>
                             </tr>
-                            <tr role="row" class="filter">
+                            <tr role="row" class="hidden">
                                <!--  <td> </td> -->
                                 <td>
                                     <input type="text" class="form-control form-filter input-sm" name="title"
@@ -53,20 +52,14 @@
                                 <td>
                                     <input type="text" class="form-control form-filter input-sm" name="short_description" placeholder="search by short description"> 
                                 </td>
-                                 <td>
-                                    <input type="text" class="form-control form-filter input-sm" name="long_description" placeholder="search by long description"> 
-                                </td>
-                               <td>
-                                    <input type="text" class="form-control form-filter input-sm" placeholder="search by order" name="order"> 
-                                </td>
-                      
-                       <!--          <td>
-                                   <select class="form-control form-filter input-sm" name="status">
+                    
+                                <td>
+                     <!--               <select class="form-control form-filter input-sm" name="status">
                                         <option value="">Select</option>
                                         <option value="true">Active</option>
                                         <option value="false">Inactive</option>
-                                    </select>
-                                </td> -->
+                                    </select> -->
+                                </td>
                                 <td>
                                     <div class="input-group date date-picker margin-bottom-5" data-date-format="yyyy-mm-dd">
                                         <input type="text" class="form-control form-filter input-sm" readonly name="from_date" placeholder="From">
@@ -87,12 +80,16 @@
                                 </td>
                                 
                                 <td>
-                                    <div class="margin-bottom-5">
-                                        <button class="btn btn-sm yellow filter-submit margin-bottom">
-                                            <i class="fa fa-search"></i> Search</button>
+                                  <div class="margin-bottom-5">
+                                    <div class="btn-group btn-group-solid">
+                                       <button class="btn btn-xs yellow filter-submit btn-outline tooltips"
+                                        data-original-title="Search">
+                                           <i class="fa fa-search"></i>
+                                        </button>
+                                         <button class="btn btn-xs red filter-cancel btn-outline tooltips" data-original-title="Reset"><i class="fa fa-refresh"></i>
+                                          </button> 
                                     </div>
-                                    <button class="btn btn-sm red filter-cancel">
-                                        <i class="fa fa-times"></i> Reset</button>
+                                   </div>  
                                 </td>
                             </tr>
                         </thead>
