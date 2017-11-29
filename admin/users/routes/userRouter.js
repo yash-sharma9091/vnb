@@ -45,7 +45,7 @@ mimicTrading.config(['$stateProvider',function($stateProvider){
 		data: {pageTitle: 'School View Detail'},
 		authenticate: true,
 		resolve: userResolver
-	})
+	});
 
 /*	.state('newUser',{
 		url: '/new-user',

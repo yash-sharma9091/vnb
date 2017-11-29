@@ -3,7 +3,7 @@
 /* Application routes */
 mimicTrading.config(['$stateProvider',function($stateProvider){
 
-	let myaccountResolver = ['myaccountSvr', '$stateParams', (myaccountSvr, $stateParams) => cmsSvr.getCMSById($stateParams.slug)];
+	let myaccountResolver = ['myaccountSvr', '$stateParams', (myaccountSvr, $stateParams) => myaccountSvr.getCMSById($stateParams.slug)];
 
 	$stateProvider
 	.state('myaccount',{
@@ -28,6 +28,6 @@ mimicTrading.config(['$stateProvider',function($stateProvider){
 		    }]
 		},
 		authenticate: true
-	})
+	});
 
 }]);

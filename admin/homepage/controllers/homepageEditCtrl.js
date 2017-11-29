@@ -40,7 +40,7 @@ mimicTrading.controller('homepageEditCtrl', ['$scope', '$state', 'RestSvr', '$ro
 					}).catch(function(errors){
 						console.log("err1--"+errors);
 					    App.alert({type: ('danger'), icon: ( 'warning'), message: errors.message, container: $rootScope.settings.errorContainer, place: 'prepend'});
-					})
+					});
 				}
 			})
 		/*	.catch(function (errors) {

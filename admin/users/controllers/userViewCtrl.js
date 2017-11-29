@@ -45,7 +45,7 @@ mimicTrading.controller('userViewCtrl', ['$scope', '$state','user','appSvr','use
                    return;
                 }
 			   }
-			})  
+			});  
            }
 		};
 
