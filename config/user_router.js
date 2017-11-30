@@ -56,6 +56,7 @@ module.exports = {
       { url: '/getfaq',method: ctrls.cmsCtrl.getFAQ, type: 'get' },
       { url: '/setting_homepage',method: ctrls.settingCtrl.settingHomepage, type: 'get' },
       { url: '/profilesetup_step1', mwear: uploadSchoolProfileImage.any(),method: ctrls.schoolProfileCtrl.schoolProfileStep1, type: 'post' },
+      { url: '/getschoolprofile_step',method: ctrls.schoolProfileCtrl.getSchoolProfileStepData, type: 'get' },
       { url: '/profile', mwear: uploadProfileImage.any(),method: ctrls.userCtrl.updateProfile, type: 'post' },
      
   ]

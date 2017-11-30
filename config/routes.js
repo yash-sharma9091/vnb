@@ -24,7 +24,7 @@ router.use(expressJWT({
 		'/api/forgot_password',
 		'/api/setting_homepage',
 		'/api/settings',
-		'/api/customer',
+		'/api/getschoolprofile_step',
 		'/api/contactus',
 		'/api/getfaq',
 		'/api/plans_list',

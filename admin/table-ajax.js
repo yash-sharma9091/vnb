@@ -61,6 +61,9 @@ var TableAjax = function () {
                                 }, 1500);
                             }
                         }
+                        if( err.status===500){
+                            message=err.responseJSON.errors.message;
+                         }
 
                         App.alert({
                             type: 'danger',
@@ -142,7 +145,7 @@ var TableAjax = function () {
                   selectedRows.map(function(row){
                      row=JSON.parse(row);
                      id.push(row._id);
-                     if(row.pilot_request=="Approved"){
+                     if(row.pilot_request=="Approved" || row.pilot_request=="Rejected"){
                         App.alert({
                             type: 'danger',
                             icon: 'warning',
@@ -155,35 +158,56 @@ var TableAjax = function () {
                      }
                   });
                     if(rejectCheck){
-                      bootbox.prompt({
-                        title: `Are you sure you want to ${action.val()} ?`,
-                        inputType: 'text',
-                        placeholder: 'Please Enter Reason',
-                        buttons: {
+                       bootbox.dialog({
+                         title:'Are you sure you want to Reject ?',
+                         message: `<form>
+                                     <div class="form-group">
+                                      <select class="form-control target">
+                                         <option value="">Select Reason</option>
+                                         <option>I want to reject</option>
+                                         <option>Other</option>
+                                      </select>
+                                     </div>
+                                     <div class="form-group">
+                                      <input type="text" class="form-control" style="display:none;" placeholder="Enter reason" id="reason" required>
+                                    </div>
+                                  </form>`,
+                         buttons: {
                             cancel: {
                                 label: '<i class="fa fa-times"></i> Cancel'
                             },
                             confirm: {
-                                label: `<i class="fa fa-check"></i> ${action.val()}`
+                                label: `<i class="fa fa-check"></i> ${action.val()}`,
+                                callback:function(result){
+                                    let selectedReason=$(".target option:selected").text();
+                                    let enteredReason=$("#reason").val();
+                                    grid.setAjaxParam("id", id); 
+                                    if(selectedReason=="Other"){
+                                      grid.setAjaxParam("reject_reason", enteredReason);   
+                                      grid.getDataTable().ajax.reload();
+                                      grid.clearAjaxParams();
+                                    }
+                                    else{
+                                      grid.setAjaxParam("reject_reason", selectedReason);   
+                                      grid.getDataTable().ajax.reload();
+                                      grid.clearAjaxParams();  
+                                    }
+                                }
                             }
-                        },
-                        callback: function (result) {
-                            console.log("res--"+result)
-                            if(result!=null){
-                              grid.setAjaxParam("id", id);  
-                              grid.setAjaxParam("reject_reason", result);   
-                              grid.getDataTable().ajax.reload();
-                              grid.clearAjaxParams();
-                            }
-                            else{
-                               return;
-                            }
-                        },
-                        size:"small"
-                      });
+                         },
+                         size:"small"
+                       });
+
+                        $( ".target" ).change(function() {
+                             if(this.value == 'Other'){
+                              $('#reason').show();
+                             }
+                             else{
+                              $('#reason').hide();
+                             }
+                        });
                     }
                 }
-
                 else if(action.val()==="remove"){
                   bootbox.confirm({
                     title: "Delete ",

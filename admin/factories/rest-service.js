@@ -67,8 +67,8 @@ mimicTrading.factory('RestSvr', ['$http', '$window', '$httpParamSerializerJQLike
 							message = '404 Route not found';
 						}
 						reject({
-							message: response.errors.message || message,
-							status: response.status
+							message: response.data.errors.message || message,
+							status: response.data.status
 						});
 					});	
 				});
@@ -92,8 +92,8 @@ mimicTrading.factory('RestSvr', ['$http', '$window', '$httpParamSerializerJQLike
 							message = '404 Route not found';
 						}
 						reject({
-							message: response.errors.message || message,
-							status: response.status
+							message: response.data.errors.message || message,
+							status: response.data.status
 						});
 					});	
 				});

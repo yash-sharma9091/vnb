@@ -52,7 +52,7 @@ exports.schoolProfileStep1 = (req, res, next) => {
 			);
 		},
 		function (result, done) {
-			User.findOne({_id: _body._id},{seq_no:0,salt:0,password:0,reset_password:0,email_verified:0,role:0,password:0, salt: 0}, done);
+			User.findOne({_id: _body._id},{seq_no:0,reset_password:0,email_verified:0,role:0,password:0, salt: 0}, done);
 		}
 	],function (err, user) {
 			if(err){
@@ -61,4 +61,71 @@ exports.schoolProfileStep1 = (req, res, next) => {
 			res.json(response.success(user));
 		}
 	)
+};
+
+
+exports.getSchoolProfileStepData= (req,res,next) => {
+	let _id=req.query._id;
+	if( !_id){
+		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
+				.json(response.required({message: 'Id is required.'}));
+	}
+
+	User.aggregate([
+	   {
+	      $match:{"_id": mongoose.Types.ObjectId(_id) }
+	   },
+
+	   {
+	   	   $project:{
+	   	   	    seq_no:0,
+	   	   	    reset_password:0,
+	   	   	    email_verified:0,
+	   	   	    role:0,
+	   	   	    password:0,
+	   	   	    salt: 0
+	   		}
+	   },
+	   {
+	   	  $project:{
+	   	  	    uan:1,
+	   	  	    contact_title:1,
+	   	   	    contact_name:1,
+	   	   	    email_address:1,
+	   	   	    contact_telephoneno:1,
+	   	   	    school_telephoneno:1,
+	   	   	    school_name:1,
+	   	   	    school_address:1,
+	   	   	    no_of_students:1,
+	   	   	    school_type:1,
+	   	   	    school_level:1,
+	   	   	    school_code:1,
+	   	   	    become_pilot_description:1,
+	   	   	    no_of_students_laptop:1,
+	   	   	    school_challenges_lesson_planning:1,
+	   	   	    school_challenges_teacher_gradebook:1,
+	   	   	    school_challenges_students_classwork:1,
+	   	   	    school_goals_lesson_planning:1,
+	   	   	    school_goals_teacher_gradebook:1,
+	   	   	    school_goals_students_classwork:1,
+	   	   	    location:1,
+	   	   	    school_logo:1,
+	   	   	    country:"$address.country",
+	   	   	    state:"$address.state",
+	   	   	    city:"$address.city",
+	   	   	    postal_code:"$address.postal_code",
+    	   	    address: { $concat: [ "$address.city", " , ","$address.state"," , ", "$address.country"," , ", "$address.postal_code" ] } 
+	   	  }
+	   }
+
+	],function(err,result){
+		if(err){
+			return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(err);
+		}
+		if(result){
+		  if(result.length>0){
+		   res.json(response.success(result[0]));
+		  }	
+		}
+	});
 };

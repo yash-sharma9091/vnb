@@ -82,10 +82,10 @@ exports.view = (req, res, next) => {
     		if(error){
     			res.json({errors: error});
     		}
-    		result.pilot_request=`<span class="label label-sm label-${status_list.class[result.pilot_request]}">${status_list.status[result.pilot_request]}</span>`
+    		result.pilot_request_check=`<span class="label label-sm label-${status_list.class[result.pilot_request]}">${status_list.status[result.pilot_request]}</span>`;
     		res.json({success: true, result: result});
     	}
-    );
+    ).lean();
 };
 
 exports.list = (req, res, next) => {
@@ -104,64 +104,10 @@ exports.list = (req, res, next) => {
 				let _status =  ( reqData.customActionName === 'Approve' ) ? 'Approved' : 'Rejected';
 
 				if(_status=="Rejected"){
-				  User.update({_id: {$in:_ids}},{$set:{pilot_request: _status,reject_reason:reqData.reject_reason}},{multi:true}, done);
+			   	   rejectPilotRequest(req,res,_ids,_status,reqData.reject_reason);		
 				}
 				else{
-			  		createUniqueAccount(_ids)
-			  		.then(response =>{
-				       async.each(response, function(elem, callback) {
-				          async.waterfall([
-	                        function(done){
-	                          let updateJson={},password= getRandomInt(100,1000000);;
-	                              updateJson.uan=elem.uan;
-	                              updateJson.pilot_request=_status;
-	                              updateJson.password=crypto.createHmac('sha512',config.salt).update(password).digest('base64');
-	                              elem.password=password;
-	                          	  updateJson.seq_no=elem.seq_no;
-	                          User.update({ _id: elem._id },{ $set: updateJson },(err,res)=>{
-	                          	if(err){
-	                          		done(err,null);
-	                          	}
-	                          	else{
-	                          		done(null,elem);
-	                          	}
-	                          });
-	                        },
-	                        function(pilotdata,callback){
-				             
-                        		mail.send({
-									subject: 'Pilot school approval confirmation',
-									html: './public/email_templates/user/approve.html',
-									from: config.mail.from, 
-									to: pilotdata.email_address,
-									emailData : {
-										contact_name: pilotdata.contact_name,
-										email_address: pilotdata.email_address,
-										username: pilotdata.uan,
-										password: pilotdata.password
-							  	    } 
-								   }, (err, success) => {
-									if(err){
-								       done(err,null);
-									} else {
-						               done(null,success);
-									}
-								});
-
-	                        }
-	                      ],callback);
-			           },function(err,res){
-			           	 if(err){
-			           	 	done(err,null);
-			           	 }
-			           	 else{
-			           	 	done(null,res);
-			           	 }
-			           });
-	                })
-			  		.catch(err =>{
-					   done(err,null);
-					});	
+				   approvePilotRequest(req,res,_ids,_status);
 				}
 			}
 			else {
@@ -188,6 +134,141 @@ exports.list = (req, res, next) => {
 	});
 };
 
+function approvePilotRequest(req,res,_ids,_status){
+		createUniqueAccount(_ids)
+  		.then(uanresponse =>{
+	       async.each(uanresponse, function(elem, callback) {
+	          async.waterfall([
+                function(done){
+                  let updateJson={},password= getRandomInt(100,1000000);
+                      updateJson.uan=elem.uan;
+                      updateJson.pilot_request=_status;
+                      updateJson.password=crypto.createHmac('sha512',config.salt).update(password).digest('base64');
+                      elem.password=password;
+                  	  updateJson.seq_no=elem.seq_no;
+                  User.update({ _id: elem._id },{ $set: updateJson },(err,res)=>{
+                  	if(err){
+                  		done(err,null);
+                  	}
+                  	else{
+                  		done(null,elem);
+                  	}
+                  });
+                },
+                function(pilotdata,done){
+	             
+            		mail.send({
+						subject: 'Pilot school approval confirmation',
+						html: './public/email_templates/user/approve.html',
+						from: config.mail.from, 
+						to: pilotdata.email_address,
+						emailData : {
+							contact_name: pilotdata.contact_name,
+							email_address: pilotdata.email_address,
+							username: pilotdata.uan,
+							password: pilotdata.password
+				  	    } 
+					   }, (err, success) => {
+						if(err){
+						   done({message:"we are facing some technical issue while sending email, please try after sometime."},null);	
+			               User.update({ _id: pilotdata._id },{ $set: {pilot_request:pilotdata.pilot_request} }).exec();	
+						} else {
+   						   done(null,{message:"Your pilot request has been rejected, I have send mail with reasons"});	
+						}
+					});
+                }
+              ],(err,eachresult) => {
+              	if(err){
+              		callback(err);
+              	}
+              	else{
+              		callback();
+              	}
+              });
+           },function(err,userres){
+             if( err ) {
+			   return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(response.error(err));
+		     }
+		     res.json(response.success({message: 'Pilot request approved successfully'}));
+           });
+        })
+  		.catch(err =>{
+		   return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(response.error(err));
+		});	
+}
+
+function rejectPilotRequest(req,res,_ids,reject_status,reject_reason){
+	async.waterfall([
+		function findAllUser(done){
+           User.find({_id: {$in:_ids}},done);
+		},
+		function updateStatus(users,done){
+           if(!_.isEmpty(users) && users.length>0){
+            async.each(users, function(rejectdata, callback) {
+		          async.waterfall([
+                    function rejectRequest(done){
+                       User.update({ _id: rejectdata._id },
+               	           { $set: {
+               	           			pilot_request:reject_status,
+               	           			reject_reason:reject_reason
+               	                   } 
+               	           },(err,res) => {
+               	           	if(err){
+               	           		done(err,null);
+               	           	}
+               	           	else{
+               	           		done(null,rejectdata);
+               	           	}
+                       });
+                    },
+                    function sendRejectMail(rejectdata,done){
+                 		mail.send({
+							subject: 'Pilot school Reject confirmation',
+							html: './public/email_templates/user/reject.html',
+							from: config.mail.from, 
+							to: rejectdata.email_address,
+							emailData : {
+								contact_name: rejectdata.contact_name,
+								email_address: rejectdata.email_address,
+								reject_reason: rejectdata.reject_reason
+					  	    } 
+						   }, (err, success) => {
+							if(err){
+							 done({message:"we are facing some technical issue while sending email, please try after sometime."},null);	
+   			                 User.update({ _id: rejectdata._id },{ $set: {pilot_request:rejectdata.pilot_request} }).exec();	
+							} else {
+ 							 done(null,{message:"Your pilot request has been rejected, I have send mail with reasons"});	
+  							}
+						});
+                    }
+                  ],(err,result) =>{
+                  	if(err){
+                  	 callback(err);
+                  	}
+                  	else{
+                     callback();		
+                  	}
+                  });
+	           },function(err,userres){
+	           	 if(err){
+	           	 	done(err,null);
+	           	 }
+	           	 else{
+	           	 	done(null,userres);
+	           	 }
+	        });	  
+           }
+           else {
+				done(null, null);
+		    }
+		}
+    ],(err,result) => {
+    	if( err ) {
+			return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(response.error(err));
+		}
+		res.json(response.success({message: 'Pilot request reject successfully'}));
+    })
+}
 
 function createUniqueAccount(userid){
    	return new Promise((resolve, reject) => {
@@ -296,7 +377,6 @@ function noOfStudentDigit(digit){
 		}
 }
 
-
 exports.approverejectsingle= (req,res,next) => {
 	let reqData= req.body;
 	if( !req.body._id ){
@@ -308,13 +388,15 @@ exports.approverejectsingle= (req,res,next) => {
 	let _status =  ( reqData.status === 'Approve' ) ? 'Approved' : 'Rejected';
 
 	if(_status=="Rejected"){
-	  User.update({_id: {$in:_ids}},{$set:{pilot_request: _status}},(err,result) => {
+        rejectPilotRequest(req,res,_ids,_status,reqData.reject_reason);
+	/*  User.update({_id: {$in:_ids}},{$set:{pilot_request: _status}},(err,result) => {
 	  	 if(err)next(err);	
         res.json(response.success({success: true, message:'Your request has been rejected by admin'}));
-	  });
+	  });*/
 	}
 	else{
-  		createUniqueAccount(_ids)
+		approvePilotRequest(req,res,_ids,_status);
+  		/*createUniqueAccount(_ids)
   		.then(uanresult =>{
   	      let userUAN=uanresult[0]; 		
           async.waterfall([
@@ -355,8 +437,6 @@ exports.approverejectsingle= (req,res,next) => {
 						  .json(err);
            	 }
            	 else{
-           	 	console.log("ddddddd"+JSON.stringify(result));
-           	 	console.log("success"+response.success({success: true, message:'Your request has been approved by admin'}))
 		        res.json(response.success({success: true, message:'Your request has been approved by admin'}));
            	 }
            });
@@ -365,7 +445,7 @@ exports.approverejectsingle= (req,res,next) => {
   		.catch(err =>{
 		 	return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
 						  .json(err);
-		});	
+		});	*/
 	}
 
 
