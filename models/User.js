@@ -153,7 +153,7 @@ UserSchema 	= new Schema({
 		}
 	},
 	reject_reason:{
-		typeL:String
+		type:String
 	},
 	reset_password: {type: Object},
 	salt: { type: String },
