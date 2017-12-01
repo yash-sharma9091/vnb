@@ -16,7 +16,16 @@ function getRandomInt(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
       return (Math.floor(Math.random() * (max - min)) + min).toString(); 
-  };
+};
+const isJson = (str) => {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 var status_list = {
 			class: {
 				"Approved" : "success",
@@ -83,6 +92,8 @@ exports.view = (req, res, next) => {
     			res.json({errors: error});
     		}
     		result.pilot_request_check=`<span class="label label-sm label-${status_list.class[result.pilot_request]}">${status_list.status[result.pilot_request]}</span>`;
+	  		result.school_level=isJson(result.school_level) ? JSON.parse(result.school_level) : result.school_level;
+	  		result.school_type=isJson(result.school_type) ? JSON.parse(result.school_type) : result.school_type;
     		res.json({success: true, result: result});
     	}
     ).lean();
@@ -389,63 +400,9 @@ exports.approverejectsingle= (req,res,next) => {
 
 	if(_status=="Rejected"){
         rejectPilotRequest(req,res,_ids,_status,reqData.reject_reason);
-	/*  User.update({_id: {$in:_ids}},{$set:{pilot_request: _status}},(err,result) => {
-	  	 if(err)next(err);	
-        res.json(response.success({success: true, message:'Your request has been rejected by admin'}));
-	  });*/
 	}
 	else{
 		approvePilotRequest(req,res,_ids,_status);
-  		/*createUniqueAccount(_ids)
-  		.then(uanresult =>{
-  	      let userUAN=uanresult[0]; 		
-          async.waterfall([
-            function(done){
-              let updateJson={},password= getRandomInt(100,1000000);
-                  updateJson.uan=userUAN.uan;
-                  updateJson.pilot_request=_status;
-                  updateJson.password=crypto.createHmac('sha512',config.salt).update(password).digest('base64');
-                  userUAN.password=password;
-              	  updateJson.seq_no=userUAN.seq_no;
-              User.update({ _id: userUAN._id },{ $set: updateJson },(err,res)=>{
-              	if(err){
-              		done(err,null);
-              	}
-              	else{
-              		done(null,userUAN);
-              	}
-              });
-            },
-            function(pilotdata,done){
-             
-        		mail.send({
-					subject: "Pencl's INK approval confirmation",
-					html: './public/email_templates/user/approve.html',
-					from: config.mail.from, 
-					to: pilotdata.email_address,
-					emailData : {
-						contact_name: pilotdata.contact_name,
-						email_address: pilotdata.email_address,
-						username: pilotdata.uan,
-						password: pilotdata.password
-			  	    } 
-				   }, done);
-            }
-          ],function(err,result){
-           	 if(err){
-           	 	return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-						  .json(err);
-           	 }
-           	 else{
-		        res.json(response.success({success: true, message:'Your request has been approved by admin'}));
-           	 }
-           });
-   
-        })
-  		.catch(err =>{
-		 	return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-						  .json(err);
-		});	*/
 	}
 
 

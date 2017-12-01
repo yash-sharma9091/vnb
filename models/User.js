@@ -14,14 +14,20 @@ UserSchema 	= new Schema({
 	seq_no:{
         type:Number
 	},
+	first_name:{
+		type:String
+	},
+	last_name:{
+		type:String
+	},
     contact_title: {
 		type: String,
-		required:"Contact title is required",
+		//required:"Contact title is required",
 		maxlength: [200, 'Contact Title cannot be more than {MAXLENGTH} characters.']
 	},
 	contact_name: {
 		type: String,
-		required:"Contact name is required",
+		//required:"Contact name is required",
 		maxlength: [200, 'Contact Name cannot be more than {MAXLENGTH} characters.']
 	},
 	email_address: {
@@ -109,7 +115,7 @@ UserSchema 	= new Schema({
 	role: {
 		type: String,
 		enum: {
-			values: ['superadmin', 'schooladmin', 'user'],
+			values: ['superadmin', 'schooladmin', 'teacher','student'],
 			message: '{VALUE} is not a valid role for user'
 		},
 		default: 'schooladmin'
@@ -155,7 +161,24 @@ UserSchema 	= new Schema({
 	reject_reason:{
 		type:String
 	},
+	profile_image:{
+		name: {
+			type: String,
+			default: config.image_name
+		},
+		path: {
+			type: String,
+			default: config.image_path
+		},
+		original_name: {
+			type: String,
+			default: config.image_name
+		}
+	},
 	reset_password: {type: Object},
+	school_id: { 
+       type: mongoose.Schema.Types.ObjectId
+	},
 	salt: { type: String },
 	lastLoggedIn: { type: Date },
 	ip: { type: String }

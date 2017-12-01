@@ -75,7 +75,6 @@ var TableAjax = function () {
                     }
                 },
                 "columns": options.columns,
-                "processing": true,
                 "serverSide": true,
                 "searchable":true,
 

@@ -17,6 +17,8 @@ npm-debug.log
 # images
 assets/profile_image/
 assets/cms_banner/
+assets/teacher_uploadedcsv/
+assets/student_uploadedcsv/
 assets/schoolprofile_image/
 assets/homepage_banner/
 

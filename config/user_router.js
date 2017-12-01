@@ -43,6 +43,37 @@ function fileFilter (req, file, cb) {
   cb(null, true);
 }
 
+let uploadTeacherCsv = multer({
+    limits: config.fileLimits,
+    storage: multer.diskStorage({
+      destination: 'assets/teacher_uploadedcsv/',
+      filename: function (req, file, cb) {
+        cb(null, Date.now() + '.' + config.csv_extensions[file.mimetype]);
+      }
+    }),
+    fileFilter: csvFilter
+});
+
+let uploadStudentCsv = multer({
+    limits: config.fileLimits,
+    storage: multer.diskStorage({
+      destination: 'assets/student_uploadedcsv/',
+      filename: function (req, file, cb) {
+        cb(null, Date.now() + '.' + config.csv_extensions[file.mimetype]);
+      }
+    }),
+    fileFilter: csvFilter
+});
+
+/* Check if file is valid csv */
+function csvFilter (req, file, cb) {
+  if(!_.includes(config.allowed_csv_extensions, file.mimetype)){
+    cb(new Error('Invalid file, please upload a valid csv file'));
+  }
+  cb(null, true);
+}
+
+
 module.exports = {
     routes: [
       { url: '/signupSchool', method: ctrls.userCtrl.signupSchool, type: 'post' },
@@ -56,6 +87,9 @@ module.exports = {
       { url: '/getfaq',method: ctrls.cmsCtrl.getFAQ, type: 'get' },
       { url: '/setting_homepage',method: ctrls.settingCtrl.settingHomepage, type: 'get' },
       { url: '/profilesetup_step1', mwear: uploadSchoolProfileImage.any(),method: ctrls.schoolProfileCtrl.schoolProfileStep1, type: 'post' },
+      { url: '/addteacher', mwear: uploadProfileImage.any(),method: ctrls.teacherCtrl.addTeacher, type: 'post' },
+     // { url: '/addbulkteacher_csv', mwear: uploadTeacherCsv.any(),method: ctrls.teacherCtrl.addBulkTeacherInCsv, type: 'post' },
+      { url: '/getteacher',method: ctrls.teacherCtrl.getTeacher, type: 'get' },
       { url: '/getschoolprofile_step',method: ctrls.schoolProfileCtrl.getSchoolProfileStepData, type: 'get' },
       { url: '/profile', mwear: uploadProfileImage.any(),method: ctrls.userCtrl.updateProfile, type: 'post' },
      

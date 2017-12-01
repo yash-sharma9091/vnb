@@ -79,7 +79,7 @@
                         <div class="form-group form-md-line-input">
                             <label class="col-md-2 control-label" >School Levels </label>
                             <div class="col-md-10">
-                                <input type="text" name="email" ng-model="userinfo.school_level" class="form-control" id="email" readonly>
+                                <input type="text" name="email" ng-model="userinfo.school_level.value" class="form-control" id="email" readonly>
                             </div>
                         </div>
 
@@ -145,7 +145,12 @@
                           <p ng-bind-html="userinfo.pilot_request_check"></p>
                             </div>
                         </div>
-
+                        <div ng-if="userinfo.pilot_request=='Rejected'" class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" for="email">Rejected Reason </label>
+                            <div class="col-md-10">
+                                <p>{{userinfo.reject_reason}}</p>
+                            </div>
+                        </div>
 
                         <div class="form-group form-md-line-input" ng-class="{ 'has-error': viewUserForm.request_status.$touched && viewUserForm.request_status.$invalid || viewUserForm.request_status.$invalid && viewUserForm.$submitted }">
                             <label class="col-md-2 control-label" for="request_status">Action</label>
@@ -156,10 +161,6 @@
                                     ng-show="viewUserForm.request_status.$touched || viewUserForm.$submitted">
                                     <span class="help-block" ng-message="required">Action is required.</span>
                                 </div>
-                    	<!--    		<button class="btn btn-success btn-sm" ng-click="approveSingleReq(userinfo)">Approve
-					      		</button>
-		      		     		<button class="btn btn-danger btn-sm" ng-click="rejectSingleReq(userinfo)">Reject
-					      		</button> -->
                             </div>
                         </div>
 

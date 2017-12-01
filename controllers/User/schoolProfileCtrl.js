@@ -3,6 +3,7 @@ const
 	path 		= require('path'),
 	response 	= require(path.resolve('config/lib/response')),
 	User 		= require(path.resolve('models/User')),
+	Teacher 	= require(path.resolve('models/Teacher')),
 	async 		= require('async'),
 	crypto 		= require('crypto'),
 	_ 			= require('lodash'),
@@ -13,6 +14,7 @@ const
 
 exports.schoolProfileStep1 = (req, res, next) => {
 	let image = {}, _body;
+
 	if( !_.isUndefined(req.files)) {
 		if(req.files.length > 0){
 		  req.files.forEach(x => {
@@ -21,11 +23,18 @@ exports.schoolProfileStep1 = (req, res, next) => {
 			 image.original_name = x.originalname;
 		  });
 		}
-
 	}
+    if(_.isNull(req.body.image) || req.body.image==="null"){
+		image.original_name=config.default_school_logo.original_name;
+		image.path=config.default_school_logo.path;
+		image.name="";
+		_body = _.assign(req.body, {school_logo: image});
+	}
+
 	if( !_.isEmpty(image) ) {
 		_body = _.assign(req.body, {school_logo: image});	
-	} else {
+	} 
+	else {
 		_body = req.body;
 		if(!_.isUndefined(_body.country) || !_.isUndefined(_body.state) || !_.isUndefined(_body.city)){
 			_body.address={
@@ -63,7 +72,6 @@ exports.schoolProfileStep1 = (req, res, next) => {
 	)
 };
 
-
 exports.getSchoolProfileStepData= (req,res,next) => {
 	let _id=req.query._id;
 	if( !_id){
@@ -79,6 +87,7 @@ exports.getSchoolProfileStepData= (req,res,next) => {
 	   {
 	   	   $project:{
 	   	   	    seq_no:0,
+	   	   	    __v:0,
 	   	   	    reset_password:0,
 	   	   	    email_verified:0,
 	   	   	    role:0,
@@ -100,21 +109,14 @@ exports.getSchoolProfileStepData= (req,res,next) => {
 	   	   	    school_type:1,
 	   	   	    school_level:1,
 	   	   	    school_code:1,
-	   	   	    become_pilot_description:1,
 	   	   	    no_of_students_laptop:1,
-	   	   	    school_challenges_lesson_planning:1,
-	   	   	    school_challenges_teacher_gradebook:1,
-	   	   	    school_challenges_students_classwork:1,
-	   	   	    school_goals_lesson_planning:1,
-	   	   	    school_goals_teacher_gradebook:1,
-	   	   	    school_goals_students_classwork:1,
-	   	   	    location:1,
 	   	   	    school_logo:1,
+	   	   	    //address:1,
 	   	   	    country:"$address.country",
 	   	   	    state:"$address.state",
 	   	   	    city:"$address.city",
 	   	   	    postal_code:"$address.postal_code",
-    	   	    address: { $concat: [ "$address.city", " , ","$address.state"," , ", "$address.country"," , ", "$address.postal_code" ] } 
+    	   	    school_address: { $concat: [ "$address.city", " , ","$address.state"," , ", "$address.country" ] } 
 	   	  }
 	   }
 
@@ -124,8 +126,24 @@ exports.getSchoolProfileStepData= (req,res,next) => {
 		}
 		if(result){
 		  if(result.length>0){
-		   res.json(response.success(result[0]));
+		  	let finalresult=result[0];
+	  		finalresult.school_type= isJson(finalresult.school_type) ? JSON.parse(finalresult.school_type) : finalresult.school_type;
+	  		finalresult.school_level=isJson(finalresult.school_level) ? JSON.parse(finalresult.school_level) : finalresult.school_level;
+	  		finalresult.school_logo=isJson(finalresult.school_logo) ? JSON.parse(finalresult.school_logo) : finalresult.school_logo;
+		  	/*if(!_.isUndefined(finalresult.address.country) || !_.isUndefined(finalresult.address.state) || !_.isUndefined(finalresult.address.city) || !_.isUndefined(finalresult.address.postal_code)){
+                finalresult.address=finalresult.address.city+ ','+ finalresult.address.state+ ','+finalresult.address.country+ ','+finalresult.address.postal_code;
+            }*/
+		   res.json(response.success(finalresult));
 		  }	
 		}
 	});
 };
+
+const isJson = (str) => {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}

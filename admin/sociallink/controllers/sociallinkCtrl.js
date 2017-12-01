@@ -11,7 +11,7 @@ mimicTrading.controller('sociallinkCtrl', ['$scope', '$state', 'RestSvr', '$root
 		    TableAjax.init({
 		    	url: 'sociallink/list/',
 		    	columns: [
-	               // { "data": "id", "orderable": false },
+	                { "data": "id", "orderable": false },
                     { "data": "title" },
                     { "data": "url" },
                     { "data": "status" },

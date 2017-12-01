@@ -11,7 +11,7 @@ mimicTrading.controller('whatdostepsCtrl', ['$scope', '$state', 'RestSvr', '$roo
 		    TableAjax.init({
 		    	url: 'whatdosteps/list/',
 		    	columns: [
-	               // { "data": "id", "orderable": false },
+	                { "data": "id", "orderable": false },
                     { "data": "title" },
                     { "data": "short_description" },
                     //{ "data": "long_description" },

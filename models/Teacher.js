@@ -4,35 +4,36 @@ const mongoose 	= require('mongoose'),
 Schema 			= mongoose.Schema,
 
 teacherSchema   = new Schema({
-	uan: {
+	user_id: {
+		type: mongoose.Schema.Types.ObjectId
+	},
+	school_id: {
+		type: mongoose.Schema.Types.ObjectId
+	},
+	teacher_code: {
 		type: String
 	},
-	first_name: {
+	joining_date: {
+		type: Date,
+		default: Date.now
+	},
+	department_name: {
 		type: String
 	},
-	last_name: {
+	designation: {
 		type: String
 	},
-	gender: {
+	qualification: {
 		type: String
 	},
-	email_address: {
+	experience: {
 		type: String
 	},
-	telephone_no: {
-		type: String
+	grade: {
+		type: Array
 	},
-	teacher_profile: {
-		type: Object
-	},
-	assign_grade: {
-		type: String
-	},
-	assign_code: {
-		type: String
-	},
-	assign_subject: {
-		type: Object
+	subject: {
+		type: Array
 	}
 },{
     timestamps: {
