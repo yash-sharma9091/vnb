@@ -16,23 +16,23 @@ exports.settingHomepage = (req, res, next) => {
    	async.waterfall([
 		
 		function findCMSData(done) {
-		   	CMS.find({},{_id:0,slug:1,title:1,meta_title:1,meta_keyword:1,meta_description:1})
+		   	CMS.find({status:true},{_id:0,slug:1,title:1,meta_title:1,meta_keyword:1,meta_description:1})
 			.then(cmsresponse => done(null,cmsresponse))
 			.catch(err => done(err,null)); 
 		},
 		function findStepsData(cmsdata, done) {
-		   	Setting.find({type:"whatdostep"},{_id:0,title:1,short_description:1,order:1,slug:1})
+		   	Setting.find({status:true,type:"whatdostep"},{_id:0,title:1,short_description:1,order:1,slug:1})
 			.then(stepresponse => done(null,cmsdata,stepresponse))
 			.catch(err => done(err,null)); 
 		},
 		function findHomepageData(cmsdata,stepdata, done) {
-		   	Setting.findOne({type:"homepage"},{_id:0,type:0,updated_at:0,status:0})
+		   	Setting.findOne({status:true,type:"homepage"},{_id:0,type:0,updated_at:0,status:0})
 			.then(homeresponse => done(null,cmsdata,stepdata,homeresponse))
 			.catch(err => done(err,null)); 
 		},
 
 		function findSocialData(cmsdata,stepdata,homeresponse, done){
-           	Setting.find({type:"social"},{_id:0,created_at:0,updated_at:0,type:0,status:0,banner_img:0,__v:0})
+           	Setting.find({status:true,type:"social"},{_id:0,created_at:0,updated_at:0,type:0,status:0,banner_img:0,__v:0})
 			.then(socialresponse => {
 				homeresponse.banner_img.text=homeresponse.banner_text;
 				let fnlresult={

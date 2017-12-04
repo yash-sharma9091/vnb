@@ -6,6 +6,7 @@ const
 	Teacher 	= require(path.resolve('models/Teacher')),
 	async 		= require('async'),
 	crypto 		= require('crypto'),
+	csv 		= require('csvtojson'),
 	_ 			= require('lodash'),
 	mail 	 	= require(path.resolve('./config/lib/mail')),
 	mongoose 	= require('mongoose'),
@@ -13,6 +14,10 @@ const
 
 
 exports.addTeacher= (req, res, next) => {
+    if( !req.body._id){
+		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
+				.json(response.required({message: 'Id is required'}));
+	}
     let image = {}, _body, nullimage={};
 
 	if( !_.isUndefined(req.files)) {
@@ -52,59 +57,10 @@ exports.addTeacher= (req, res, next) => {
                 coordinates: [_body.lng, _body.lat]
 			};
         }
-		var userInputJson={
-           first_name:_body.first_name,
-           last_name:_body.last_name,
-           gender:_body.gender,
-           email_address:_body.email_address,
-           contact_telephoneno:_body.contact_telephoneno,
-           role:'teacher',
-           address:_body.address,
-           location:_body.location,
-           school_id: _body._id
-		};
 
-		var teacherInputJson={
-           teacher_code:_body.teacher_code,
-           joining_date: _body.joining_date,
-           department_name:_body.department_name,
-           designation:_body.designation,
-           qualification:_body.qualification,
-           experience:_body.experience,
-           grade:_body.grade,
-           subject:_body.subject,
-           official_grade:_body.official_grade,
-           school_id: _body._id
-		};
-	}
-	async.waterfall([
-		function saveInUser(done) {
-			let user= new User(userInputJson);
-        	user.save(function (err, user) {
-				if(err){
- 					done(err, null);
-				} else {
-					done(null, user);
-				}
-			});
-		},
-		function saveInTeacher(user, done) {
-			teacherInputJson.user_id = user._id;
-			let teacher = new Teacher(teacherInputJson);
-        	teacher.save(function (err, teacher) {
-				if(err){
- 					done(err, null);
-				} else {
-					done(null, teacher);
-				}
-			});
-		}
-	],function (err, teacher) {
-		if(err){
-		  return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(err);
-		}
-		res.json(response.success({message:"Teacher added successfully."}));
-	})
+        saveTeacher(req,res,_body);
+ 	}
+  
 };
 
 exports.getTeacher = (req, res, next) => {
@@ -161,30 +117,41 @@ exports.getTeacher = (req, res, next) => {
 
 
 exports.addBulkTeacherInCsv = (req, res, next) => {
-	return;
-/*	const csvFilePath=req.files[0].path,studentArr=[];
+	if( !req.body._id){
+		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
+				.json(response.required({message: 'Id is required'}));
+	}
+	const csvFilePath=req.files[0].path,teacherArr=[];
 	let checkField=false;
    
 	csv()
 	.preFileLine((fileLineString, lineIdx)=>{
 		
 		if (lineIdx === 1){
-			return fileLineString.replace('image url','image_url')
+			return fileLineString.replace('profile image','profile_image')
 		}
 		return fileLineString
 	})
 	.fromFile(csvFilePath)
-	.on('json',(studentObj)=>{
-		if( studentObj.hasOwnProperty("name")===true && 
-			studentObj.hasOwnProperty("location")===true && 
-			studentObj.hasOwnProperty("date")===true &&
-			studentObj.hasOwnProperty("image_url")===true)
+	.on('json',(teacherObj)=>{
+		if( teacherObj.hasOwnProperty("first_name")===true && 
+			teacherObj.hasOwnProperty("last_name")===true && 
+			teacherObj.hasOwnProperty("gender")===true &&
+			teacherObj.hasOwnProperty("email_address")===true && 
+			teacherObj.hasOwnProperty("contact_telephoneno")===true &&
+			teacherObj.hasOwnProperty("profile_image")===true && 
+			teacherObj.hasOwnProperty("address")===true &&
+			teacherObj.hasOwnProperty("department_name")===true &&
+			teacherObj.hasOwnProperty("designation")===true &&
+			teacherObj.hasOwnProperty("qualification")===true &&
+			teacherObj.hasOwnProperty("experience")===true &&
+			teacherObj.hasOwnProperty("grade")===true &&
+			teacherObj.hasOwnProperty("subject")===true )
 		{
-			studentObj.user_id = req.body._id;
-			studentObj.subscription_id = req.body.subscription_id;
-			studentObj.website_id = req.body.website_id;
-			//studentObj.action = req.body.action;
-			studentArr.push(studentObj);
+			teacherObj.school_id = req.body._id;
+			teacherObj.role = "teacher";
+			teacherObj.joining_date = new Date();
+			teacherArr.push(teacherObj);
 		}
 		else{
 			checkField=true;
@@ -199,7 +166,8 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 		}
 		else{
 	  		fs.unlinkSync(csvFilePath);
-			Teacher.insertMany(studentArr,function(err, importres) {
+	  		return;
+/*			Teacher.insertMany(studentArr,function(err, importres) {
 		     if(err){ return res.json(response.error(err)) }
 		     else{
 	       		res.json(response.success({
@@ -207,7 +175,64 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 					message: 'Client list imported successfully'
 				}));
 		      }
-		    });
+		    });*/
 		}
-	 })*/
+	 })
+};
+
+
+function saveTeacher(req,res,_body){
+ 	var userInputJson={
+       first_name:_body.first_name,
+       last_name:_body.last_name,
+       gender:_body.gender,
+       email_address:_body.email_address,
+       contact_telephoneno:_body.contact_telephoneno,
+       role:'teacher',
+       address:_body.address,
+       location:_body.location,
+       school_id: _body._id
+	};
+
+	var teacherInputJson={
+       teacher_code:_body.teacher_code,
+       joining_date: _body.joining_date,
+       department_name:_body.department_name,
+       designation:_body.designation,
+       qualification:_body.qualification,
+       experience:_body.experience,
+       grade:_body.grade,
+       subject:_body.subject,
+       official_grade:_body.official_grade,
+       school_id: _body._id
+	};
+
+	async.waterfall([
+		function saveInUser(done) {
+			let user= new User(userInputJson);
+        	user.save(function (err, user) {
+				if(err){
+ 					done(err, null);
+				} else {
+					done(null, user);
+				}
+			});
+		},
+		function saveInTeacher(user, done) {
+			teacherInputJson.user_id = user._id;
+			let teacher = new Teacher(teacherInputJson);
+        	teacher.save(function (err, teacher) {
+				if(err){
+ 					done(err, null);
+				} else {
+					done(null, teacher);
+				}
+			});
+		}
+	],function (err, teacher) {
+		if(err){
+		  return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(err);
+		}
+		res.json(response.success({message:"Teacher saved successfully."}));
+	})
 };

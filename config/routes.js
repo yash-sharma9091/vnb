@@ -28,6 +28,7 @@ router.use(expressJWT({
 		'/api/contactus',
 		'/api/addteacher',
 		'/api/getteacher',
+		'/api/getfaq',
 		'/api/plans_list',
 		'/api/cron',
 		/^\/api\/cms\/.*/,

@@ -13,7 +13,7 @@ const
 
 
 exports.schoolProfileStep1 = (req, res, next) => {
-	let image = {}, _body;
+	let image = {}, _body,nullimage={};
 
 	if( !_.isUndefined(req.files)) {
 		if(req.files.length > 0){
@@ -25,10 +25,10 @@ exports.schoolProfileStep1 = (req, res, next) => {
 		}
 	}
     if(_.isNull(req.body.image) || req.body.image==="null"){
-		image.original_name=config.default_school_logo.original_name;
-		image.path=config.default_school_logo.path;
-		image.name="";
-		_body = _.assign(req.body, {school_logo: image});
+		nullimage.original_name=config.default_school_logo.original_name;
+		nullimage.path=config.default_school_logo.path;
+		nullimage.name="";
+		_body = _.assign(req.body, {school_logo: nullimage});
 	}
 
 	if( !_.isEmpty(image) ) {
