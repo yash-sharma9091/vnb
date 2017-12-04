@@ -20,17 +20,24 @@ mimicTrading.controller('homepageEditCtrl', ['$scope', '$state', 'RestSvr', '$ro
 		    let req = '';
 			let urlId=angular.copy(data.video_url, req);
 			data.video_url_id=YouTubeGetID(urlId);
+			console.log("11"+JSON.stringify(data));
 			Upload.upload({
 				url: baseUrl('homepage/edit'),
 				data: data
 			})
 			.then(function (response) {
-				return Upload.resize(data.banner_img, {width:60,height:60})
-				.then(function(resizedFile){
-					return resizedFile;
-				});
+				if(Upload.isFile(data.banner_img)){
+					return Upload.resize(data.banner_img, {width:60,height:60})
+					.then(function(resizedFile){
+						return resizedFile;
+					})
+				}
+				else{
+					$state.go('viewhomepage');
+				}	
 				
 			}).then(function(response){
+
 				if(Upload.isFile(data.banner_img)){
 					Upload.upload({
 						url: baseUrl('homepage/bannerthumb'),
@@ -38,15 +45,14 @@ mimicTrading.controller('homepageEditCtrl', ['$scope', '$state', 'RestSvr', '$ro
 					}).then(function(result){
 						$state.go('viewhomepage');
 					}).catch(function(errors){
-						console.log("err1--"+errors);
 					    App.alert({type: ('danger'), icon: ( 'warning'), message: errors.message, container: $rootScope.settings.errorContainer, place: 'prepend'});
 					});
 				}
 			})
-		/*	.catch(function (errors) {
+			.catch(function (errors) {
 				console.log("err2--"+errors);
 				App.alert({type: ('danger'), icon: ( 'warning'), message: errors.message, container: $rootScope.settings.errorContainer, place: 'prepend'});
-			})*/
+			})
 			.finally(function () {
 				$scope.isLoading = false;
 			});

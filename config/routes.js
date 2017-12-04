@@ -28,6 +28,7 @@ router.use(expressJWT({
 		'/api/contactus',
 		'/api/addteacher',
 		'/api/getteacher',
+		'/api/addbulkteacher_csv',
 		'/api/getfaq',
 		'/api/plans_list',
 		'/api/cron',

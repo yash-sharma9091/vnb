@@ -88,7 +88,7 @@ module.exports = {
       { url: '/setting_homepage',method: ctrls.settingCtrl.settingHomepage, type: 'get' },
       { url: '/profilesetup_step1', mwear: uploadSchoolProfileImage.any(),method: ctrls.schoolProfileCtrl.schoolProfileStep1, type: 'post' },
       { url: '/addteacher', mwear: uploadProfileImage.any(),method: ctrls.teacherCtrl.addTeacher, type: 'post' },
-     // { url: '/addbulkteacher_csv', mwear: uploadTeacherCsv.any(),method: ctrls.teacherCtrl.addBulkTeacherInCsv, type: 'post' },
+      { url: '/addbulkteacher_csv', mwear: uploadTeacherCsv.any(),method: ctrls.teacherCtrl.addBulkTeacherInCsv, type: 'post' },
       { url: '/getteacher',method: ctrls.teacherCtrl.getTeacher, type: 'get' },
       { url: '/getschoolprofile_step',method: ctrls.schoolProfileCtrl.getSchoolProfileStepData, type: 'get' },
       { url: '/profile', mwear: uploadProfileImage.any(),method: ctrls.userCtrl.updateProfile, type: 'post' },

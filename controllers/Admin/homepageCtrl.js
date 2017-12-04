@@ -16,7 +16,7 @@ exports.edit = (req, res, next) => {
 		});
      req.body.banner_img = image;	
 	} else {
-		delete req.body.banner_img
+;		delete req.body.banner_img;
 	}
     Setting.update({_id:req.body._id,type:"homepage"},{$set:req.body})
     .then(result => res.json({success: true}))

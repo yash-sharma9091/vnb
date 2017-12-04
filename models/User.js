@@ -20,6 +20,9 @@ UserSchema 	= new Schema({
 	last_name:{
 		type:String
 	},
+	gender:{
+		type:String
+	},
     contact_title: {
 		type: String,
 		//required:"Contact title is required",
@@ -164,15 +167,15 @@ UserSchema 	= new Schema({
 	profile_image:{
 		name: {
 			type: String,
-			default: config.image_name
+			//default: config.image_name
 		},
 		path: {
 			type: String,
-			default: config.image_path
+			//default: config.image_path
 		},
 		original_name: {
 			type: String,
-			default: config.image_name
+			//default: config.image_name
 		}
 	},
 	reset_password: {type: Object},

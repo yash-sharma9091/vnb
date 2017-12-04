@@ -5,6 +5,7 @@ const
 	User 		= require(path.resolve('models/User')),
 	Teacher 	= require(path.resolve('models/Teacher')),
 	async 		= require('async'),
+	fs 			= require('fs'),
 	crypto 		= require('crypto'),
 	csv 		= require('csvtojson'),
 	_ 			= require('lodash'),
@@ -12,55 +13,65 @@ const
 	mongoose 	= require('mongoose'),
   	config 		= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 
+function GetFilename(url)
+{
+   if (url)
+   {
+      var m = url.toString().match(/.*\/(.+?)\./);
+      if (m && m.length > 1)
+      {
+         return m[1];
+      }
+   }
+   return "";
+}
+
 
 exports.addTeacher= (req, res, next) => {
+
     if( !req.body._id){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
 				.json(response.required({message: 'Id is required'}));
 	}
-    let image = {}, _body, nullimage={};
-
-	if( !_.isUndefined(req.files)) {
+    let image = {}, _body = req.body;
+   
+	if( req.files) {
 		if(req.files.length > 0){
 		  req.files.forEach(x => {
-			 image.name = x.filename;
-			 image.path = x.path;
-			 image.original_name = x.originalname;
+			image.name = x.filename;
+			image.path = x.path;
+			image.original_name = x.originalname;
 		  });
 		}
 	}
-
-
-    if(_.isNull(req.body.image) || req.body.image==="null"){
-		nullimage.original_name=config.image_name;
-		nullimage.path=config.image_path;
-		nullimage.name=config.image_path;
-		_body = _.assign(req.body, {profile_image: nullimage});
-	}
   
-	if( !_.isEmpty(image) ) {
-		_body = _.assign(req.body, {profile_image: image});	
+	if( _.isEmpty(image) ) {
+		image.original_name=config.image_name;
+		image.path=config.image_path;
+		image.name=config.image_path;
+	   //console.log(image); return;
 	} 
-	else {
-		_body = req.body;
-		if(!_.isUndefined(_body.country) || !_.isUndefined(_body.state) || !_.isUndefined(_body.city)){
-			_body.address={
-				country:_body.country,
-				state  :_body.state,
-				city   :_body.city,
-				postal_code:_body.postal_code
-		   };
-		}
-        if(!_.isUndefined(_body.lng) || !_.isUndefined(_body.lat)){
-    		_body.location={
-			    type       : "Point",
-                coordinates: [_body.lng, _body.lat]
-			};
-        }
+	_body = _.assign(req.body, {profile_image: image});	
 
-        saveTeacher(req,res,_body);
- 	}
-  
+	if(!_.isUndefined(_body.country) || !_.isUndefined(_body.state) || !_.isUndefined(_body.city)){
+		_body.address={
+			country:_body.country,
+			state  :_body.state,
+			city   :_body.city,
+			postal_code:_body.postal_code
+	   };
+	}
+    if(!_.isUndefined(_body.lng) || !_.isUndefined(_body.lat)){
+		_body.location={
+		    type       : "Point",
+            coordinates: [_body.lng, _body.lat]
+		};
+    }
+ 	saveTeacher(_body).then(result =>{
+       res.json(response.success({message:"Teacher saved successfully."})); 
+ 	}).catch(err => {
+ 		return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(err);
+ 	});
 };
 
 exports.getTeacher = (req, res, next) => {
@@ -92,10 +103,10 @@ exports.getTeacher = (req, res, next) => {
 	   	  			 last_name:1,
 	   	  			 gender:1,
 	   	  			 email_address:1,
-	   	  			 address:1,
-	   	  			 location:1,
 	   	  			 contact_telephoneno:1,
 	   	  			 profile_image:1,
+	   	  			 address:1,
+	   	  			 //teacher_address: { $concat: [ "$address.city", " , ","$address.state"," , ", "$address.country" ] } ,
 	   	   			 'teacher_code':'$teacher_data.teacher_code',
 	   	   			 'joining_date':'$teacher_data.joining_date',
 	   	   			 'department_name':'$teacher_data.department_name',
@@ -117,6 +128,10 @@ exports.getTeacher = (req, res, next) => {
 
 
 exports.addBulkTeacherInCsv = (req, res, next) => {
+	
+    //console.log("files"+JSON.stringify(req.files));
+    //console.log("body"+req.body); return;
+    req.body._id="5a043cf9c256ba26f62338c2";
 	if( !req.body._id){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
 				.json(response.required({message: 'Id is required'}));
@@ -140,18 +155,25 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 			teacherObj.hasOwnProperty("email_address")===true && 
 			teacherObj.hasOwnProperty("contact_telephoneno")===true &&
 			teacherObj.hasOwnProperty("profile_image")===true && 
-			teacherObj.hasOwnProperty("address")===true &&
-			teacherObj.hasOwnProperty("department_name")===true &&
+			teacherObj.hasOwnProperty("address")===true)
+		{
+		/*	teacherObj.hasOwnProperty("department_name")===true &&
 			teacherObj.hasOwnProperty("designation")===true &&
 			teacherObj.hasOwnProperty("qualification")===true &&
 			teacherObj.hasOwnProperty("experience")===true &&
 			teacherObj.hasOwnProperty("grade")===true &&
-			teacherObj.hasOwnProperty("subject")===true )
-		{
+			teacherObj.hasOwnProperty("subject")===true */
+            teacherObj.profile_image={name:"",original_name:GetFilename(teacherObj.profile_image),path:teacherObj.profile_image};
 			teacherObj.school_id = req.body._id;
 			teacherObj.role = "teacher";
 			teacherObj.joining_date = new Date();
-			teacherArr.push(teacherObj);
+			//console.log("objcsv"+JSON.stringify(teacherObj)); return;
+		 	saveTeacher(teacherObj).then(result =>{
+		 		console.log("Teacher imported successfully.");
+		 	}).catch(err => {
+		 		return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(err);
+		 	});
+			//teacherArr.push(teacherObj);
 		}
 		else{
 			checkField=true;
@@ -165,24 +187,17 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 			}));
 		}
 		else{
-	  		fs.unlinkSync(csvFilePath);
-	  		return;
-/*			Teacher.insertMany(studentArr,function(err, importres) {
-		     if(err){ return res.json(response.error(err)) }
-		     else{
-	       		res.json(response.success({
-					success: true, 
-					message: 'Client list imported successfully'
-				}));
-		      }
-		    });*/
+	  	 fs.unlinkSync(csvFilePath);
+         res.json(response.success({message:"Teacher uploaded successfully."})); 
 		}
 	 })
 };
 
 
-function saveTeacher(req,res,_body){
- 	var userInputJson={
+function saveTeacher(_body){
+ 	
+ return new Promise((resolve, reject) => {
+    var userInputJson={
        first_name:_body.first_name,
        last_name:_body.last_name,
        gender:_body.gender,
@@ -191,7 +206,8 @@ function saveTeacher(req,res,_body){
        role:'teacher',
        address:_body.address,
        location:_body.location,
-       school_id: _body._id
+       school_id: _body._id,
+       profile_image:_body.profile_image
 	};
 
 	var teacherInputJson={
@@ -231,8 +247,13 @@ function saveTeacher(req,res,_body){
 		}
 	],function (err, teacher) {
 		if(err){
-		  return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(err);
+		  reject(err);
+		  //return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(err);
 		}
-		res.json(response.success({message:"Teacher saved successfully."}));
+		resolve(teacher);
+		//res.json(response.success({message:"Teacher saved successfully."}));
 	})
+
+  });
+ 	
 };
