@@ -5,7 +5,7 @@ angular.module('mimicTrading').controller('dashboardCtrl', ['$scope', '$location
 		        // initialize core components
 	        App.initAjax();
 	    });
-
+        
 	    // set sidebar closed and body solid layout mode
 	    $rootScope.settings.layout.pageContentWhite = true;
 	    $rootScope.settings.layout.pageBodySolid = false;

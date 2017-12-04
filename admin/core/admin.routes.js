@@ -4,7 +4,6 @@
 mimicTrading.config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $urlRouterProvider){
 	 // the known route
     $urlRouterProvider.when('', '/');
-
     // For any unmatched url, send to 404
     //$urlRouterProvider.otherwise('/404');
     $urlRouterProvider.otherwise(function($injector, $location){

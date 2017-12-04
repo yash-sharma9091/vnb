@@ -88,6 +88,11 @@ mimicTrading.config(['$httpProvider', function($httpProvider){
 	function($location, $rootScope, loginSrv, $state,localStorageService, $timeout, $injector, notificationSvr){
 
 		$rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+          //console.log(toState+localStorageService.get('token'));
+          /*  if(!localStorageService.get('token') && toState.name=="dashboard"){
+               console.log('in see---')
+                $location.path("login");
+            }*/
             $rootScope.isPageLoading = true; 
             $rootScope.server_error_message = '';
             if (toState.authenticate && !loginSrv.isLogged && !localStorageService.get('admin')){
