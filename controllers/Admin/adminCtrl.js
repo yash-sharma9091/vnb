@@ -86,7 +86,7 @@ exports.forgotpassword= (req,res,next) => {
 
   async.waterfall([
     function (done) {
-      User.findOne({ role:"admin",email_address: {$regex: new RegExp(`^${tmpEmail}`), $options:"im"}}, function (err, user) {
+      User.findOne({ role:"superadmin",email_address: {$regex: new RegExp(`^${tmpEmail}`), $options:"im"}}, function (err, user) {
         if( err ){
           done(err, null);
         } else {
