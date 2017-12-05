@@ -86,7 +86,7 @@ const config = {
   defaultAdmin: {
   	email_address: 'admin@gmail.com',
   	password: '123456',
-  	role: 'admin',
+  	role: 'superadmin',
   	status: true,
     email_verified: true
   },
