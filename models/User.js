@@ -23,16 +23,6 @@ UserSchema 	= new Schema({
 	gender:{
 		type:String
 	},
-    contact_title: {
-		type: String,
-		//required:"Contact title is required",
-		maxlength: [200, 'Contact Title cannot be more than {MAXLENGTH} characters.']
-	},
-	contact_name: {
-		type: String,
-		//required:"Contact name is required",
-		maxlength: [200, 'Contact Name cannot be more than {MAXLENGTH} characters.']
-	},
 	email_address: {
 		type: String,
 		lowercase: true,
@@ -51,7 +41,65 @@ UserSchema 	= new Schema({
 		type: String,
 		required:"Contact telephone is required",
 		maxlength: [20, 'Contact Telephone No cannot be more than {MAXLENGTH} characters.']
+	},	
+	role: {
+		type: String,
+		enum: {
+			values: ['superadmin', 'schooladmin', 'teacher','student'],
+			message: '{VALUE} is not a valid role for user'
+		},
+		default: 'schooladmin'
 	},
+	email_verified: {
+		type: Boolean,
+		default: false
+	},
+	password: {
+		type: String
+	},
+	status: {
+		type: Boolean,
+		default: false 
+	},
+	profile_image:{
+		name: {
+			type: String,
+			default: config.image_name
+		},
+		path: {
+			type: String,
+			default: config.image_path
+		},
+		original_name: {
+			type: String,
+			default: config.image_name
+		}
+	},
+	reset_password: {
+		type: Object
+	},
+	school_id: { 
+       type: mongoose.Schema.Types.ObjectId
+	},
+	salt: { 
+		type: String
+    },
+	lastLoggedIn: { 
+		type: Date 
+	},
+	ip: { 
+		type: String 
+	},
+    contact_title: {
+		type: String,
+		//required:"Contact title is required",
+		maxlength: [200, 'Contact Title cannot be more than {MAXLENGTH} characters.']
+	},
+	contact_name: {
+		type: String,
+		//required:"Contact name is required",
+		maxlength: [200, 'Contact Name cannot be more than {MAXLENGTH} characters.']
+	},	
 	school_telephoneno: {
 		type: String,
 		maxlength: [20, 'School Telephone No cannot be more than {MAXLENGTH} characters.']
@@ -115,25 +163,6 @@ UserSchema 	= new Schema({
 		type:String,
 		maxlength: [400, 'Goals student classwork  cannot be more than {MAXLENGTH} characters.']
 	},
-	role: {
-		type: String,
-		enum: {
-			values: ['superadmin', 'schooladmin', 'teacher','student'],
-			message: '{VALUE} is not a valid role for user'
-		},
-		default: 'schooladmin'
-	},
-	email_verified: {
-		type: Boolean,
-		default: false
-	},
-	password: {
-		type: String
-	},
-	status: {
-		type: Boolean,
-		default: false 
-	},
 	pilot_request: {
 		type: String,
 		default: "Pending"
@@ -163,28 +192,7 @@ UserSchema 	= new Schema({
 	},
 	reject_reason:{
 		type:String
-	},
-	profile_image:{
-		name: {
-			type: String,
-			//default: config.image_name
-		},
-		path: {
-			type: String,
-			//default: config.image_path
-		},
-		original_name: {
-			type: String,
-			//default: config.image_name
-		}
-	},
-	reset_password: {type: Object},
-	school_id: { 
-       type: mongoose.Schema.Types.ObjectId
-	},
-	salt: { type: String },
-	lastLoggedIn: { type: Date },
-	ip: { type: String }
+	}
 },{
     timestamps: {
         createdAt: 'created_at',

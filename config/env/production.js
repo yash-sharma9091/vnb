@@ -57,7 +57,14 @@ const config = {
     'image/gif' : 'gif',
     'image/bmp' : 'bmp',
   },
-  allowed_csv_extensions:['text/csv','application/csv','application/octet-stream','text/comma-separated-values'],
+  allowed_csv_extensions:[
+    'xlsx','xls','ms-excel',
+    'application/ms-excel',
+    'application/vnd.oasis.opendocument.spreadsheet',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.google-apps.spreadsheet',
+    'application/vnd.ms-excel', 'text/csv','application/csv',
+    'application/octet-stream','text/comma-separated-values'],
   csv_extensions:{
     'text/csv' : 'csv',
     'application/csv':'csv',

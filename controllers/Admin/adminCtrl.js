@@ -123,7 +123,7 @@ exports.forgotpassword= (req,res,next) => {
       let baseUrl = `${req.protocol}://${req.headers.host}`;
       let changePasswordLink=`${baseUrl}/adminapi/reset/${token}`;
 		mail.send({
-			subject: 'Virtual-Notebook Forgot Password',
+			subject: "Pencil's INK Forgot Password",
 			html: './public/email_templates/admin/forgotpassword.html',
 			from: config.mail.from, 
 			to: user.email_address,

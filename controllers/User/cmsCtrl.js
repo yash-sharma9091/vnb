@@ -11,7 +11,7 @@ const path 	 	= require('path'),
 
 exports.getFAQ = (req, res, next) => {
 
-    FAQ.find({}, 
+    FAQ.find({status:true}, 
     	function (error, result) {
     		if(error){
     			res.json(response.error(error));

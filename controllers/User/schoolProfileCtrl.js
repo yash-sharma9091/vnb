@@ -4,6 +4,7 @@ const
 	response 	= require(path.resolve('config/lib/response')),
 	User 		= require(path.resolve('models/User')),
 	Teacher 	= require(path.resolve('models/Teacher')),
+	School 	    = require(path.resolve('models/School')),
 	async 		= require('async'),
 	crypto 		= require('crypto'),
 	_ 			= require('lodash'),
@@ -53,15 +54,12 @@ exports.schoolProfileStep1 = (req, res, next) => {
 	}
 	async.waterfall([
 		function (done) {
-			User.findOneAndUpdate(
-				{ _id: _body._id },
+			School.findOneAndUpdate(
+				{ user_id: _body._id },
 				{$set:_body},
 				{ runValidators: true, setDefaultsOnInsert:true,context: 'query' },
 				done
 			);
-		},
-		function (result, done) {
-			User.findOne({_id: _body._id},{seq_no:0,reset_password:0,email_verified:0,role:0,password:0, salt: 0}, done);
 		}
 	],function (err, user) {
 			if(err){
@@ -95,28 +93,40 @@ exports.getSchoolProfileStepData= (req,res,next) => {
 	   	   	    salt: 0
 	   		}
 	   },
+       {
+	      $lookup:
+	        {
+	            from: "schools",
+	            localField: "_id",
+	            foreignField: "user_id",
+	            as: "school_data"
+	        }
+	   },
+       {
+	      $unwind: "$school_data"
+	   },
 	   {
 	   	  $project:{
 	   	  	    uan:1,
-	   	  	    contact_title:1,
-	   	   	    contact_name:1,
+	   	  	    contact_title:"$school_data.contact_title",
+	   	   	    contact_name:"$school_data.contact_title",
 	   	   	    email_address:1,
 	   	   	    contact_telephoneno:1,
-	   	   	    school_telephoneno:1,
-	   	   	    school_name:1,
-	   	   	    school_address:1,
-	   	   	    no_of_students:1,
-	   	   	    school_type:1,
-	   	   	    school_level:1,
-	   	   	    school_code:1,
-	   	   	    no_of_students_laptop:1,
-	   	   	    school_logo:1,
+	   	   	    school_telephoneno:"$school_data.school_telephoneno",
+	   	   	    school_name:"$school_data.school_name",
+	   	   	    school_address:"$school_data.school_address",
+	   	   	    no_of_students:"$school_data.no_of_students",
+	   	   	    school_type:"$school_data.school_type",
+	   	   	    school_level:"$school_data.school_level",
+	   	   	    school_code:"$school_data.school_code",
+	   	   	    no_of_students_laptop:"$school_data.no_of_students_laptop",
+	   	   	    school_logo:"$school_data.school_logo",
 	   	   	    //address:1,
-	   	   	    country:"$address.country",
-	   	   	    state:"$address.state",
-	   	   	    city:"$address.city",
-	   	   	    postal_code:"$address.postal_code",
-    	   	    school_address: { $concat: [ "$address.city", " , ","$address.state"," , ", "$address.country" ] } 
+	   	   	    country:"$school_data.address.country",
+	   	   	    state:"$school_data.address.state",
+	   	   	    city:"$school_data.address.city",
+	   	   	    postal_code:"$school_data.address.postal_code",
+    	   	    school_address: { $concat: [ "$school_data.address.city", " , ","$school_data.address.state"," , ", "$school_data.address.country" ] } 
 	   	  }
 	   }
 

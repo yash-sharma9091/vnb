@@ -3,6 +3,7 @@ const
 	path 		= require('path'),
 	response 	= require(path.resolve('config/lib/response')),
 	User 		= require(path.resolve('models/User')),
+	School 		= require(path.resolve('models/School')),
 	async 		= require('async'),
 	paginate 	= require(path.resolve('./config/lib/paginate')),
 	crypto 		= require('crypto'),
@@ -38,14 +39,63 @@ exports.signupSchool = (req, res, next) => {
 		},
 		function (user, done) {
 			if(_.isNull(user)){
-		 		let user = new User(req.body);
-				user.save(function (err, user) {
+
+				async.waterfall([
+					function saveInUser(done){
+						let userJson={
+							first_name:reqData.contact_name,
+							email_address:reqData.email_address,
+							contact_telephoneno:reqData.contact_telephoneno,
+							role:"schooladmin",
+							gender:reqData.gender
+						};
+				
+						let user = new User(userJson);
+						user.save(function (err, saveduser) {
+							if(err){
+		     					done(err, null);
+							} else {
+								done(null, saveduser);
+							}
+						});
+
+					},
+					function saveInSchool(user,done){
+                      let schoolJson={
+                      	user_id:user._id,
+                      	contact_name:reqData.contact_name,
+                      	contact_title:reqData.contact_title,
+                      	school_address:reqData.school_address,
+                      	school_type:reqData.school_type,
+                      	school_level:reqData.school_level,
+                      	no_of_students_laptop:reqData.no_of_students_laptop,
+                      	become_pilot_description:reqData.become_pilot_description,
+                      	school_challenges_lesson_planning:reqData.school_challenges_lesson_planning,
+                      	school_challenges_teacher_gradebook:reqData.school_challenges_teacher_gradebook,
+                      	school_challenges_students_classwork:reqData.school_challenges_students_classwork,
+                      	school_goals_lesson_planning:reqData.school_goals_lesson_planning,
+                      	school_goals_teacher_gradebook:reqData.school_goals_teacher_gradebook,
+                      	school_goals_students_classwork:reqData.school_goals_students_classwork,
+                      	no_of_students:reqData.no_of_students,
+                      	school_name:reqData.school_name,
+                      	school_telephoneno:reqData.school_telephoneno
+                      }; 
+                  		let school = new School(schoolJson);
+						school.save(function (err, user) {
+							if(err){
+		     					done(err, null);
+							} else {
+								done(null, user);
+							}
+						}); 
+				    }
+				],(err, result) => {
 					if(err){
-     					done(err, null);
-					} else {
-						done(null, user);
+						done(err,null);
 					}
-				});
+					done(null,result);
+				})
+
 			}
 			else{
      			done({errors:{email_address:{message: 'This email is already exist.'}}},null);
@@ -58,7 +108,7 @@ exports.signupSchool = (req, res, next) => {
 				from: config.mail.from, 
 				to: user.email_address,
 				emailData : {
-		   		    contact_name: user.contact_name
+		   		    contact_name: user.first_name
 		   		}
 			}, function(err, success){
 				if(err){
@@ -70,9 +120,9 @@ exports.signupSchool = (req, res, next) => {
 							success: false
 						})
 			        );
-	        		User.remove({email_address:user.email_address})
-			            .then(response => done(null, response))
-			            .catch(err => done(err,null));
+	        		// User.remove({email_address:user.email_address})
+			        //     .then(response => done(null, response))
+			        //     .catch(err => done(err,null));
 				} else {
 					res.json(
 						response.success({
@@ -99,7 +149,7 @@ exports.loginSchool = (req, res, next) => {
 	
 	async.waterfall([
 		function(done){
-			User.findOne({ uan: _.trim(req.body.uan) }, {seq_no:0,__v: 0,reset_password: 0, salt: 0},(err, user, next) => {
+			User.findOne({ $or:[{ uan: _.trim(req.body.uan) },{email_address: _.trim(req.body.uan)}]}, {seq_no:0,__v: 0,reset_password: 0, salt: 0},(err, user, next) => {
 				if(err){
 					done(err,null);
 				} else {
@@ -176,15 +226,15 @@ exports.verifyEmail = (req, res, next) => {
  */
 exports.forgot = (req, res, next) => {
 
-	if(!req.body.uan ){
+	if(!req.body.email_address ){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
-			.json(response.required({message: 'UAN is required'}));
+			.json(response.required({message: 'Email is required'}));
 	}
 
 	async.waterfall([
 		// find the user
 		function(done){
-			User.findOne({ uan: _.trim(req.body.uan), role: { $ne: "admin" } },function(err, user){
+			User.findOne({ uan: _.trim(req.body.email_address), role: { $ne: "admin" } },function(err, user){
 				if(err){
 					done(err, null);
 				} else {
@@ -248,7 +298,7 @@ exports.forgot = (req, res, next) => {
 				to: user.email_address || config.mail.testing,
 				emailData : {
 		   		    changePasswordLink: `${baseUrl}/__api/reset/${token}`,
-		   		    contact_name: user.contact_name
+		   		    contact_name: user.first_name
 		   		}
 			}, function(err, success){
 				if(err){
@@ -314,7 +364,7 @@ exports.reset = function (req, res, next) {
 		function(done){
 			User.findOne(
 				{ "reset_password.token": req.params.token, "reset_password.timestamp": { $gt: Date.now() }, "reset_password.status": true }, 
-				{email_address: 1, password: 1, reset_password: 1, contact_name:1},
+				{email_address: 1, password: 1, reset_password: 1, first_name:1},
 				function(err, user){
 					if(!err && user){
 						user.password = req.body.new_password;
@@ -355,7 +405,7 @@ exports.reset = function (req, res, next) {
 				from: config.mail.from, 
 				to: user.email_address,
 				emailData : {
-					contact_name: user.contact_name || 'User'
+					contact_name: user.first_name || 'User'
 				}
 			},done);
 		}
@@ -391,7 +441,7 @@ exports.changePassword = (req, res, next) => {
                 		from: config.mail.from, 
                 		to: saveduser.email,
                 		emailData : {
-                			customer_name: saveduser.customer_name || 'User'
+                			customer_name: saveduser.first_name || 'User'
                 		}
                 	}, function(err, success) {
                         if (err) {

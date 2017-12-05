@@ -129,9 +129,6 @@ exports.getTeacher = (req, res, next) => {
 
 exports.addBulkTeacherInCsv = (req, res, next) => {
 	
-    //console.log("files"+JSON.stringify(req.files));
-    //console.log("body"+req.body); return;
-    req.body._id="5a043cf9c256ba26f62338c2";
 	if( !req.body._id){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
 				.json(response.required({message: 'Id is required'}));
@@ -140,13 +137,6 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 	let checkField=false;
    
 	csv()
-	.preFileLine((fileLineString, lineIdx)=>{
-		
-		if (lineIdx === 1){
-			return fileLineString.replace('profile image','profile_image')
-		}
-		return fileLineString
-	})
 	.fromFile(csvFilePath)
 	.on('json',(teacherObj)=>{
 		if( teacherObj.hasOwnProperty("first_name")===true && 
@@ -154,7 +144,6 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 			teacherObj.hasOwnProperty("gender")===true &&
 			teacherObj.hasOwnProperty("email_address")===true && 
 			teacherObj.hasOwnProperty("contact_telephoneno")===true &&
-			teacherObj.hasOwnProperty("profile_image")===true && 
 			teacherObj.hasOwnProperty("address")===true)
 		{
 		/*	teacherObj.hasOwnProperty("department_name")===true &&
@@ -164,7 +153,7 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 			teacherObj.hasOwnProperty("grade")===true &&
 			teacherObj.hasOwnProperty("subject")===true */
             teacherObj.profile_image={name:"",original_name:GetFilename(teacherObj.profile_image),path:teacherObj.profile_image};
-			teacherObj.school_id = req.body._id;
+			teacherObj._id = req.body._id;
 			teacherObj.role = "teacher";
 			teacherObj.joining_date = new Date();
 			//console.log("objcsv"+JSON.stringify(teacherObj)); return;
@@ -183,12 +172,12 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 		if(checkField==true){
 			return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(response.error({
 					success: 0, 
-					message: 'Please import csv with valid format name, you can download sample csv to check the format'
+					message: 'Invalid file format, please download sample csv for proper format'
 			}));
 		}
 		else{
 	  	 fs.unlinkSync(csvFilePath);
-         res.json(response.success({message:"Teacher uploaded successfully."})); 
+         res.json(response.success({message:"Teacher list has been saved successfully"})); 
 		}
 	 })
 };
