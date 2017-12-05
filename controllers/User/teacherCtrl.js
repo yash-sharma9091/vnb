@@ -75,7 +75,7 @@ exports.addTeacher= (req, res, next) => {
 };
 
 exports.getTeacher = (req, res, next) => {
-	let _id=req.query._id;
+	let _id=req.query._id,datalimit=req.query.limit;
 	if( !_id){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
 				.json(response.required({message: 'Id is required.'}));
@@ -117,6 +117,12 @@ exports.getTeacher = (req, res, next) => {
 	   	   			 'subject':'$teacher_data.subject',
 	   	   			 'official_grade':"$teacher_data.official_grade"
 	   				}
+	   },
+	   {
+	   	 $sort:{_id:-1}
+	   },
+	   {
+	   	 $limit: datalimit
 	   }
 	],function(err,teacherresult){
 	  	if(err){

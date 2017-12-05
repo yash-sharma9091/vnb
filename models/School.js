@@ -71,10 +71,6 @@ SchoolSchema 	= new Schema({
 		type:String,
 		maxlength: [400, 'Goals student classwork  cannot be more than {MAXLENGTH} characters.']
 	},
-	pilot_request: {
-		type: String,
-		default: "Pending"
-	},
 	no_of_students: {
 		type: Number,
 		default:0,
@@ -111,9 +107,6 @@ SchoolSchema 	= new Schema({
 	school_telephoneno: {
 		type: String,
 		maxlength: [20, 'School Telephone No cannot be more than {MAXLENGTH} characters.']
-	},
-	reject_reason:{
-		type:String
 	}
 
 },{

@@ -85,18 +85,75 @@ exports.view = (req, res, next) => {
 		return;
 	}	 
     
-    
-    User.findOne({_id: req.params.id}, 
-    	function (error, result) {
-    		if(error){
-    			res.json({errors: error});
-    		}
-    		result.pilot_request_check=`<span class="label label-sm label-${status_list.class[result.pilot_request]}">${status_list.status[result.pilot_request]}</span>`;
-	  		result.school_level=isJson(result.school_level) ? JSON.parse(result.school_level) : result.school_level;
-	  		result.school_type=isJson(result.school_type) ? JSON.parse(result.school_type) : result.school_type;
-    		res.json({success: true, result: result});
-    	}
-    ).lean();
+    User.aggregate([
+		   {
+		      $match: {_id: mongoose.Types.ObjectId(req.params.id)}
+		   },
+		   {
+		   	   $project:{
+		   	   	    seq_no:0,
+		   	   	    __v:0,
+		   	   	    reset_password:0,
+		   	   	    email_verified:0,
+		   	   	    role:0,
+		   	   	    password:0,
+		   	   	    salt: 0
+		   		}
+		   },
+	       {
+		      $lookup:
+		        {
+		            from: "schools",
+		            localField: "_id",
+		            foreignField: "user_id",
+		            as: "school_data"
+		        }
+		   },
+	       {
+		      $unwind: "$school_data"
+		   },
+		   {
+		   	  $project:{
+		   	  	    _id:1,
+		   	  	    contact_title:"$school_data.contact_title",
+		   	   	    contact_name:"$school_data.contact_name",
+		   	   	    email_address:1,
+		   	   	    contact_telephoneno:1,
+		   	   	    pilot_request:1,
+		   	   	    reject_reason:1,
+		   	   	    become_pilot_description:"$school_data.become_pilot_description",
+		   	   	    school_name:"$school_data.school_name",
+		   	   	    school_telephoneno:"$school_data.school_telephoneno",
+		   	   	    school_address:"$school_data.school_address",
+		   	   	    no_of_students:"$school_data.no_of_students",
+		   	   	    school_type:"$school_data.school_type",
+		   	   	    school_level:"$school_data.school_level",
+		   	   	    school_code:"$school_data.school_code",
+		   	   	    no_of_students_laptop:"$school_data.no_of_students_laptop",
+		   	   	    school_challenges_lesson_planning:"$school_data.school_challenges_lesson_planning",
+                  	school_challenges_teacher_gradebook:"$school_data.school_challenges_teacher_gradebook",
+                  	school_challenges_students_classwork:"$school_data.school_challenges_students_classwork",
+                  	school_goals_lesson_planning:"$school_data.school_goals_lesson_planning",
+                  	school_goals_teacher_gradebook:"$school_data.school_goals_teacher_gradebook",
+                  	school_goals_students_classwork:"$school_data.school_goals_students_classwork",
+		   	  }
+		   }
+
+		],function(err,userresult){
+			if(err){
+				res.json({errors: error});
+			}
+			if(userresult){
+			  if(userresult.length>0){
+			  	let finalresult=userresult[0];
+		  		finalresult.pilot_request_check=`<span class="label label-sm label-${status_list.class[finalresult.pilot_request]}">${status_list.status[finalresult.pilot_request]}</span>`;
+	  			finalresult.school_level=isJson(finalresult.school_level) ? JSON.parse(finalresult.school_level) : finalresult.school_level;
+	  			finalresult.school_type=isJson(finalresult.school_type) ? JSON.parse(finalresult.school_type) : finalresult.school_type;
+			 
+	            res.json({success: true, result: finalresult});
+			  }	
+		  }
+	});
 };
 
 exports.list = (req, res, next) => {
@@ -104,8 +161,8 @@ exports.list = (req, res, next) => {
 	let regexsearch={$regex: new RegExp(`${reqData.search.value}`), $options:"im"};
 	let operation = {role: "schooladmin",$or: [ { contact_telephoneno: regexsearch },{email_address:regexsearch},
 					{school_name:regexsearch},{school_address:regexsearch}]};
-    let sorting  = datatable.sortingDatatable(req.body.columns,req.body.order);
-    sorting.created_at=-1;
+    //let sorting  = datatable.sortingDatatable(req.body.columns,req.body.order);
+    //sorting.created_at=-1;
 
 	async.waterfall([
 		function (done) {
@@ -131,7 +188,62 @@ exports.list = (req, res, next) => {
 					User.count(operation,done);
 				},
 				records: (done) => {
-					User.find(operation,done).sort(sorting).skip(start).limit(length);	
+					//User.find(operation,done).sort(sorting).skip(start).limit(length);	
+
+					 User.aggregate([
+					   {
+					      $match: operation
+					   },
+
+					   {
+					   	   $project:{
+					   	   	    seq_no:0,
+					   	   	    __v:0,
+					   	   	    reset_password:0,
+					   	   	    email_verified:0,
+					   	   	    role:0,
+					   	   	    password:0,
+					   	   	    salt: 0
+					   		}
+					   },
+				       {
+					      $lookup:
+					        {
+					            from: "schools",
+					            localField: "_id",
+					            foreignField: "user_id",
+					            as: "school_data"
+					        }
+					   },
+				       {
+					      $unwind: "$school_data"
+					   },
+					   {
+					   	  $project:{
+					   	  	    contact_title:"$school_data.contact_title",
+					   	   	    contact_name:"$school_data.contact_title",
+					   	   	    email_address:1,
+					   	   	    contact_telephoneno:1,
+					   	   	    pilot_request:1,
+					   	   	    school_name:"$school_data.school_name",
+					   	   	    school_address:"$school_data.school_address",
+					   	   	    no_of_students:"$school_data.no_of_students",
+					   	   	    school_type:"$school_data.school_type",
+					   	   	    school_level:"$school_data.school_level",
+					   	   	    school_code:"$school_data.school_code",
+					   	   	    no_of_students:"$school_data.no_of_students"
+					   	  }
+					   },
+					   { $sort  : {created_at:-1} },
+			   		   { $skip  : start   },
+			   	       { $limit : length }
+
+					],function(err,userresult){
+						if(err){
+							return done(err,null);
+						}
+						done(null,userresult);
+					});
 				}
 			}, done);	
 		}
@@ -174,7 +286,7 @@ function approvePilotRequest(req,res,_ids,_status){
 						from: config.mail.from, 
 						to: pilotdata.email_address,
 						emailData : {
-							contact_name: pilotdata.contact_name,
+							contact_name: pilotdata.first_name,
 							email_address: pilotdata.email_address,
 							username: pilotdata.uan,
 							password: pilotdata.password
@@ -239,7 +351,7 @@ function rejectPilotRequest(req,res,_ids,reject_status,reject_reason){
 							from: config.mail.from, 
 							to: rejectdata.email_address,
 							emailData : {
-								contact_name: rejectdata.contact_name,
+								contact_name: rejectdata.first_name,
 								email_address: rejectdata.email_address,
 								reject_reason: rejectdata.reject_reason
 					  	    } 
@@ -287,7 +399,7 @@ function createUniqueAccount(userid){
 	    async.waterfall([
 	    	function createSequence(done){
 
-              User.find({role:{$ne:"admin"},pilot_request:"Approved"},(err,userseq) =>{
+              User.find({role:{$ne:"superadmin"},pilot_request:"Approved"},(err,userseq) =>{
                  if(err){
                    done(err,null);	
                  }
@@ -304,20 +416,53 @@ function createUniqueAccount(userid){
                  } 
               }).sort({_id:-1}).limit(1); 
 	    	},
-	        function getUserInfo(sequence,done){
-  	          User.find({$and:[{_id: {$in:userid}},{pilot_request:{$in:["Pending","Rejected"]}}]},(err,user) => {
-  	          	if(err){
-  	          	  done(err,null);
-  	          	}
-  	          	else{
-  	          	  if(user){
-  	          	    done(null,user,sequence);
-  	          	  }
-  	          	  else{
-                    done({message:"This is already approved."},null);
-  	          	  }	
-  	          	}
-  	          });		
+	        function getSchoolInfo(sequence,done){
+  	          
+			    User.aggregate([
+					   {
+					      $match: {$and:[{_id: {$in:userid}},{pilot_request:{$in:["Pending","Rejected"]}}]}
+					   },
+					   {
+					   	   $project:{
+					   	   	    seq_no:0,
+					   	   	    __v:0,
+					   	   	    reset_password:0,
+					   	   	    email_verified:0,
+					   	   	    role:0,
+					   	   	    password:0,
+					   	   	    salt: 0
+					   		}
+					   },
+				       {
+					      $lookup:
+					        {
+					            from: "schools",
+					            localField: "_id",
+					            foreignField: "user_id",
+					            as: "school_data"
+					        }
+					   },
+				       {
+					      $unwind: "$school_data"
+					   },
+					   {
+					   	  $project:{
+					   	   	    email_address:1,
+					   	   	    first_name:1,
+					   	   	    pilot_request:1,
+					   	   	    created_at:1,
+					   	   	    school_name:"$school_data.school_name",
+					   	   	    no_of_students:"$school_data.no_of_students",
+					   	   	    school_type:"$school_data.school_type",
+					   	   	    school_level:"$school_data.school_level",
+					   	  }
+					   }
+					],function(err,userresult){
+						if(err){
+							return done(err,null);
+						}
+						done(null,userresult,sequence);
+				});
 	        },
 	        function uniqueAccountNo(user,sequence,done){
 	          let uniqueAccArr=[],seqNo=0;	
@@ -395,7 +540,7 @@ exports.approverejectsingle= (req,res,next) => {
 				.json(response.required({message: 'Id is required'}));
 	}
 
-	let _ids = [reqData._id];
+	let _ids = [mongoose.Types.ObjectId(reqData._id)];
 	let _status =  ( reqData.status === 'Approve' ) ? 'Approved' : 'Rejected';
 
 	if(_status=="Rejected"){

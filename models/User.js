@@ -93,6 +93,9 @@ UserSchema 	= new Schema({
 	pilot_request:{
 		type:String,
 		default:"Pending"
+	},
+	reject_reason:{
+		type:String
 	}
 },{
     timestamps: {

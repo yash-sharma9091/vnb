@@ -234,7 +234,7 @@ exports.forgot = (req, res, next) => {
 	async.waterfall([
 		// find the user
 		function(done){
-			User.findOne({ uan: _.trim(req.body.email_address), role: { $ne: "admin" } },function(err, user){
+			User.findOne({ uan: _.trim(req.body.email_address), role: { $ne: "superadmin" } },function(err, user){
 				if(err){
 					done(err, null);
 				} else {
