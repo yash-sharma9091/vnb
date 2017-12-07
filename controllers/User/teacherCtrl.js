@@ -4,6 +4,9 @@ const
 	response 	= require(path.resolve('config/lib/response')),
 	User 		= require(path.resolve('models/User')),
 	Teacher 	= require(path.resolve('models/Teacher')),
+    MIRROR      = require(path.resolve('models/TeacherMirror')),
+	GEO         = require(path.resolve('./config/lib/geoCoder')),
+    ERROR       = require(path.resolve('./config/lib/error')),
 	async 		= require('async'),
 	fs 			= require('fs'),
 	crypto 		= require('crypto'),
@@ -13,19 +16,14 @@ const
 	mongoose 	= require('mongoose'),
   	config 		= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 
-function GetFilename(url)
-{
-   if (url)
-   {
-      var m = url.toString().match(/.*\/(.+?)\./);
-      if (m && m.length > 1)
-      {
-         return m[1];
-      }
-   }
-   return "";
-}
+/*Init Classes*/
+let GEO_CODER = new GEO();
 
+function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return (Math.floor(Math.random() * (max - min)) + min).toString(); 
+};
 
 exports.addTeacher= (req, res, next) => {
 
@@ -135,10 +133,10 @@ exports.getTeacher = (req, res, next) => {
 
 exports.addBulkTeacherInCsv = (req, res, next) => {
 	
-	/*if( !req.body._id){
+	if( !req.body._id){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
 				.json(response.required({message: 'Id is required'}));
-	}*/
+	}
 	const csvFilePath=req.files[0].path,teacherArr=[];
 	let checkField=false;
    
@@ -165,6 +163,7 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 			teacherObj.hasOwnProperty("address")===true)
 		{
        		teacherObj.school_id = req.body._id;
+       		delete req.body._id;
 			teacherObj.role = "teacher";
 			teacherObj.joining_date = new Date();
 		    teacherArr.push(teacherObj);
@@ -177,7 +176,7 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 		if(checkField==true){
 			return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(response.error({
 					success: 0, 
-					message: 'Invalid file format, please download sample csv for proper format'
+					message: 'Invalid field name(case sensitive), please download sample csv for proper format'
 			}));
 		}
 		else{
@@ -196,15 +195,126 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 	  	    			 	errorStack.push("error");
                             errorQueue.push("Missing mandatory fields values found.");
 	  	    		    }else{
-	  	    			 	errorStack.push("passed function 1");
+	  	    			 	errorStack.push("1 passed mandatory fields values");
 	  	    			}
 	  	    		    done(null, teacher, errorStack, errorQueue);	 
-	  	    		}
-	  	    	])
-	  	    })
-         console.log("arr----"+JSON.stringify(teacherArr));
-         return;
-         //res.json(response.success({message:"Teacher list has been saved successfully"})); 
+	  	    		},
+  	    		    function(teacher, errorStack, errorQueue, done) {
+                      /* Stage 2 - Validation against Job Address*/
+                      GEO_CODER.LATLON(teacher.address, (ifFound)=>{
+                        if(ifFound && ifFound.length && ifFound!=='No data found or invalid address'){
+                          ifFound = ifFound[0];
+                          /*if address found*/
+                          /*now set google address object to teacher*/
+                          let strComps = [];
+
+                          if(ifFound.streetNumber) strComps.push(ifFound.streetNumber);
+                          if(ifFound.streetName) strComps.push(ifFound.streetName);
+                          if(ifFound.extra && ifFound.extra.subpremise) strComps.push("UNIT "+ifFound.extra.subpremise);
+                          	teacher.address     = strComps.join(" ");
+                            teacher.postal_code = ifFound.zipcode ? ifFound.zipcode : "";
+                            teacher.country     = ifFound.country ? ifFound.country : "";
+                            teacher.state 		= (ifFound.administrativeLevels && ifFound.administrativeLevels.level1long) ? ifFound.administrativeLevels.level1long : "";
+                            teacher.city		= (ifFound.city) ? ifFound.city : "";
+                            teacher.location	=  {
+                                type : "Point",
+                                coordinates : [ifFound.longitude,ifFound.latitude]
+                            };
+
+                          errorStack.push("2 passed address validation");
+                        }else{
+                          /*if address not found*/
+                          errorStack.push("error");
+                          errorQueue.push("Teacher address is not valid.");
+                        }
+                        done(null, teacher, errorStack, errorQueue);
+                      });
+                    }
+	  	    	], function (err, results, stack, queue) {
+                
+                  if(stack.indexOf("error")>=0){
+                    /*add a new mirror teacher*/
+                    let newteacher = new MIRROR(teacher);
+                    newteacher.save((err, saved) => {
+                      if(err) {
+                        counter += 1;
+                        _ProcessesTeacher.push({name:teacher.first_name,status:"FAILED",error:ERROR.extract(err.message, ":"),stack:stack,queue:queue});
+                      }else{
+                        _ProcessesTeacher.push({name:teacher.first_name,status:"Drafted",stack:stack,queue:queue});
+                      }
+                      callback(false);
+                    });
+                  }else{
+                    /*add a new teacher into main collection*/
+                    let teacherStatus="Saved";
+  
+                    async.waterfall([
+			            function saveInUser(done) {
+          	      		  let password = getRandomInt(100,1000000);
+          	      		  teacher.password=crypto.createHmac('sha512',config.salt).update(password).digest('base64');
+			              let user= new User(teacher);
+			                  user.save(function (err, user) {
+			                if(err){
+			                  done(err, null);
+			                } else {
+			                  done(null, user,password);
+			                }
+			              });
+			            },
+			            function saveInTeacher(user, password,done) {
+			              teacher.user_id = user._id;
+			              let teacherObj = new Teacher(teacher);
+			               teacherObj.save(function (err, teacherresult) {
+			                if(err){
+			                  done(err, null);
+			                } else {
+			                  done(null, user,password);
+			                }
+			              });
+			            },
+			            function sendMailToTeacher(userresult,password,done) {
+              	      		let mailsentmsg = "error";
+              	      		console.log('pwd---'+password);
+              	      		mail.send({
+								subject: "Welcome to Pilot School's",
+								html: './public/email_templates/user/teacher-signup.html',
+								from: config.mail.from, 
+								to: userresult.email_address,
+								emailData : {
+									contact_name: userresult.first_name,
+									email_address: userresult.email_address,
+									password: password
+						  	    } 
+							   }, (err, success) => {
+								if(err){
+								  console.log("err----"+JSON.stringify(err));
+								   done(mailsentmsg,null);	
+					               //User.update({ _id: pilotdata._id },{ $set: {pilot_request:pilotdata.pilot_request} }).exec();	
+								} else {
+									console.log("res----"+JSON.stringify(success));
+									mailsentmsg="success";
+		   						   done(null,mailsentmsg);	
+								}
+							});
+			            }
+			          ],function (err, teacherresult) {  
+			              if(err) {
+                             counter += 1;
+                             _ProcessesTeacher.push({name:teacher.first_name,status:"FAILED",error:ERROR.extract(err.message, ":"),stack:stack,queue:queue,mailsent:teacherresult});
+                          }else{
+                             _ProcessesTeacher.push({name:teacher.first_name,status:teacherStatus,stack:stack,queue:queue,mailsent:teacherresult});
+                        }
+                       callback(false);
+			        })
+                  }
+                });
+            },
+            // 3rd param is the function to call when everything's done
+            (err) => {
+              if(err) return res.status(412).json({type:"error",message:ERROR.oops(),errors:ERROR.pull(err)});
+              return res.json({type:"success",message:(teacherArr.length-counter)+" out of "+(teacherArr.length)+" Teacher's imported successfully.",data:_ProcessesTeacher});
+            }
+          );
 		}
 	 })
 };
@@ -245,35 +355,54 @@ function saveTeacher(_body){
 
 	async.waterfall([
 		function saveInUser(done) {
+			let password = getRandomInt(100,1000000);
+      		  userInputJson.password=crypto.createHmac('sha512',config.salt).update(password).digest('base64');
 			let user= new User(userInputJson);
         	user.save(function (err, user) {
 				if(err){
  					done(err, null);
 				} else {
-					done(null, user);
+					done(null, user,password);
 				}
 			});
 		},
-		function saveInTeacher(user, done) {
+		function saveInTeacher(user, password,done) {
 			teacherInputJson.user_id = user._id;
 			let teacher = new Teacher(teacherInputJson);
         	teacher.save(function (err, teacher) {
 				if(err){
  					done(err, null);
 				} else {
-					done(null, teacher);
+					done(null, user,password);
 				}
 			});
-		}
+		},
+        function sendMailToTeacher(userresult,password,done) {
+      		mail.send({
+				subject: "Welcome to Pilot School's",
+				html: './public/email_templates/user/teacher-signup.html',
+				from: config.mail.from, 
+				to: userresult.email_address,
+				emailData : {
+					contact_name: userresult.first_name,
+					email_address: userresult.email_address,
+					password: password
+		  	    } 
+			   }, (err, success) => {
+				if(err){
+				   done({message:"we are facing some technical issue while sending email, please try after sometime."},null);	
+	               //User.update({ _id: pilotdata._id },{ $set: {pilot_request:pilotdata.pilot_request} }).exec();	
+				} else {
+				   done(null,{message:"Mail sent successfully"});	
+				}
+		    });
+	    }
 	],function (err, teacher) {
 		if(err){
 		  reject(err);
-		  //return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(err);
 		}
 		resolve(teacher);
-		//res.json(response.success({message:"Teacher saved successfully."}));
 	})
 
   });
- 	
 };
