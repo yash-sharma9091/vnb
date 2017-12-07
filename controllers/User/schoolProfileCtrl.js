@@ -37,14 +37,6 @@ exports.schoolProfileStep1 = (req, res, next) => {
 	} 
 	else {
 		_body = req.body;
-		if(!_.isUndefined(_body.country) || !_.isUndefined(_body.state) || !_.isUndefined(_body.city)){
-			_body.address={
-				country:_body.country,
-				state  :_body.state,
-				city   :_body.city,
-				postal_code:_body.postal_code
-		   };
-		}
         if(!_.isUndefined(_body.lng) || !_.isUndefined(_body.lat)){
     		_body.location={
 			    type       : "Point",
@@ -114,19 +106,17 @@ exports.getSchoolProfileStepData= (req,res,next) => {
 	   	   	    contact_telephoneno:1,
 	   	   	    school_telephoneno:"$school_data.school_telephoneno",
 	   	   	    school_name:"$school_data.school_name",
-	   	   	    school_address:"$school_data.school_address",
 	   	   	    no_of_students:"$school_data.no_of_students",
 	   	   	    school_type:"$school_data.school_type",
 	   	   	    school_level:"$school_data.school_level",
 	   	   	    school_code:"$school_data.school_code",
 	   	   	    no_of_students_laptop:"$school_data.no_of_students_laptop",
 	   	   	    school_logo:"$school_data.school_logo",
-	   	   	    //address:1,
-	   	   	    country:"$school_data.address.country",
-	   	   	    state:"$school_data.address.state",
-	   	   	    city:"$school_data.address.city",
-	   	   	    postal_code:"$school_data.address.postal_code",
-    	   	    school_address: { $concat: [ "$school_data.address.city", " , ","$school_data.address.state"," , ", "$school_data.address.country" ] } 
+	   	   	    address:"$school_data.address",
+	   	   	    country:"$school_data.country",
+	   	   	    state:"$school_data.state",
+	   	   	    city:"$school_data.city",
+	   	   	    postal_code:"$school_data.postal_code"
 	   	  }
 	   }
 
@@ -140,9 +130,7 @@ exports.getSchoolProfileStepData= (req,res,next) => {
 	  		finalresult.school_type= isJson(finalresult.school_type) ? JSON.parse(finalresult.school_type) : finalresult.school_type;
 	  		finalresult.school_level=isJson(finalresult.school_level) ? JSON.parse(finalresult.school_level) : finalresult.school_level;
 	  		finalresult.school_logo=isJson(finalresult.school_logo) ? JSON.parse(finalresult.school_logo) : finalresult.school_logo;
-		  	/*if(!_.isUndefined(finalresult.address.country) || !_.isUndefined(finalresult.address.state) || !_.isUndefined(finalresult.address.city) || !_.isUndefined(finalresult.address.postal_code)){
-                finalresult.address=finalresult.address.city+ ','+ finalresult.address.state+ ','+finalresult.address.country+ ','+finalresult.address.postal_code;
-            }*/
+	
 		   res.json(response.success(finalresult));
 		  }	
 		}

@@ -22,9 +22,25 @@ SchoolSchema 	= new Schema({
 		required:"Contact title is required",
 		maxlength: [200, 'Contact Title cannot be more than {MAXLENGTH} characters.']
 	},
-	school_address: {
+	address: {
 		type: String,
-		maxlength: [200, 'School Address cannot be more than {MAXLENGTH} characters.']
+		maxlength: [200, 'Address cannot be more than {MAXLENGTH} characters.']
+	},
+	country: {
+		type: String,
+		maxlength: [200, 'Country cannot be more than {MAXLENGTH} characters.']
+	},
+	state: {
+		type: String,
+		maxlength: [200, 'State cannot be more than {MAXLENGTH} characters.']
+	},
+	city: {
+		type: String,
+		maxlength: [200, 'City cannot be more than {MAXLENGTH} characters.']
+	},
+	postal_code: {
+		type: String,
+		maxlength: [200, 'Postal Code cannot be more than {MAXLENGTH} characters.']
 	},
 	school_type: {
 		name:{
@@ -77,10 +93,7 @@ SchoolSchema 	= new Schema({
 		min:0,
 		max: [9999, 'No of students cannot be more than {MAX} characters.'],
 	},
-    address:{
-		type:Object
-	},
-	location:{
+   	location:{
 		type:Object
 	},
 	school_logo:{

@@ -34,6 +34,29 @@ teacherSchema   = new Schema({
 	},
 	subject: {
 		type: Array
+	},
+	address: {
+		type: String,
+		maxlength: [200, 'Address cannot be more than {MAXLENGTH} characters.']
+	},
+	country: {
+		type: String,
+		maxlength: [200, 'Country cannot be more than {MAXLENGTH} characters.']
+	},
+	state: {
+		type: String,
+		maxlength: [200, 'State cannot be more than {MAXLENGTH} characters.']
+	},
+	city: {
+		type: String,
+		maxlength: [200, 'City cannot be more than {MAXLENGTH} characters.']
+	},
+	postal_code: {
+		type: String,
+		maxlength: [200, 'Postal Code cannot be more than {MAXLENGTH} characters.']
+	},
+	location:{
+		type:Object
 	}
 },{
     timestamps: {

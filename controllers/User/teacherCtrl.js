@@ -49,18 +49,9 @@ exports.addTeacher= (req, res, next) => {
 		image.original_name=config.image_name;
 		image.path=config.image_path;
 		image.name=config.image_path;
-	   //console.log(image); return;
 	} 
 	_body = _.assign(req.body, {profile_image: image});	
 
-	if(!_.isUndefined(_body.country) || !_.isUndefined(_body.state) || !_.isUndefined(_body.city)){
-		_body.address={
-			country:_body.country,
-			state  :_body.state,
-			city   :_body.city,
-			postal_code:_body.postal_code
-	   };
-	}
     if(!_.isUndefined(_body.lng) || !_.isUndefined(_body.lat)){
 		_body.location={
 		    type       : "Point",
@@ -75,7 +66,7 @@ exports.addTeacher= (req, res, next) => {
 };
 
 exports.getTeacher = (req, res, next) => {
-	let _id=req.query._id,datalimit=req.query.limit;
+	let _id=req.query._id,datalimit=req.query.limit || 5;
 	if( !_id){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
 				.json(response.required({message: 'Id is required.'}));
@@ -105,8 +96,6 @@ exports.getTeacher = (req, res, next) => {
 	   	  			 email_address:1,
 	   	  			 contact_telephoneno:1,
 	   	  			 profile_image:1,
-	   	  			 address:1,
-	   	  			 //teacher_address: { $concat: [ "$address.city", " , ","$address.state"," , ", "$address.country" ] } ,
 	   	   			 'teacher_code':'$teacher_data.teacher_code',
 	   	   			 'joining_date':'$teacher_data.joining_date',
 	   	   			 'department_name':'$teacher_data.department_name',
@@ -115,7 +104,12 @@ exports.getTeacher = (req, res, next) => {
 	   	   			 'experience':'$teacher_data.experience',
 	   	   			 'grade':'$teacher_data.grade',
 	   	   			 'subject':'$teacher_data.subject',
-	   	   			 'official_grade':"$teacher_data.official_grade"
+	   	   			 'official_grade':"$teacher_data.official_grade",
+   			 	     'address':"$teacher_data.address",
+	   	   	         'country':"$teacher_data.country",
+	   	   	         'state':"$teacher_data.state",
+	   	   	         'city':"$teacher_data.city",
+	   	   	         'postal_code':"$teacher_data.postal_code"
 	   				}
 	   },
 	   {
@@ -132,19 +126,37 @@ exports.getTeacher = (req, res, next) => {
 	});	
 };
 
+/*	teacherObj.hasOwnProperty("department_name")===true &&
+	teacherObj.hasOwnProperty("designation")===true &&
+	teacherObj.hasOwnProperty("qualification")===true &&
+	teacherObj.hasOwnProperty("experience")===true &&
+	teacherObj.hasOwnProperty("grade")===true &&
+	teacherObj.hasOwnProperty("subject")===true */
 
 exports.addBulkTeacherInCsv = (req, res, next) => {
 	
-	if( !req.body._id){
+	/*if( !req.body._id){
 		return res.status(response.STATUS_CODE.UNPROCESSABLE_ENTITY)
 				.json(response.required({message: 'Id is required'}));
-	}
+	}*/
 	const csvFilePath=req.files[0].path,teacherArr=[];
 	let checkField=false;
    
 	csv()
+	.preFileLine((fileLineString, lineIdx)=>{
+		if (lineIdx === 1){
+			 
+				return fileLineString.replace('profile image','profile_image')
+				                     .replace('first name','first_name')
+				                     .replace('last name','last_name')
+				                     .replace('email address','email_address')
+				                     .replace('contact telephoneno','contact_telephoneno')
+		}
+		return fileLineString
+	})
 	.fromFile(csvFilePath)
 	.on('json',(teacherObj)=>{
+
 		if( teacherObj.hasOwnProperty("first_name")===true && 
 			teacherObj.hasOwnProperty("last_name")===true && 
 			teacherObj.hasOwnProperty("gender")===true &&
@@ -152,23 +164,10 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 			teacherObj.hasOwnProperty("contact_telephoneno")===true &&
 			teacherObj.hasOwnProperty("address")===true)
 		{
-		/*	teacherObj.hasOwnProperty("department_name")===true &&
-			teacherObj.hasOwnProperty("designation")===true &&
-			teacherObj.hasOwnProperty("qualification")===true &&
-			teacherObj.hasOwnProperty("experience")===true &&
-			teacherObj.hasOwnProperty("grade")===true &&
-			teacherObj.hasOwnProperty("subject")===true */
-            teacherObj.profile_image={name:"",original_name:GetFilename(teacherObj.profile_image),path:teacherObj.profile_image};
-			teacherObj._id = req.body._id;
+       		teacherObj.school_id = req.body._id;
 			teacherObj.role = "teacher";
 			teacherObj.joining_date = new Date();
-			//console.log("objcsv"+JSON.stringify(teacherObj)); return;
-		 	saveTeacher(teacherObj).then(result =>{
-		 		console.log("Teacher imported successfully.");
-		 	}).catch(err => {
-		 		return res.status(response.STATUS_CODE.INTERNAL_SERVER_ERROR).json(err);
-		 	});
-			//teacherArr.push(teacherObj);
+		    teacherArr.push(teacherObj);
 		}
 		else{
 			checkField=true;
@@ -182,8 +181,30 @@ exports.addBulkTeacherInCsv = (req, res, next) => {
 			}));
 		}
 		else{
-	  	 fs.unlinkSync(csvFilePath);
-         res.json(response.success({message:"Teacher list has been saved successfully"})); 
+			let counter = 0, _ProcessesTeacher=[], status=true;	
+	  	    fs.unlinkSync(csvFilePath);
+	  	    async.eachSeries(teacherArr,(teacher,callback) => {
+	  	    	let errorStack = [], errorQueue=[];
+	  	    	//---------WATERFALL start for validating uploaded CSV----------
+	  	    	async.waterfall([
+	  	    		function(done){
+	  	    			 /*Stage 1 - Validataion against required fields*/
+	  	    			if(    !teacher.first_name || !teacher.last_name 
+	  	    			 	 || !teacher.gender || !teacher.email_address
+	  	    			 	 || !teacher.contact_telephoneno || !teacher.address){
+
+	  	    			 	errorStack.push("error");
+                            errorQueue.push("Missing mandatory fields values found.");
+	  	    		    }else{
+	  	    			 	errorStack.push("passed function 1");
+	  	    			}
+	  	    		    done(null, teacher, errorStack, errorQueue);	 
+	  	    		}
+	  	    	])
+	  	    })
+         console.log("arr----"+JSON.stringify(teacherArr));
+         return;
+         //res.json(response.success({message:"Teacher list has been saved successfully"})); 
 		}
 	 })
 };
@@ -199,8 +220,6 @@ function saveTeacher(_body){
        email_address:_body.email_address,
        contact_telephoneno:_body.contact_telephoneno,
        role:'teacher',
-       address:_body.address,
-       location:_body.location,
        school_id: _body._id,
        profile_image:_body.profile_image
 	};
@@ -215,7 +234,13 @@ function saveTeacher(_body){
        grade:_body.grade,
        subject:_body.subject,
        official_grade:_body.official_grade,
-       school_id: _body._id
+       school_id: _body._id,
+       address:_body.address,
+       country:_body.country,
+       state:_body.state,
+       city:_body.city,
+       postal_code:_body.postal_code,
+       location:_body.location
 	};
 
 	async.waterfall([

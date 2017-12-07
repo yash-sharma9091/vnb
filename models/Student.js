@@ -4,35 +4,27 @@ const mongoose 	= require('mongoose'),
 Schema 			= mongoose.Schema,
 
 studentSchema   = new Schema({
-	uan: {
+	user_id: {
+		type: mongoose.Schema.Types.ObjectId
+	},
+	school_id: {
+		type: mongoose.Schema.Types.ObjectId
+	},
+	dob: {
 		type: String
 	},
-	student_first_name: {
-		type: String
-	},
-	student_last_name: {
-		type: String
-	},
-	student_dob: {
-		type: String
-	},
-	student_grade: {
+	grade: {
 		type: String
 	},
 	student_code: {
 		type: String
 	},
-	student_gender: {
+	official_grade: {
 		type: String
 	},
-	student_email_address: {
-		type: String
-	},
-	student_phone_no: {
-		type: String
-	},
-	student_profile: {
-		type: Object
+	admission_date:{
+        type:Date,
+        default:Date.now
 	},
 	parent_name: {
 		type: String
@@ -40,23 +32,28 @@ studentSchema   = new Schema({
 	parent_relation: {
 		type: String
 	},
-	parent_address: {
-		type: Object
+	address: {
+		type: String,
+		maxlength: [200, 'Address cannot be more than {MAXLENGTH} characters.']
 	},
-	parent_country: {
-		type: String
+	country: {
+		type: String,
+		maxlength: [200, 'Country cannot be more than {MAXLENGTH} characters.']
 	},
-	parent_state: {
-		type: String
+	state: {
+		type: String,
+		maxlength: [200, 'State cannot be more than {MAXLENGTH} characters.']
 	},
-	parent_city: {
-		type: Object
+	city: {
+		type: String,
+		maxlength: [200, 'City cannot be more than {MAXLENGTH} characters.']
 	},
-	parent_phone_no: {
-		type: String
+	postal_code: {
+		type: String,
+		maxlength: [200, 'Postal Code cannot be more than {MAXLENGTH} characters.']
 	},
-	parent_email_address: {
-		type: Object
+	location:{
+		type:Object
 	}
 },{
     timestamps: {

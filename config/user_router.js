@@ -92,6 +92,12 @@ module.exports = {
       { url: '/getteacher',method: ctrls.teacherCtrl.getTeacher, type: 'get' },
       { url: '/getschoolprofile_step',method: ctrls.schoolProfileCtrl.getSchoolProfileStepData, type: 'get' },
       { url: '/profile', mwear: uploadProfileImage.any(),method: ctrls.userCtrl.updateProfile, type: 'post' },
+      { url: '/get_master_data',method: ctrls.masterCtrl.getMasterData, type: 'get' },
+      { url: '/get_class',method: ctrls.masterCtrl.getClassData, type: 'get' },
+      { url: '/get_section',method: ctrls.masterCtrl.getSectionData, type: 'get' },
+      { url: '/get_subject',method: ctrls.masterCtrl.getSubjectData, type: 'get' },
+      { url: '/addstudent', mwear: uploadProfileImage.any(),method: ctrls.studentCtrl.addStudent, type: 'post' },
+      { url: '/getstudent',method: ctrls.studentCtrl.getStudent, type: 'get' },
      
   ]
 };

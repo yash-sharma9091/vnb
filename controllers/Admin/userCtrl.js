@@ -234,7 +234,7 @@ exports.list = (req, res, next) => {
 					   	   	    no_of_students:"$school_data.no_of_students"
 					   	  }
 					   },
-					   { $sort  : {created_at:-1} },
+					   { $sort  : {_id:-1} },
 			   		   { $skip  : start   },
 			   	       { $limit : length }
 

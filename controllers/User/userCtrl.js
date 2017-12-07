@@ -37,8 +37,8 @@ exports.signupSchool = (req, res, next) => {
 			.then(response => done(null, response))
 			.catch(err => done(err,null));
 		},
-		function (user, done) {
-			if(_.isNull(user)){
+		function (userresult, done) {
+			if(_.isNull(userresult)){
 
 				async.waterfall([
 					function saveInUser(done){
@@ -81,7 +81,7 @@ exports.signupSchool = (req, res, next) => {
                       	school_telephoneno:reqData.school_telephoneno
                       }; 
                   		let school = new School(schoolJson);
-						school.save(function (err, user) {
+						school.save(function (err, schoolresult) {
 							if(err){
 		     					done(err, null);
 							} else {
@@ -112,7 +112,7 @@ exports.signupSchool = (req, res, next) => {
 		   		}
 			}, function(err, success){
 				if(err){
-
+                 console.log("mail err"+err);
 					res.status(500).json(
 						response.error({
 							source: err,
@@ -124,6 +124,7 @@ exports.signupSchool = (req, res, next) => {
 			        //     .then(response => done(null, response))
 			        //     .catch(err => done(err,null));
 				} else {
+					 console.log("mail ss"+JSON.stringify(success));
 					res.json(
 						response.success({
 							success: true,
